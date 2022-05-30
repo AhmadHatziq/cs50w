@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Google Advanced Search</title>
+		<link rel="stylesheet" href="style.css">
+		<style>
+		
+			$white: #fff;
+			$google-blue: #4285f4;
+			$button-active-blue: #1669F2;
+			
+			input {
+				display: flex; 
+				flex-direction: column; 
+				align-items: flex-end; 
+			}; 
+			
+			.google-btn {
+				width: 134px;
+				height: 42px;
+				background-color: #4285f4;
+				border-radius: 2px;
+				box-shadow: 0 3px 4px 0 rgba(0,0,0,.25);
+			}; 
+
+		</style>
+    </head>
+    <body>
+	
+		<!-- Nav bar -->
+		<div class="topnav">
+		  <a class="active" href="advanced_search.html">Google Advanced Search</a>
+		  <a href="image_search.html">Google Image Search</a>
+		  <a href="index.html">Google Search</a>
+		</div>
+		
+		
+			<h1>Project 0: Search (Google Advanced Search)</h1>
+		
+			<form action="https://google.com/search">
+				<div class="advanced_search_form">
+				<h2>Find pages with...</h2> <br>
+				
+				<label>all these words: </label>
+				<input type="text" name="as_q"> 
+				
+				<label>this exact word or phrase: </label> 
+				<input type="text" name="as_epq"> 
+				
+				<label>any of these words: </label>
+				<input type="text" name="as_oq"> 
+				
+				<label>none of these words: </label> 
+				<input type="text" name="as_eq"> <br> 
+				</div>
+				
+				<button class="advanced_search_button">
+				  
+					<p class="advanced_search_button_text"><b>Advanced Search</b></p>
+				  				
+				</button>
+				
+				
+			</form>
+		
+    </body>
+</html>

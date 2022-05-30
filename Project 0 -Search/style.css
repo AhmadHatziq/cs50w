@@ -1,0 +1,79 @@
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #213EDB;
+  color: white;
+}
+
+nav {
+	border-bottom:2px solid black;
+	height:60px;
+	line-height:60px;
+}
+
+html {
+	zoom: 175%; 
+}
+
+input {
+		border-radius: 15px;
+}
+
+.submit_button {
+	border-radius: 2px;
+}
+
+div.advanced_search_form {
+	display:grid;
+    grid-template-columns: max-content max-content;
+    grid-gap:5px;
+}
+
+div.advanced_search_form label       { text-align:right; }
+
+.advanced_search_button {
+	width: 134px;
+	height: 60px;
+	background-color: #4285f4;
+	border-radius: 20px;
+	box-shadow: 0 3px 4px 0 rgba(0,0,0,.25);
+}
+	
+.advanced_search_button_text {
+	
+	
+	color: #fff;
+	font-size: 14px;
+	letter-spacing: 0.2px;
+	font-family: "Roboto";
+}
+
+.advanced_search_button:hover {
+	box-shadow: 0 0 6px #4285f4;
+}
+.advanced_search_button:active {
+	background: #1669F2;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:500);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Google Search</title>
+		<style> </style>
+		<link rel="stylesheet" href="style.css">
+		
+		<script>
+			function redirectFunction() {
+				
+				// Extract input string from user 
+				let inputString = document.getElementById("inputString").value; 
+				console.log("Input string is: " + inputString);
+				
+				// Redirect user to feeling lucky webpage
+				let redirectedURL = "http://www.google.com/search?q=" + inputString + "&btnI"; 
+				console.log("Redirected URL: " + redirectedURL);
+				location.replace(redirectedURL);
+			}
+		</script>
+    </head>
+    <body>
+	
+	<!-- Nav bar -->
+	<div class="topnav">
+	  <a href="advanced_search.html">Google Advanced Search</a>
+	  <a href="image_search.html">Google Image Search</a>
+	  <a class="active" href="index.html">Google Search</a>
+	</div>
+	
+		<center>
+			<h1>Project 0: Search (Google Search)</h1>
+		</center>
+	
+		<center>
+			<form action="https://google.com/search">
+				<label><h3>Text search term: </h3></label> 
+				<input type="text" name="q" id="inputString"> <br> <br>
+				<input type="submit" value="Google Search" class="submit_button"> 
+				
+				<!-- By default, all buttons in a form are of type='submit', which will auto click the form. 
+					 Hence, need to manually set the button type to 'button' so to not trigger the form submission of GET params -->
+				<button type="button" class="submit_button" onClick="redirectFunction()">I am feeling lucky!</button>
+				
+				<br>
+			</form>
+		</center>
+		
+    </body>
+</html>
