@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+    <h1>Wiki Entry</h1>
+	
+	<h5> Below is the Wiki entry for {{ entry_name }} </h5>
+
+    <div>
+		{{ html_content |safe}} 
+	</div>
+
+{% endblock %}
