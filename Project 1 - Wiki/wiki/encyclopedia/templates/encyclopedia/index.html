@@ -4,14 +4,26 @@
     Encyclopedia
 {% endblock %}
 
+
+
 {% block body %}
+	<!-- Show message if it exists in context -->
+	{% if message %}
+		<div> 
+			{{ message }}
+		</div>
+	{% endif %}
+
     <h1>All Pages</h1>
 	
 	<h2> Below is all the entries of .md files that exist in the directory </h2>
 
     <ul>
         {% for entry in entries %}
-            <li>{{ entry }}</li>
+            <li>
+				<a href=" {% url 'display_entry' entry %} "> {{ entry }} </a>
+			</li>
+			
         {% endfor %}
     </ul>
 
