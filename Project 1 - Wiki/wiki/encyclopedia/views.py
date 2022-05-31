@@ -34,6 +34,57 @@ def display_entry(request, title):
         return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(), 
         "message": f"Specified entry for '{title}' does not exist. Please choose from the list below."
-    })
+        })
+    
+# Handles /search, which is called when the FORM POSTS data     
+def search(request): 
+    if request.method == "POST":
+    
+        # Extract search string inputted by user
+        search_string = request.POST["q"]
+        # print(f"Search string is: {search_string}")
+        
+        # Get queries that match the search string 
+        entries = util.list_entries()
+        matching_entries = []
+        for entry in entries: 
+            entry_content = util.get_entry(entry)
+            # print(entry_content)
+            
+            if search_string in str(entry_content): 
+                matching_entries.append(entry)
+
+        # Redirect to index if no matching queries found
+        if len(matching_entries) == 0: 
+            return render(request, "encyclopedia/index.html", {
+                "entries": matching_entries, 
+                "message": f"No matching entries found for search term '{search_string}'"
+                })
+                
+        # If there is only 1 matching entry, redirect to that page. 
+        # Else, display a list of matching entries. 
+        if len(matching_entries) == 1: 
+            matching_entry = matching_entries[0]
+            context_dict = {
+                "html_content": util.get_entry(matching_entry),
+                "entry_name": matching_entry
+            }
+        
+            return render(request, "encyclopedia/wiki_entry.html", context_dict)
+        
+        # Last case, where there are multuple search results. 
+        # Show the index page, but only for matching entries. 
+        return render(request, "encyclopedia/index.html", {
+            "entries": matching_entries,
+            "message": f"Below are the entries that containt the search term '{search_string}'"
+        })
+        
+    else: 
+        # User got to /search without POSTING data. 
+        # Redirect to /index with error message. 
+        return render(request, "encyclopedia/index.html", {
+            "entries": util.list_entries(), 
+            "message": "Error, no search term detected. Please enter search term into form again"
+        })
     
 
