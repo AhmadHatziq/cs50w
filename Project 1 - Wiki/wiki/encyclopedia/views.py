@@ -47,9 +47,14 @@ def search(request):
         # Get queries that match the search string 
         entries = util.list_entries()
         matching_entries = []
+        
+        # Search for matching substring in either title or content. 
         for entry in entries: 
             entry_content = util.get_entry(entry)
             # print(entry_content)
+            
+            if (search_string.lower()) in (str(entry).lower()): 
+                matching_entries.append(entry)
             
             if (search_string.lower()) in (str(entry_content).lower()): 
                 matching_entries.append(entry)
