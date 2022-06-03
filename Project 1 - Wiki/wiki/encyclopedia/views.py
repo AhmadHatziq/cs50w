@@ -30,11 +30,11 @@ def display_entry(request, title):
         
     else: 
         # Display error page 
-        print(f"Error for {title}")
+        # print(f"Error for {title}")
         return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries(), 
-        "message": f"Specified entry for '{title}' does not exist. Please choose from the list below."
-        })
+            "entries": util.list_entries(), 
+            "message": f"Specified entry for '{title}' does not exist. Please choose from the list below."
+            })
     
 # Handles /search, which is called when the FORM POSTS data     
 def search(request): 
@@ -51,7 +51,7 @@ def search(request):
             entry_content = util.get_entry(entry)
             # print(entry_content)
             
-            if search_string in str(entry_content): 
+            if (search_string.lower()) in (str(entry_content).lower()): 
                 matching_entries.append(entry)
 
         # Redirect to index if no matching queries found
