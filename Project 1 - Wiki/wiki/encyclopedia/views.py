@@ -133,9 +133,11 @@ def create_page(request):
         else: 
             message = f"Successfully added entry for '{title}'"
             
-        return render(request, "encyclopedia/index.html", {
-            "entries": util.list_entries(), 
-            "message": message 
+        # Redirect user to entry page       
+        return render(request, "encyclopedia/wiki_entry.html", {
+            "html_content": util.get_entry(title),
+            "entry_name": title, 
+            "message": message
         })
     
     else:

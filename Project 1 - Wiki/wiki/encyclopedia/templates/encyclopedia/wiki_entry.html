@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block body %}
+	
+	<!-- Show message if it exists in context -->
+	{% if message %}
+		<div> 
+			{{ message }}
+		</div>
+	{% endif %}
+
     <h1>Wiki Entry</h1>
 	
 	<h5> Below is the Wiki entry for {{ entry_name }} </h5>
