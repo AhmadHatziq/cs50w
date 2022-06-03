@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from . import util
 
+import random 
 
 def index(request):
 
@@ -163,3 +164,20 @@ def edit_page(request):
                 "message": "ERROR with editing route."
             })
 
+def random_page(request): 
+    
+    # Generate a random number from 0 to num_of_titles 
+    random_index = random.randint(0, len(util.list_entries()) - 1)
+    
+    # Gets the corresponding random title 
+    title = (util.list_entries())[random_index]
+    
+    # Redirect user to that chosen page     
+    context_dict = {
+        "html_content": util.get_entry(title),
+        "entry_name": title
+    }
+        
+    return render(request, "encyclopedia/wiki_entry.html", context_dict)
+    
+    
