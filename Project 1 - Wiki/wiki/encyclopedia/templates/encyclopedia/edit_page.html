@@ -1,0 +1,27 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Edit Existing Entry 
+{% endblock %}
+
+
+
+{% block body %} 
+	<!-- Show message if it exists in context -->
+	{% if message %}
+		<div> 
+			{{ message }}
+		</div>
+	{% endif %}
+
+    <h1> Please edit the entry for {{ entry_name }} </h1>
+
+	<form action=" {% url 'create_page' %} " method="post">
+		{% csrf_token %}
+		Markdown: <textarea name="markdown_content" cols="30" rows="15"> {{ markdown_content }} </textarea>
+		<input type="hidden" name="is_edit" value="is_edit">
+		<input type="hidden" name="title" value="{{ entry_name }}">
+		<button type="submit">Save</button>
+	</form>
+
+{% endblock %}

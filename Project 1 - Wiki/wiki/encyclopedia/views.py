@@ -98,6 +98,14 @@ def search(request):
 def create_page(request): 
 
     if request.method == "POST":
+    
+        # Editing will call this create_page route. 
+        # If editing, will delete the old content before resuming the create page with the content. 
+        if 'is_edit' in request.POST.keys():
+            print("From EDIT, in CREATE.")
+            title = request.POST["title"]
+            util.delete_entry(title)
+    
         # Extract form parameters
         title = request.POST["title"]
         markdown_content = request.POST["markdown_content"]
@@ -117,15 +125,41 @@ def create_page(request):
         print(f"Markdown content: {markdown_content}")
         util.save_entry(title, markdown_content)
         
-        # Redirect to index 
+        # Redirect to index with different message depending on new creation or edit. 
+        message = ""
+        if 'is_edit' in request.POST.keys():
+            message = f"Successfully updated the entry for '{title}'"
+        else: 
+            message = f"Successfully added entry for '{title}'"
+            
         return render(request, "encyclopedia/index.html", {
             "entries": util.list_entries(), 
-            "message": f"Successfully added entry for '{title}'"
+            "message": message 
         })
     
     else:
         # Case when the user just got to the create page. 
         return render(request, "encyclopedia/create_page.html")
 
+def edit_page(request): 
 
+    if request.method == "POST":
+        
+        # User will come here by clicking a button (in a form) from each entry page 
+        title_to_edit = request.POST["entry_name"]
+        markdown_content = util.get_entry_markdown(title_to_edit)
+        print(f"User wants to edit {title_to_edit}")
+        
+        return render(request, "encyclopedia/edit_page.html", {
+            "entry_name": title_to_edit, 
+            "markdown_content": markdown_content
+            })
+        
+    else: 
+
+        # Returns an error page as user is not supposed to get here without POSTING data
+        return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries(), 
+                "message": "ERROR with editing route."
+            })
 

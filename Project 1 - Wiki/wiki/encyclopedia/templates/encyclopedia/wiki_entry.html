@@ -12,5 +12,11 @@
     <div>
 		{{ html_content |safe}} 
 	</div>
+	
+	<form action=" {% url 'edit_page' %} " method="post">
+		{% csrf_token %}
+		<input type="hidden" name="entry_name" value="{{ entry_name }}">
+		<button type="submit">Edit entry</button>
+	</form>
 
 {% endblock %}

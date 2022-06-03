@@ -25,10 +25,17 @@ def save_entry(title, content):
         default_storage.delete(filename)
     default_storage.save(filename, ContentFile(content))
 
+def delete_entry(title): 
+    """
+    Delete the local .md file for a given title. 
+    """
+    filename = f"entries/{title}.md"
+    if default_storage.exists(filename):
+        default_storage.delete(filename)
 
 def get_entry(title):
     """
-    Retrieves an encyclopedia entry by its title. If no such
+    Retrieves an encyclopedia entry (in HTML form) by its title. If no such
     entry exists, the function returns None.
     """
     try:
@@ -36,5 +43,17 @@ def get_entry(title):
         markdown_raw = f.read().decode("utf-8")
         html_converted = markdown.markdown(markdown_raw)
         return html_converted
+    except FileNotFoundError:
+        return None
+
+def get_entry_markdown(title): 
+    """
+    Retrieves an encyclopedia entry (in markdown form) by its title. If no such
+    entry exists, the function returns None.
+    """
+    try:
+        f = default_storage.open(f"entries/{title}.md")
+        markdown_raw = f.read().decode("utf-8")
+        return markdown_raw
     except FileNotFoundError:
         return None
