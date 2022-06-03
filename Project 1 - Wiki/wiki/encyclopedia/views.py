@@ -47,7 +47,7 @@ def search(request):
         
         # Get queries that match the search string 
         entries = util.list_entries()
-        matching_entries = set()
+        matching_entries = []
         
         # Search for matching substring in either title or content. 
         for entry in entries: 
@@ -55,11 +55,14 @@ def search(request):
             # print(entry_content)
             
             if (search_string.lower()) in (str(entry).lower()): 
-                matching_entries.add(entry)
+                matching_entries.append(entry)
             
             if (search_string.lower()) in (str(entry_content).lower()): 
-                matching_entries.add(entry)
-
+                matching_entries.append(entry)
+                
+        # Remove duplicate entries in the list 
+        matching_entries = list(dict.fromkeys(matching_entries))
+        
         # Redirect to index if no matching queries found
         if len(matching_entries) == 0: 
             return render(request, "encyclopedia/index.html", {
