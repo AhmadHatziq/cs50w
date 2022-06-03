@@ -87,4 +87,40 @@ def search(request):
             "message": "Error, no search term detected. Please enter search term into form again"
         })
     
+# Handles creating of new pages. 
+# If the user goes to /search, user will be presented with the template. 
+# If the user submits the FORM data, data will be sent to this function, which will redirect the user to the index page
+def create_page(request): 
+
+    if request.method == "POST":
+        # Extract form parameters
+        title = request.POST["title"]
+        markdown_content = request.POST["markdown_content"]
+        
+        # Check if a title already exists 
+        current_entries = util.list_entries()
+        if title in current_entries: 
+            print(f'Unable to add {title} as already exists')
+            return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries(), 
+                "message": f"ERROR: Unable to add '{title}' as it already exists"
+            })
+        
+        # Add title and content to storage
+        print("Adding new content:")
+        print(f"Title: {title}")
+        print(f"Markdown content: {markdown_content}")
+        util.save_entry(title, markdown_content)
+        
+        # Redirect to index 
+        return render(request, "encyclopedia/index.html", {
+            "entries": util.list_entries(), 
+            "message": f"Successfully added entry for '{title}'"
+        })
+    
+    else:
+        # Case when the user just got to the create page. 
+        return render(request, "encyclopedia/create_page.html")
+
+
 
