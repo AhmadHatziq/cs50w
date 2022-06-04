@@ -39,6 +39,17 @@ def display_entry(request, title):
     
 # Handles /search, which is called when the FORM POSTS data     
 def search(request): 
+    
+    search_string = ""
+    
+    # Allow for data to be sent either via GET or POST. 
+    # Current method: POST (as search string)
+    '''
+    if request.method == 'GET': 
+        search_string = request.GET["q"]
+    '''
+
+    # Extract search string if sent via POST 
     if request.method == "POST":
     
         # Extract search string inputted by user
