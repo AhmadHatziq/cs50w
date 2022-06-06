@@ -8,6 +8,7 @@ class Airport(models.Model):
     def __str__(self):
         return f"{self.city} ({self.code})"
 
+# Foreign key is only defined onces, in the foreign table, not the main table. 
 class Flight(models.Model): 
     origin = models.ForeignKey(Airport, on_delete = models.CASCADE, related_name="departures")
     destination = models.ForeignKey(Airport, on_delete = models.CASCADE, related_name="arrivals")
