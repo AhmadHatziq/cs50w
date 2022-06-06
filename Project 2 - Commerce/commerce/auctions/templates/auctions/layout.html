@@ -8,6 +8,14 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
+	
+		<!-- Show message if it exists in context -->
+		{% if message %}
+			<div> 
+				{{ message }}
+			</div>
+		{% endif %}
+	
         <h1>Auctions</h1>
         <div>
             {% if user.is_authenticated %}
@@ -29,7 +37,7 @@
 					<a class="nav-link" href="">Watchlist</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="">Create Listing</a>
+					<a class="nav-link" href="{% url 'create_listing' %}">Create Listing</a>
 				</li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
