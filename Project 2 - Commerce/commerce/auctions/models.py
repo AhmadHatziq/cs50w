@@ -23,9 +23,23 @@ class Auction(models.Model):
     item_name = models.CharField(max_length=64)
     item_category = models.ForeignKey(Category, on_delete=models.PROTECT, db_column="category")
     item_owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    item_bid_amount = models.DecimalField(max_digits=9, decimal_places=2)
-    item_bid_count = models.IntegerField(default=1) 
     item_image_url = models.URLField(max_length=256)
     
     def __str__(self): 
-        return f"{self.item_name}"
+        return f"{self.item_name} by {self.item_owner}"
+        
+class Bid(models.Model): 
+    bid_amount = models.DecimalField(max_digits=9, decimal_places=2)
+    bid_item = models.ForeignKey(Auction, on_delete=models.PROTECT)
+    bid_bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self): 
+        return f"${self.bid_amount} for {self.bid_item} made by {self.bid_bidder}"
+        
+class Comment(models.Model): 
+    comment_string = models.CharField(max_length=255)
+    comment_user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    comment_listing = models.ForeignKey(Auction, on_delete=models.CASCADE)
+    
+    def __str__(self): 
+        return f"Comment '{self.comment_string}' was made by {self.comment_user} for item '{self.comment_listing}'"
