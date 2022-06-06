@@ -17,14 +17,24 @@
             {% endif %}
         </div>
         <ul class="nav">
+			<!-- Show Active Listings without considering if user is logged in --> 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
             {% if user.is_authenticated %}
+				<li class="nav-item">
+					<a class="nav-link" href="">Categories</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="">Watchlist</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="">Create Listing</a>
+				</li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                 </li>
-            {% else %}
+            {% else %} <!-- User is not authenticated -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login' %}">Log In</a>
                 </li>
