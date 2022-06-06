@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import User
 
-# Register your models here.
+# Create a new user class to see more user details in the admin interface 
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("id", "username", "email", "password", "last_login", "date_joined", "is_staff")
 
-admin.site.register(User)
+# Register your models here.
+admin.site.register(User, UserAdmin)

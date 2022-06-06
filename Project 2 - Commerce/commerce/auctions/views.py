@@ -49,7 +49,7 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
+        # Attempt to create new user. Only 3 fields are needed: username, email, password 
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
