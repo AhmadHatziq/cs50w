@@ -5,13 +5,25 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms 
 
-from .models import User
+from .models import User, Category, Auction, Bid, Comment 
 
 class CreateListingForm(forms.Form): 
+
+    # Get list of categories stored in the DB. 
+    categories = Category.objects.all()
+    category_choices = [('New Category (Please type below)', 'New Category (Please type below)')]
+    for i in categories: 
+        category_choices.append((i.category, i.category))
+    
+    # The other form elements. 
     listing_name = forms.CharField(label="Listing name", widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_start_price = forms.DecimalField(label="Starting price", max_digits=9, decimal_places=2, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_url = forms.URLField(label="Image URL", max_length=256, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_desc = forms.CharField(label="Details", widget=forms.Textarea(attrs={'name':'body', 'rows':'3', 'cols':'5', 'class':'form-control'}))
+    
+    # User has 2 options to input for category, either the ones already created or input a new category 
+    listing_category_dropdown = forms.CharField(label='Category choices', required=False, widget=forms.Select(choices=category_choices, attrs={'class':'form-control'}))
+    listing_category_text = forms.CharField(label="New category", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
 
 def index(request):
     return render(request, "auctions/index.html")
@@ -97,7 +109,25 @@ def create_listing(request):
             listing_image_url = form.cleaned_data['listing_url']
             listing_desc = form.cleaned_data['listing_desc']
             
+            # Check for category_chosen 
+            category_option = form.cleaned_data['listing_category_dropdown']
+            category_text = form.cleaned_data['listing_category_text']
+            category_chosen = ''
             
+            if 'New Category (Please type below)' in str(category_option):
+                category_chosen = category_text
+                if len(category_text) == 0: 
+                    error_message = "Please type a valid category"
+                    return render(request, "auctions/create_listing.html", {
+                            "form": form,
+                            "message": error_message
+                            })
+            else: 
+                category_chosen = category_option
+
+           
+            
+                            
             
             
     
