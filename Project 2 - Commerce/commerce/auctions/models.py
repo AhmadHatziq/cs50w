@@ -24,6 +24,8 @@ class Auction(models.Model):
     item_category = models.ForeignKey(Category, on_delete=models.PROTECT, db_column="category")
     item_owner = models.ForeignKey(User, on_delete=models.CASCADE)
     item_image_url = models.URLField(max_length=256)
+    item_starting_bid = models.DecimalField(max_digits=9, decimal_places=2)
+    item_description = models.CharField(max_length=255)
     
     def __str__(self): 
         return f"{self.item_name} by {self.item_owner}"
