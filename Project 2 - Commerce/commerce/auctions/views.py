@@ -8,12 +8,6 @@ from django import forms
 from .models import User, Category, Auction, Bid, Comment 
 
 class CreateListingForm(forms.Form): 
-
-    # Get list of categories stored in the DB. 
-    categories = Category.objects.all()
-    category_choices = [('New Category (Please type below)', 'New Category (Please type below)')]
-    for i in categories: 
-        category_choices.append((i.category, i.category))
     
     # The other form elements. 
     listing_name = forms.CharField(label="Listing name", widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -22,8 +16,8 @@ class CreateListingForm(forms.Form):
     listing_desc = forms.CharField(label="Details", widget=forms.Textarea(attrs={'name':'body', 'rows':'3', 'cols':'5', 'class':'form-control'}))
     
     # User has 2 options to input for category, either the ones already created or input a new category 
-    listing_category_dropdown = forms.CharField(label='Category choices', required=False, widget=forms.Select(choices=category_choices, attrs={'class':'form-control'}))
-    listing_category_text = forms.CharField(label="New category", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
+    # listing_category_dropdown = forms.CharField(label='Category choices', required=False, widget=forms.Select(choices=self.category_choices, attrs={'class':'form-control'}))
+    # listing_category_text = forms.CharField(label="New category", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
 
 def index(request):
     return render(request, "auctions/index.html")
@@ -90,9 +84,12 @@ def create_listing(request):
         
     # Returns form template if method is by GET 
     if request.method == "GET":
+        categories = Category.objects.all()
+        category_choices = [i.category for i in categories]   
         return render(request, "auctions/create_listing.html", {
-            "form": CreateListingForm()
-            })
+            "form": CreateListingForm(), 
+            "categories": category_choices
+                })
      
     # Handle data sent from the form 
     if request.method == "POST": 
@@ -109,22 +106,33 @@ def create_listing(request):
             listing_image_url = form.cleaned_data['listing_url']
             listing_desc = form.cleaned_data['listing_desc']
             
-            # Check for category_chosen 
-            category_option = form.cleaned_data['listing_category_dropdown']
-            category_text = form.cleaned_data['listing_category_text']
-            category_chosen = ''
+            # Extract category chosen as handled differently from Django forms. 
+            listing_category = request.POST['category']
             
-            if 'New Category (Please type below)' in str(category_option):
-                category_chosen = category_text
-                if len(category_text) == 0: 
-                    error_message = "Please type a valid category"
-                    return render(request, "auctions/create_listing.html", {
-                            "form": form,
-                            "message": error_message
-                            })
-            else: 
-                category_chosen = category_option
-
+            # Insert into category table if it is a new category      
+            existing_categories = [i.category for i in Category.objects.all()] 
+            if listing_category not in existing_categories: 
+                new_category = Category(category=listing_category)
+                new_category.save()
+                print(f'Saved new category into DB: {new_category}')
+            
+            
+            # Extract other data from the user 
+            username = request.user.username 
+            
+            # Insert the new listing into the database 
+            new_listing = Auction(
+                    item_name = listing_name, 
+                    item_category = Category.objects.get(category = listing_category), 
+                    item_owner = User.objects.get(username = username), 
+                    item_image_url = listing_image_url, 
+                    item_starting_bid = listing_start_price, 
+                    item_description = listing_desc, 
+                    item_is_active = True 
+                )
+            new_listing.save()
+            print(f'Sabed new listing into DB: {new_listing}')
+            
            
             
                             

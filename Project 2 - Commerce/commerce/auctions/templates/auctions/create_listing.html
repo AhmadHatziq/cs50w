@@ -12,6 +12,15 @@
 		{% csrf_token %}
 		<div class="form-group">
 			{{ form }}
+		
+		<!-- Datalist option for category choice --> 
+		<label for="categories">Category</label>
+		<input list="categories" name="category" required class="form-control" id="id_listing_category">
+			<datalist id="categories">
+			{% for category in categories %}
+				<option value="{{ category }}" class="form-control">
+			{% endfor %}
+			</datalist>
 		</div>
 		<input type="submit">
 	</form>

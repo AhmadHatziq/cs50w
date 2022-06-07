@@ -29,7 +29,7 @@ class Auction(models.Model):
     item_is_active = models.BooleanField(default=True)
     
     def __str__(self): 
-        return f"{self.item_name} by {self.item_owner}"
+        return f"{self.item_name} by {self.item_owner} of category {self.item_category}"
         
 class Bid(models.Model): 
     bid_amount = models.DecimalField(max_digits=9, decimal_places=2)
