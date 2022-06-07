@@ -15,8 +15,14 @@ class CreateListingForm(forms.Form):
     listing_url = forms.URLField(label="Image URL", max_length=256, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_desc = forms.CharField(label="Details", widget=forms.Textarea(attrs={'name':'body', 'rows':'3', 'cols':'5', 'class':'form-control'}))
 
+# Index view contains all active listings. 
 def index(request):
-    return render(request, "auctions/index.html")
+    
+    active_listings = Auction.objects.filter(item_is_active = True)
+
+    return render(request, "auctions/index.html", {
+            "listings": active_listings
+        })
 
 
 def login_view(request):
@@ -110,7 +116,6 @@ def create_listing(request):
                 new_category.save()
                 print(f'Saved new category into DB: {new_category}')
             
-            
             # Extract other data from the user 
             username = request.user.username 
             
@@ -128,7 +133,7 @@ def create_listing(request):
             print(f'Sabed new listing into DB: {new_listing}')
 
             # Return to index to view active listings 
-            return render(request, "auctions/index.html")
+            return HttpResponseRedirect(reverse("index"))
     
     # Return to index otherwise
-    return render(request, "auctions/index.html")
+    return HttpResponseRedirect(reverse("index"))
