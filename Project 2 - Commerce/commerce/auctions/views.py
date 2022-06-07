@@ -14,10 +14,6 @@ class CreateListingForm(forms.Form):
     listing_start_price = forms.DecimalField(label="Starting price", max_digits=9, decimal_places=2, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_url = forms.URLField(label="Image URL", max_length=256, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_desc = forms.CharField(label="Details", widget=forms.Textarea(attrs={'name':'body', 'rows':'3', 'cols':'5', 'class':'form-control'}))
-    
-    # User has 2 options to input for category, either the ones already created or input a new category 
-    # listing_category_dropdown = forms.CharField(label='Category choices', required=False, widget=forms.Select(choices=self.category_choices, attrs={'class':'form-control'}))
-    # listing_category_text = forms.CharField(label="New category", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
 
 def index(request):
     return render(request, "auctions/index.html")
@@ -98,8 +94,6 @@ def create_listing(request):
         form = CreateListingForm(request.POST)
         if form.is_valid(): 
             
-            # print(form.cleaned_data)
-            
             # Extract data from form 
             listing_name = form.cleaned_data['listing_name']
             listing_start_price = form.cleaned_data['listing_start_price']
@@ -132,12 +126,9 @@ def create_listing(request):
                 )
             new_listing.save()
             print(f'Sabed new listing into DB: {new_listing}')
-            
-           
-            
-                            
-            
-            
+
+            # Return to index to view active listings 
+            return render(request, "auctions/index.html")
     
     # Return to index otherwise
     return render(request, "auctions/index.html")
