@@ -5,20 +5,18 @@
 
     {% for listing in listings %}
 		
+		<div class="card" style="width: 18rem;">
+			<h4>Item name: {{ listing.item_name }}</h4>
+			<img class="card-img-top" src="{{ listing.item_image_url }}" alt="Image of {{ listing.item_name }}">
+				<div class="card-body">
+					<p class="card-text">Details: {{ listing.item_description }}</p>
+					<p class="card-text">Posted by: {{ listing.item_owner }}</p>
+					<p class="card-text">Category: {{ listing.item_category }}</p>
+					<p class="card-text">Startinng bid: ${{ listing.item_starting_bid }}</p>
+				</div>
+		</div>
+		
+		
 	{% endfor %}
-	
-	<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="https://m.media-amazon.com/images/I/51QXk33t27L._AC_SX522_.jpg" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-  </div>
-</div>
-
-	<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="https://m.media-amazon.com/images/I/51QXk33t27L._AC_SX522_.jpg" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-  </div>
-</div>
 	
 {% endblock %}
