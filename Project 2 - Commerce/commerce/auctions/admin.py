@@ -7,7 +7,7 @@ class UserAdmin(admin.ModelAdmin):
     
 class AuctionAdmin(admin.ModelAdmin): 
     list_display =("id", "item_name", "item_owner", "item_starting_bid", "item_description", "item_image_url", 
-        "item_category)
+        "item_category")
         
 class CategoryAdmin(admin.ModelAdmin): 
     list_display = ("id", "category")

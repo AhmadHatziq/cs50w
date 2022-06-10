@@ -7,6 +7,10 @@ from django import forms
 
 from .models import User, Category, Auction, Bid, Comment 
 
+'''
+    Defines the form used to create an auction listing. 
+    Note that the category is hardcored on the HTML template itself as it generate dynamically. 
+'''
 class CreateListingForm(forms.Form): 
     
     # The other form elements. 
@@ -15,8 +19,11 @@ class CreateListingForm(forms.Form):
     listing_url = forms.URLField(label="Image URL", max_length=256, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_desc = forms.CharField(label="Details", widget=forms.Textarea(attrs={'name':'body', 'rows':'3', 'cols':'5', 'class':'form-control'}))
 
-# Index view contains all active listings. 
-def index(request):
+'''
+    Helper function to return active listings along with top current bidders. 
+    
+'''
+def append_top_bidder_to_active_listings():
 
     # Extract active listings 
     active_listings = Auction.objects.filter(item_is_active = True)
@@ -43,6 +50,7 @@ def index(request):
         
         # Store listing and max bid details into a new dictionary and append to the new list       
         listing_and_bid = {
+            'item_id': listing.id, 
             'item_name': listing.item_name, 
             'item_image_url': listing.item_image_url, 
             'item_description': listing.item_description, 
@@ -54,7 +62,14 @@ def index(request):
             'item_current_highest_bidder': highest_bid_record.bid_bidder
         }
         active_listings_and_bid.append(listing_and_bid)
+        
+    return active_listings_and_bid
            
+# Index view contains all active listings. 
+def index(request):
+
+    active_listings_and_bid = append_top_bidder_to_active_listings()
+    
     return render(request, "auctions/index.html", {
             "listings": active_listings_and_bid
         })
@@ -181,3 +196,34 @@ def create_listing(request):
     
     # Return to index otherwise
     return HttpResponseRedirect(reverse("index"))
+    
+def show_listing(request, listing_id): 
+    print('Listing ID: ', listing_id) 
+    
+    # Get all listings and filter down to current listing ID. 
+    active_listings_and_bid = append_top_bidder_to_active_listings()
+    current_listing = None 
+    for listing in active_listings_and_bid: 
+        if int(listing['item_id']) == int(listing_id): 
+            current_listing = listing 
+            
+    # Get bidding history regarding this listing ID 
+    bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
+    
+    # Return error if ID does not exist 
+    if current_listing is None: 
+        return render(request, "auctions/index.html", {
+            "message": 'Unable to find specified listing ID', 
+            "listings": append_top_bidder_to_active_listings()
+        })
+        
+    # Returns the display_listing template 
+    return render(request, "auctions/display_listing.html", {
+        "listing": current_listing, 
+        "bidding_history": bidding_history
+    })
+    
+    return HttpResponseRedirect(reverse("index"))
+    
+    
+    

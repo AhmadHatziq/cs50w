@@ -1,14 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Listing for XXX </h2>
-
+    <h2>Listing for {{ listing.item_name }} </h2>
 		
 	<div class="card" style="width: 25rem;">
-		<div class="card-header"><h4>Item name: {{ listing.item_name }}</h4></div>
+		<div class="card-header"><h4>Details: {{ listing.item_description }}</h4></div>
 		<img class="card-img-top" src="{{ listing.item_image_url }}" alt="No image available for {{ listing.item_name }}">
 			<div class="card-body">
-				<p class="card-text">Details: {{ listing.item_description }}</p>
 				<p class="card-text">Posted by: {{ listing.item_owner }}</p>
 				<p class="card-text">Category: {{ listing.item_category }}</p>
 				<p class="card-text">Starting bid: ${{ listing.item_starting_bid }}</p>
@@ -19,6 +17,33 @@
 					<li class="list-group-item">Current bid count: {{ listing.item_bid_count }}</li>
 				</ul>
 				<br>
+				<h3>Bidding history:</h3>
+				
+					<table class="table">
+					  <thead>
+						<tr>
+						  <th scope="col">#</th>
+						  <th scope="col">Username</th>
+						  <th scope="col">Amount</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						{% for bid_entry in bidding_history %}
+							<tr>
+							  <th scope="row"> {{ forloop.counter }} </th>
+							  <td>
+								{% if bid_entry.bid_bidder == listing.item_owner %}
+									{{ bid_entry.bid_bidder }} (Starting bid)
+								{% else %} 
+									{{ bid_entry.bid_bidder }}
+								{% endif %}
+							  </td>
+							  <td> {{ bid_entry.bid_amount }} </td>
+							</tr>
+						{% endfor %}
+					  </tbody>
+					</table>
+									
 				<a href="#" class="btn btn-primary">Placeholder for making a bid </a>
 			</div>
 	</div>
