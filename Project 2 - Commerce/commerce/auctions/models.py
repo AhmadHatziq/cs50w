@@ -27,6 +27,7 @@ class Auction(models.Model):
     item_starting_bid = models.DecimalField(max_digits=9, decimal_places=2)
     item_description = models.CharField(max_length=255)
     item_is_active = models.BooleanField(default=True)
+    users_watching = models.ManyToManyField(User, blank=True, related_name='watching') # Call by (User obj).watching.all()
     
     def __str__(self): 
         return f"{self.item_name} by {self.item_owner} of category {self.item_category}"
@@ -46,3 +47,4 @@ class Comment(models.Model):
     
     def __str__(self): 
         return f"Comment '{self.comment_string}' was made by {self.comment_user} for item '{self.comment_listing}'"
+        

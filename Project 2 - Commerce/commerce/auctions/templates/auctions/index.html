@@ -7,7 +7,7 @@
 		
 		<div class="card" style="width: 25rem;">
 			<div class="card-header"><h4>Item name: {{ listing.item_name }}</h4></div>
-			<img class="card-img-top" src="{{ listing.item_image_url }}" alt="Image of {{ listing.item_name }}">
+			<img class="card-img-top" src="{{ listing.item_image_url }}" alt="No image available for {{ listing.item_name }}">
 				<div class="card-body">
 					<p class="card-text">Details: {{ listing.item_description }}</p>
 					<p class="card-text">Posted by: {{ listing.item_owner }}</p>
@@ -19,14 +19,15 @@
 						<li class="list-group-item">Current highest bidder: {{ listing.item_current_highest_bidder }}</li>
 						<li class="list-group-item">Current bid count: {{ listing.item_bid_count }}</li>
 					</ul>
-					
-					<a href="#" class="btn btn-primary">Go somewhere</a>
+					<br>
+					<a href="#" class="btn btn-primary">More Details</a>
 				</div>
 		</div>
 		
 		<!-- NTS: Insert portion on number of current bids made ->>
 		
 		<!-- NTS: Insert code for inputting a bid (only for logged in users) -->
+		<!-- Will implement feature on the product page -->
 
 	{% empty %}
 	There are no active listings at the moment. 
