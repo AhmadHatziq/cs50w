@@ -5,14 +5,22 @@
 
     {% for listing in listings %}
 		
-		<div class="card" style="width: 18rem;">
-			<h4>Item name: {{ listing.item_name }}</h4>
+		<div class="card" style="width: 25rem;">
+			<div class="card-header"><h4>Item name: {{ listing.item_name }}</h4></div>
 			<img class="card-img-top" src="{{ listing.item_image_url }}" alt="Image of {{ listing.item_name }}">
 				<div class="card-body">
 					<p class="card-text">Details: {{ listing.item_description }}</p>
 					<p class="card-text">Posted by: {{ listing.item_owner }}</p>
 					<p class="card-text">Category: {{ listing.item_category }}</p>
-					<p class="card-text">Startinng bid: ${{ listing.item_starting_bid }}</p>
+					<p class="card-text">Starting bid: ${{ listing.item_starting_bid }}</p>
+					
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Current highest bid: ${{ listing.item_max_bid }}</li>
+						<li class="list-group-item">Current highest bidder: {{ listing.item_current_highest_bidder }}</li>
+						<li class="list-group-item">Current bid count: {{ listing.item_bid_count }}</li>
+					</ul>
+					
+					<a href="#" class="btn btn-primary">Go somewhere</a>
 				</div>
 		</div>
 		

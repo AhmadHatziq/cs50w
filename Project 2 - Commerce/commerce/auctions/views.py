@@ -17,11 +17,46 @@ class CreateListingForm(forms.Form):
 
 # Index view contains all active listings. 
 def index(request):
-    
-    active_listings = Auction.objects.filter(item_is_active = True)
 
+    # Extract active listings 
+    active_listings = Auction.objects.filter(item_is_active = True)
+    
+    # Extract current bid count and highest bid for current listings
+    active_listings_and_bid = []
+    for listing in active_listings: 
+    
+        # Get matching bids for the item 
+        # Note that .get() returns 1 item. Else there will be an error 
+        item_bids = Bid.objects.filter(bid_item = listing)
+        
+        # Get bid count 
+        bid_count = len(item_bids)
+        
+        # Get highest bid 
+        highest_bid_amount, highest_bid_record = 0, None 
+        for bid_record in item_bids: 
+            
+            current_bid = bid_record.bid_amount
+            if current_bid > highest_bid_amount: 
+                highest_bid_amount = current_bid 
+                highest_bid_record = bid_record
+        
+        # Store listing and max bid details into a new dictionary and append to the new list       
+        listing_and_bid = {
+            'item_name': listing.item_name, 
+            'item_image_url': listing.item_image_url, 
+            'item_description': listing.item_description, 
+            'item_owner': listing.item_owner, 
+            'item_category': listing.item_category, 
+            'item_starting_bid': listing.item_starting_bid, 
+            'item_bid_count': bid_count, 
+            'item_max_bid': highest_bid_record.bid_amount, 
+            'item_current_highest_bidder': highest_bid_record.bid_bidder
+        }
+        active_listings_and_bid.append(listing_and_bid)
+           
     return render(request, "auctions/index.html", {
-            "listings": active_listings
+            "listings": active_listings_and_bid
         })
 
 
