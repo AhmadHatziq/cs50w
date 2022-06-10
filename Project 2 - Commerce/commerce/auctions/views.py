@@ -198,7 +198,6 @@ def create_listing(request):
     return HttpResponseRedirect(reverse("index"))
     
 def show_listing(request, listing_id): 
-    print('Listing ID: ', listing_id) 
     
     # Get all listings and filter down to current listing ID. 
     active_listings_and_bid = append_top_bidder_to_active_listings()
@@ -224,6 +223,24 @@ def show_listing(request, listing_id):
     })
     
     return HttpResponseRedirect(reverse("index"))
+
+# Comment is sent via POST from the display_listing page    
+def add_comment(request): 
+    if request.method == "POST": 
     
-    
+        # Extract comment 
+        comment = request.POST["comment"]
+        
+        # Todo: Update comment into DB. 
+        
+        # Redirect back to original page 
+        source_address = (request.META.get('HTTP_REFERER')) #Eg http://127.0.0.1:8000/listing/8
+        return HttpResponseRedirect(source_address)
+       
+    else: 
+        render(request, "auctions/index.html", {
+            "listings": active_listings_and_bid, 
+            "message": 'Error in submitting comment. Please try again.'
+        })
+        
     

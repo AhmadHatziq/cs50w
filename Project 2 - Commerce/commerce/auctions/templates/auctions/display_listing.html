@@ -45,6 +45,17 @@
 					</table>
 									
 				<a href="#" class="btn btn-primary">Placeholder for making a bid </a>
+				<br> 
+				<form action=" {% url 'add_comment' %} " method="post">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="exampleFormControlTextarea1">Enter a comment: </label>
+						<textarea class="form-control" name="comment" rows="3"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Submit Comment</button>
+				</form>
+				
+				<h3>Comments: </h3>
 			</div>
 	</div>
 	
