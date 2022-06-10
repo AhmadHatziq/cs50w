@@ -37,7 +37,7 @@ class Bid(models.Model):
     bid_bidder = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self): 
-        return f"${self.bid_amount} for {self.bid_item} made by {self.bid_bidder}"
+        return f"${self.bid_amount} for {self.bid_item.item_name} made by {self.bid_bidder}"
         
 class Comment(models.Model): 
     comment_string = models.CharField(max_length=255)

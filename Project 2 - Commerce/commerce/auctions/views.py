@@ -108,18 +108,18 @@ def create_listing(request):
             
             # Extract category chosen as handled differently from Django forms. 
             listing_category = request.POST['category']
-            
-            # Insert into category table if it is a new category      
+              
+            # If it is a new category, insert into CATEGORY table 
             existing_categories = [i.category for i in Category.objects.all()] 
             if listing_category not in existing_categories: 
                 new_category = Category(category=listing_category)
                 new_category.save()
-                print(f'Saved new category into DB: {new_category}')
+                print(f'Saved new category into CATEGORY: {new_category}')
             
             # Extract other data from the user 
             username = request.user.username 
             
-            # Insert the new listing into the database 
+            # Insert the new listing into the Auction table  
             new_listing = Auction(
                     item_name = listing_name, 
                     item_category = Category.objects.get(category = listing_category), 
@@ -130,7 +130,16 @@ def create_listing(request):
                     item_is_active = True 
                 )
             new_listing.save()
-            print(f'Sabed new listing into DB: {new_listing}')
+            print(f'Saved new listing into AUCTION: {new_listing}')
+            
+            # Insert the corresponding bid into the BID table 
+            new_bid = Bid(
+                    bid_amount = listing_start_price, 
+                    bid_item = new_listing, 
+                    bid_bidder = User.objects.get(username = username)
+                )
+            new_bid.save()
+            print(f'Saved new bid into BID: {new_bid}')
 
             # Return to index to view active listings 
             return HttpResponseRedirect(reverse("index"))
