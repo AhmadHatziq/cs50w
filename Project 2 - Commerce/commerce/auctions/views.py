@@ -228,16 +228,25 @@ def show_listing(request, listing_id):
 def add_comment(request): 
     if request.method == "POST": 
     
-        # Extract comment 
+        # Extract posted parameters 
         comment = request.POST["comment"]
+        listing_id = request.POST["listing_id"]
         
-        # Todo: Update comment into DB. 
+        # Create new comment object and save into DB.  
+        new_comment = Comment(
+            comment_string = comment, 
+            comment_user = User.objects.get(username = request.user.username), 
+            comment_listing = Auction.objects.get(id = listing_id)
+        )
+        new_comment.save()
+        print(f'Saved new comment into COMMENT: {new_comment}')
         
         # Redirect back to original page 
         source_address = (request.META.get('HTTP_REFERER')) #Eg http://127.0.0.1:8000/listing/8
         return HttpResponseRedirect(source_address)
        
     else: 
+        # User should not be arriving at this page via GET. 
         render(request, "auctions/index.html", {
             "listings": active_listings_and_bid, 
             "message": 'Error in submitting comment. Please try again.'
