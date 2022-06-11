@@ -45,7 +45,24 @@
 					</table>
 									
 				<a href="#" class="btn btn-primary">Placeholder for making a bid </a>
-				<br> 
+
+				<br> <br>
+				
+				<div class="row">
+					<div class="col-sm-5">
+					  <div class="card">
+						  <a href="#" class="btn btn-primary">Add to Wishlist</a>
+					  </div>
+					</div>
+					<div class="col-sm-6">
+					  <div class="card">
+						  <a href="#" class="btn btn-primary">Remove from Wishlist</a>						
+					  </div>
+					</div>
+				  </div>
+
+				<br>
+
 				<form action=" {% url 'add_comment' %} " method="post">
 					{% csrf_token %}
 					<div class="form-group">
