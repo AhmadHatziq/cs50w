@@ -10,5 +10,5 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("listing/<str:listing_id>", views.show_listing, name="show_listing"), 
     path("add_comment", views.add_comment, name="add_comment"), 
-    # path("add_to_wishlist", views.add_to_wishlist, name="add_to_wishlist")
+    path("add_to_wishlist", views.add_to_wishlist, name="add_to_wishlist")
 ]

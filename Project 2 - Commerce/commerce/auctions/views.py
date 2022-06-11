@@ -262,4 +262,20 @@ def add_comment(request):
 @login_required(login_url='/login')   
 # Handles the event when the user clicks to add to wishlist.         
 def add_to_wishlist(request): 
-    pass 
+    
+    if request.method == 'GET':
+
+        # Get username of the user and the listing id 
+        # Listing ID is obtained by parsing the HTTP REFERER which is: http://127.0.0.1:8000/listing/8 
+        username = request.user.username 
+        source_address = (request.META.get('HTTP_REFERER'))
+        listing_id = (str(source_address)).split('/')[-1]
+
+        # Add that item to that users wishlist. 
+        current_user = User.objects.get(username=username)
+        current_listing = Auction.objects.get(id=listing_id)
+        current_listing.users_watching.add(current_user)
+
+        # Redirect back to listing page 
+         #Eg http://127.0.0.1:8000/listing/8
+        return HttpResponseRedirect(source_address)
