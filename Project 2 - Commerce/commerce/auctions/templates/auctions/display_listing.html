@@ -57,6 +57,28 @@
 				</form>
 				
 				<h3>Comments: </h3>
+				
+					<table class="table">
+					  <thead>
+						<tr>
+						  <th scope="col">#</th>
+						  <th scope="col">Username</th>
+						  <th scope="col">Comment</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						{% for comment in comment_history %}
+							<tr>
+							  <th scope="row"> {{ forloop.counter }} </th>
+							  <td>
+								{{ comment.comment_user }}
+							  </td>
+							  <td> {{ comment.comment_string }} </td>
+							</tr>
+						{% endfor %}
+					  </tbody>
+					</table>
+				
 			</div>
 	</div>
 	

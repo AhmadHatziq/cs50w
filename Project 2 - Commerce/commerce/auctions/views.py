@@ -209,6 +209,9 @@ def show_listing(request, listing_id):
     # Get bidding history regarding this listing ID 
     bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
     
+    # Get comments regarding this listing ID 
+    comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
+    
     # Return error if ID does not exist 
     if current_listing is None: 
         return render(request, "auctions/index.html", {
@@ -219,7 +222,8 @@ def show_listing(request, listing_id):
     # Returns the display_listing template 
     return render(request, "auctions/display_listing.html", {
         "listing": current_listing, 
-        "bidding_history": bidding_history
+        "bidding_history": bidding_history, 
+        "comment_history": comment_history 
     })
     
     return HttpResponseRedirect(reverse("index"))
