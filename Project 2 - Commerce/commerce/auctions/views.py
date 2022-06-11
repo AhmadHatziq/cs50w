@@ -261,7 +261,7 @@ def add_comment(request):
 
 @login_required(login_url='/login')   
 # Handles the event when the user clicks to add to wishlist.         
-def add_to_wishlist(request): 
+def add_to_watchlist(request): 
     
     if request.method == 'GET':
 
@@ -275,7 +275,37 @@ def add_to_wishlist(request):
         current_user = User.objects.get(username=username)
         current_listing = Auction.objects.get(id=listing_id)
         current_listing.users_watching.add(current_user)
+        print('Added user {} to watchlist for item: {}'.format(current_user, current_listing))
+        print('Current watchlist: ', current_listing.users_watching.all())
+        
+        # Debug
+        # result =  (Auction.objects.get(id=listing_id)).users_watching.all()
+        # print(result)
 
         # Redirect back to listing page 
          #Eg http://127.0.0.1:8000/listing/8
+        return HttpResponseRedirect(source_address)
+
+@login_required(login_url='/login')   
+# Handles the event when the user clicks to remove from wishlist.  
+def remove_from_watchlist(request): 
+    if request.method == 'GET': 
+
+        # Get parameters 
+        username = request.user.username 
+        source_address = (request.META.get('HTTP_REFERER'))
+        listing_id = (str(source_address)).split('/')[-1]
+
+        # Query and remove if the user exists in the watchlist 
+        current_user = User.objects.get(username=username)
+        current_listing = Auction.objects.get(id=listing_id)
+        all_watching_users = current_listing.users_watching.all()
+        # print(current_listing.users_watching.all())
+        if current_user in all_watching_users: 
+            current_listing.users_watching.remove(current_user)
+        
+        # print(current_listing.users_watching.all())
+        print('Removed user {} from watchlist for item: {}'.format(current_user, current_listing))
+        print('Current watchlist: ', current_listing.users_watching.all())
+
         return HttpResponseRedirect(source_address)
