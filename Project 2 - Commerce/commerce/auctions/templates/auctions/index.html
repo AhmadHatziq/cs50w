@@ -21,7 +21,7 @@
 						<li class="list-group-item">Current bid count: {{ listing.item_bid_count }}</li>
 					</ul>
 					<br>
-					<a href="#" class="btn btn-primary">More Details</a>
+					<a href="{% url 'show_listing' listing.item_id %}" class="btn btn-primary">More Details</a>
 				</div>
 		</div>
 		

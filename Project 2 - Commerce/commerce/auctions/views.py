@@ -252,7 +252,7 @@ def add_comment(request):
     else: 
         # User should not be arriving at this page via GET. 
         render(request, "auctions/index.html", {
-            "listings": active_listings_and_bid, 
+            "listings": append_top_bidder_to_active_listings(), 
             "message": 'Error in submitting comment. Please try again.'
         })
         
