@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -13,7 +14,7 @@ from .models import User, Category, Auction, Bid, Comment
 '''
 class CreateListingForm(forms.Form): 
     
-    # The other form elements. 
+    # The form elements. 
     listing_name = forms.CharField(label="Listing name", widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_start_price = forms.DecimalField(label="Starting price", max_digits=9, decimal_places=2, widget=forms.TextInput(attrs={'class':'form-control'}))
     listing_url = forms.URLField(label="Image URL", max_length=256, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -21,7 +22,6 @@ class CreateListingForm(forms.Form):
 
 '''
     Helper function to return active listings along with top current bidders. 
-    
 '''
 def append_top_bidder_to_active_listings():
 
@@ -126,6 +126,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+@login_required(login_url='/login')   
 def create_listing(request): 
     
     # Checks for user name. Redirects back to login if user is not logged in. 
@@ -196,7 +197,8 @@ def create_listing(request):
     
     # Return to index otherwise
     return HttpResponseRedirect(reverse("index"))
-    
+
+@login_required(login_url='/login')    
 def show_listing(request, listing_id): 
     
     # Get all listings and filter down to current listing ID. 
@@ -228,6 +230,7 @@ def show_listing(request, listing_id):
     
     return HttpResponseRedirect(reverse("index"))
 
+@login_required(login_url='/login')   
 # Comment is sent via POST from the display_listing page    
 def add_comment(request): 
     if request.method == "POST": 
@@ -255,5 +258,8 @@ def add_comment(request):
             "listings": append_top_bidder_to_active_listings(), 
             "message": 'Error in submitting comment. Please try again.'
         })
-        
-    
+
+@login_required(login_url='/login')   
+# Handles the event when the user clicks to add to wishlist.         
+def add_to_wishlist(request): 
+    pass 
