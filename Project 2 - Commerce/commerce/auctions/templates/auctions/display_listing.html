@@ -32,7 +32,7 @@
 							<tr>
 							  <th scope="row"> {{ forloop.counter }} </th>
 							  <td>
-								{% if bid_entry.bid_bidder == listing.item_owner %}
+								{% if bid_entry.bid_bidder == listing.item_owner and forloop.counter == 1 %}
 									{{ bid_entry.bid_bidder }} <p class="font-weight-bold">(Starting bid)</p>
 								{% else %} 
 									{{ bid_entry.bid_bidder }}
