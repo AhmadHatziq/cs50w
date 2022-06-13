@@ -309,3 +309,23 @@ def remove_from_watchlist(request):
         print('Current watchlist: ', current_listing.users_watching.all())
 
         return HttpResponseRedirect(source_address)
+
+@login_required(login_url='/login') 
+# Views the watchlist for a specified user. Does not care if item is inactive. 
+def view_watchlist(request): 
+    if request.method == 'GET':
+
+        # Get username 
+        username = request.user.username
+        this_user = User.objects.get(username=username)
+
+        # Get all items and filter down to those that have this user in their watchlist 
+        items_user_watching = Auction.objects.filter(users_watching = this_user)
+
+        print(items_user_watching)
+
+        return render(request, "auctions/view_watchlist.html", {
+            "listings": items_user_watching
+        })
+        
+    
