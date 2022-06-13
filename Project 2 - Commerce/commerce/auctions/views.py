@@ -198,6 +198,7 @@ def create_listing(request):
     # Return to index otherwise
     return HttpResponseRedirect(reverse("index"))
 
+# Shows the listing for a single particular listing ID. 
 @login_required(login_url='/login')    
 def show_listing(request, listing_id): 
     
@@ -322,10 +323,17 @@ def view_watchlist(request):
         # Get all items and filter down to those that have this user in their watchlist 
         items_user_watching = Auction.objects.filter(users_watching = this_user)
 
-        print(items_user_watching)
-
         return render(request, "auctions/view_watchlist.html", {
             "listings": items_user_watching
         })
         
     
+def view_all_listings(request): 
+    if request.method =='GET': 
+        
+        # Get all items in the databse. 
+        items = Auction.objects.all()
+
+        return render(request, "auctions/all_listings.html", {
+            "listings": items
+        }) 

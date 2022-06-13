@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h1>All Listings</h1>
+
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Item</th>
+            <th scope="col">Item Owner</th>
+            <th scope="col">Status</th>
+            <th scope="col">Link to Item </th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for listing in listings %}
+
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ listing.item_name }}</td>
+                <td>{{ listing.item_owner }}</td>
+
+                {% if listing.item_is_active %}
+                    <td>Active</td>
+                {% else %}
+                    <td>Closed</td>
+                {% endif %}
+                
+                <td><a href="{% url 'show_listing' listing.id %}">More Details</a></td>
+              </tr>
+
+            {% empty %}
+            There are no listing records available. 
+
+            {% endfor %}    
+
+	
+{% endblock %}
