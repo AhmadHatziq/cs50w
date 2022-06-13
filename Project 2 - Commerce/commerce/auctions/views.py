@@ -327,7 +327,7 @@ def view_watchlist(request):
             "listings": items_user_watching
         })
         
-    
+# Views all listings, irregardless of active or inactive status.     
 def view_all_listings(request): 
     if request.method =='GET': 
         
@@ -337,3 +337,19 @@ def view_all_listings(request):
         return render(request, "auctions/all_listings.html", {
             "listings": items
         }) 
+
+@login_required(login_url='/login') 
+def submit_bid(request): 
+    if request.method == 'POST': 
+        
+        # Extract parameters 
+        amount_bid = request.POST['bid_amount']
+        print(amount_bid)
+
+        # Check if amount bidded is valid 
+               
+        # Return to index 
+        return render(request, "auctions/index.html", {
+            "listings": append_top_bidder_to_active_listings(), 
+            "message": 'Page under construction.'
+        })

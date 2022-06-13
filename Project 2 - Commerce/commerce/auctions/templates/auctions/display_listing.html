@@ -44,7 +44,14 @@
 					  </tbody>
 					</table>
 									
-				<a href="#" class="btn btn-primary">Placeholder for making a bid </a>
+					<form class="form-inline" action="{% url 'submit_bid' %}" method="post">
+						{% csrf_token %}
+						<div class="form-group mx-sm-3 mb-2">
+							<label for="bid_ammount" class="sr-only">Bid Amount</label>
+							<input class="form-control" id="bid_ammount" name="bid_amount" placeholder="$.¢¢" type="number" step=".01">
+						</div>
+						<button type="submit" class="btn btn-primary mb-2">Submit Bid</button>
+					</form>
 
 				<br> <br>
 				
