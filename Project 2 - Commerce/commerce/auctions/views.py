@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms 
@@ -228,8 +230,6 @@ def show_listing(request, listing_id):
         "bidding_history": bidding_history, 
         "comment_history": comment_history 
     })
-    
-    return HttpResponseRedirect(reverse("index"))
 
 @login_required(login_url='/login')   
 # Comment is sent via POST from the display_listing page    
@@ -343,10 +343,45 @@ def submit_bid(request):
     if request.method == 'POST': 
         
         # Extract parameters 
-        amount_bid = request.POST['bid_amount']
-        print(amount_bid)
+        submitted_bid = float(request.POST['bid_amount'])
+        source_address = (request.META.get('HTTP_REFERER'))
+        listing_id = (str(source_address)).split('/')[-1]
 
-        # Check if amount bidded is valid 
+        # Get max bid using for loop
+        bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
+        max_bid = -1 
+        for bid in bidding_history: 
+            if max_bid <= float(bid.bid_amount): 
+                max_bid = float(bid.bid_amount)
+        # print(max_bid)
+        
+        # Get max bid using aggrregate method
+        max_bid = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id)).aggregate(Max('bid_amount'))
+        max_bid = (float(max_bid['bid_amount__max']))
+        
+
+        # Return error message to user if submitted_bid is <= max_bid 
+        # Reobtains values needed for show_listing. 
+        if submitted_bid <= max_bid:
+
+            # Get current listing
+            current_listing = Auction.objects.get(id=listing_id)
+
+            # Get bidding history regarding this listing ID 
+            bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
+            
+            # Get comments regarding this listing ID 
+            comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
+                
+            # Returns the display_listing template with error message that bid submitted is too low. 
+            return render(request, "auctions/display_listing.html", {
+                "listing": current_listing, 
+                "bidding_history": bidding_history, 
+                "comment_history": comment_history, 
+                "message": 'Bid failed as too low. '
+            })
+
+        # TODO: Bid is successful. LEt it go through. 
                
         # Return to index 
         return render(request, "auctions/index.html", {
