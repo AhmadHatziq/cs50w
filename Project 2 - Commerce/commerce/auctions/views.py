@@ -218,6 +218,14 @@ def show_listing(request, listing_id):
     
     # Get comments regarding this listing ID 
     comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
+
+    # Get boolean variable if listing is in user watch list 
+    user = User.objects.get(username = request.user.username)
+    listing = Auction.objects.get(id = listing_id)
+    all_watching_users = listing.users_watching.all()
+    currently_watching = False
+    if user in all_watching_users:
+        currently_watching = True
     
     # Return error if ID does not exist 
     if current_listing is None: 
@@ -230,7 +238,8 @@ def show_listing(request, listing_id):
     return render(request, "auctions/display_listing.html", {
         "listing": current_listing, 
         "bidding_history": bidding_history, 
-        "comment_history": comment_history 
+        "comment_history": comment_history, 
+        "currently_watching": currently_watching 
     })
 
 @login_required(login_url='/login')   

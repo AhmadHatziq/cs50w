@@ -56,6 +56,14 @@
 				<br> <br>
 				
 				<div class="row">
+					{% if currently_watching %}
+						<p>Item is being <b>watched</b></p>
+					{% else %}
+						<p>Item is <b>not watched</b></p>
+					{% endif %}
+				</div>
+
+				<div class="row">
 					<div class="col-sm-5">
 					  <div class="card">
 						  <a href="{% url 'add_to_watchlist' %}" class="btn btn-primary">Add to Watchlist</a>
