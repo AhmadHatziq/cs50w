@@ -406,13 +406,9 @@ def submit_bid(request):
         new_bid.save()
         print(f'Saved new bid into BID: {new_bid}')
         
+        # Redirect
+        return HttpResponseRedirect(source_address)
                
-        # Return to listing page
-        return render(request, "auctions/display_listing.html", {
-            "listing": current_listing, 
-            "bidding_history": bidding_history, 
-            "comment_history": comment_history
-        })
 
 
 
