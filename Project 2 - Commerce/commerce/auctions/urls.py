@@ -16,3 +16,4 @@ urlpatterns = [
     path("view_all_listings", views.view_all_listings, name="view_all_listings"), 
     path("submit_bid", views.submit_bid, name="submit_bid")
 ]
+

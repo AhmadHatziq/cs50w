@@ -10,6 +10,8 @@ from django import forms
 
 from .models import User, Category, Auction, Bid, Comment 
 
+import decimal
+
 '''
     Defines the form used to create an auction listing. 
     Note that the category is hardcored on the HTML template itself as it generate dynamically. 
@@ -346,6 +348,7 @@ def submit_bid(request):
         submitted_bid = float(request.POST['bid_amount'])
         source_address = (request.META.get('HTTP_REFERER'))
         listing_id = (str(source_address)).split('/')[-1]
+        username = request.user.username
 
         # Get max bid using for loop
         bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
@@ -358,33 +361,48 @@ def submit_bid(request):
         # Get max bid using aggrregate method
         max_bid = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id)).aggregate(Max('bid_amount'))
         max_bid = (float(max_bid['bid_amount__max']))
+
+        # Get current listing
+        current_listing = Auction.objects.get(id=listing_id)
+
+        # Get bidding history regarding this listing ID 
+        bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
+        
+        # Get comments regarding this listing ID 
+        comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
         
 
         # Return error message to user if submitted_bid is <= max_bid 
         # Reobtains values needed for show_listing. 
         if submitted_bid <= max_bid:
 
-            # Get current listing
-            current_listing = Auction.objects.get(id=listing_id)
-
-            # Get bidding history regarding this listing ID 
-            bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
-            
-            # Get comments regarding this listing ID 
-            comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
-                
             # Returns the display_listing template with error message that bid submitted is too low. 
+            error_message = 'Bid failed as needs to be higher than {}'.format(float(max_bid))
             return render(request, "auctions/display_listing.html", {
                 "listing": current_listing, 
                 "bidding_history": bidding_history, 
                 "comment_history": comment_history, 
-                "message": 'Bid failed as too low. '
+                "message": error_message
             })
 
-        # TODO: Bid is successful. LEt it go through. 
+        # Add bid to database 
+        
+        # print(decimal.Decimal(submitted_bid))
+        new_bid = Bid(
+                bid_amount = decimal.Decimal(submitted_bid), 
+                bid_item = Auction.objects.get(id=listing_id), 
+                bid_bidder = User.objects.get(username = username)
+        )
+        new_bid.save()
+        print(f'Saved new bid into BID: {new_bid}')
+        
                
-        # Return to index 
-        return render(request, "auctions/index.html", {
-            "listings": append_top_bidder_to_active_listings(), 
-            "message": 'Page under construction.'
+        # Return to listing page
+        return render(request, "auctions/display_listing.html", {
+            "listing": current_listing, 
+            "bidding_history": bidding_history, 
+            "comment_history": comment_history
         })
+
+
+
