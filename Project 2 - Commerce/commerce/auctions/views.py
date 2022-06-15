@@ -359,8 +359,10 @@ def submit_bid(request):
         listing_id = (str(source_address)).split('/')[-1]
         username = request.user.username
 
-        # Get max bid using for loop
+        # Get max bid using for loop and counts of bids inside. 
+        # If there is only one bid, allowed bid is >= max bid. Else, allowed bid is only > max bid. 
         bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
+        bid_count = len(bidding_history)
         max_bid = -1 
         for bid in bidding_history: 
             if max_bid <= float(bid.bid_amount): 
@@ -381,9 +383,9 @@ def submit_bid(request):
         comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
         
 
-        # Return error message to user if submitted_bid is <= max_bid 
+        # Return error message to user if submitted_bid is <= max_bid or < max_bid if first bid.
         # Reobtains values needed for show_listing. 
-        if submitted_bid <= max_bid:
+        if ((bid_count == 1) and (submitted_bid < max_bid)) or ((bid_count > 1) and (submitted_bid <= max_bid)):
 
             # Returns the display_listing template with error message that bid submitted is too low. 
             error_message = 'Bid failed as needs to be higher than {}'.format(float(max_bid))
@@ -395,7 +397,6 @@ def submit_bid(request):
             })
 
         # Add bid to database 
-        
         # print(decimal.Decimal(submitted_bid))
         new_bid = Bid(
                 bid_amount = decimal.Decimal(submitted_bid), 
