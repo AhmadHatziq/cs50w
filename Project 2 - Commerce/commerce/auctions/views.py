@@ -226,6 +226,13 @@ def show_listing(request, listing_id):
     currently_watching = False
     if user in all_watching_users:
         currently_watching = True
+
+    # Get boolean variable if current user is the item owner. 
+    listing_owner = listing.item_owner
+    is_owner = False 
+    if listing_owner == user: 
+        is_owner = True 
+    print('Is owner:', is_owner)
     
     # Return error if ID does not exist 
     if current_listing is None: 
@@ -239,7 +246,8 @@ def show_listing(request, listing_id):
         "listing": current_listing, 
         "bidding_history": bidding_history, 
         "comment_history": comment_history, 
-        "currently_watching": currently_watching 
+        "currently_watching": currently_watching, 
+        "is_owner": is_owner
     })
 
 @login_required(login_url='/login')   
