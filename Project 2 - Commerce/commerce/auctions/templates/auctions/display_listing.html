@@ -50,7 +50,16 @@
 							<label for="bid_ammount" class="sr-only">Bid Amount</label>
 							<input class="form-control" id="bid_ammount" name="bid_amount" placeholder="$.¢¢" type="number" step=".01">
 						</div>
-						<button type="submit" class="btn btn-primary mb-2">Submit Bid</button>
+
+						<!-- If bidding status is False, disable the submit button-->
+						<button type="submit" class="btn btn-primary mb-2" 
+							{% if bidding_status %}
+							{% else %} 
+								disabled
+							{% endif %}
+						>
+							Submit Bid
+						</button>
 					</form>
 
 				<br> <br>

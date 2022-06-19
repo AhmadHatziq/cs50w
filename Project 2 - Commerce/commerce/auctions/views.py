@@ -247,7 +247,9 @@ def show_listing(request, listing_id):
         "bidding_history": bidding_history, 
         "comment_history": comment_history, 
         "currently_watching": currently_watching, 
-        "is_owner": is_owner
+        "is_owner": is_owner, 
+        # "bidding_status": current_listing.item_is_active
+        "bidding_status": listing.item_is_active 
     })
 
 @login_required(login_url='/login')   
