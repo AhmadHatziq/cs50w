@@ -3,13 +3,17 @@
 {% block body %}
     <h2>Listing for {{ listing.item_name }} </h2>
 		
-	<div class="card" style="width: 25rem;">
+	<div class="card" style="width: 26rem;">
 
 		<!-- Show winner if auction is closed-->
 		{% if bidding_status %}
 		{% else %} 
 			<div class="alert alert-primary" role="alert">
-				Auction has been closed. <br>
+				{% if is_winner %}
+					CONGRATULATIONS FOR WINNING THE AUCTION!
+				{% endif %}
+				
+				<br> Auction has been closed. <br>
 				The winning bid is {{ highest_bidder }} with ${{ highest_bid }}
 			</div>
 		{% endif %}
