@@ -271,7 +271,8 @@ def show_listing(request, listing_id):
         "show_auction_close_button": show_auction_close_button, 
         "highest_bid": highest_bid, 
         "highest_bidder": highest_bidder, 
-        "is_winner": True if str(highest_bidder) == str(user) else False
+        "is_winner": True if str(highest_bidder) == str(user) else False, 
+        
     })
 
 @login_required(login_url='/login')   
