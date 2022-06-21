@@ -232,7 +232,12 @@ def show_listing(request, listing_id):
     is_owner = False 
     if listing_owner == user: 
         is_owner = True 
-    print('Is owner:', is_owner)
+    # print('Is owner:', is_owner)
+
+    # Get boolean variable if item can be closed 
+    show_auction_close_button = False 
+    if is_owner == True and listing.item_is_active == True: 
+        show_auction_close_button = True 
     
     # Return error if ID does not exist 
     if current_listing is None: 
@@ -248,8 +253,8 @@ def show_listing(request, listing_id):
         "comment_history": comment_history, 
         "currently_watching": currently_watching, 
         "is_owner": is_owner, 
-        # "bidding_status": current_listing.item_is_active
-        "bidding_status": listing.item_is_active 
+        "bidding_status": listing.item_is_active, 
+        "show_auction_close_button": show_auction_close_button
     })
 
 @login_required(login_url='/login')   
@@ -419,6 +424,20 @@ def submit_bid(request):
         # Redirect
         return HttpResponseRedirect(source_address)
                
+@login_required(login_url='/login') 
+def close_auction(request):
+    # The button is only clickable by the item owner from the display_listing webpage
 
+    # Extract information 
+    source_address = (request.META.get('HTTP_REFERER'))
+    listing_id = (str(source_address)).split('/')[-1]
+    username = request.user.username
 
+    # Mark item as closed 
+    bid_item = Auction.objects.get(id=listing_id)
+    bid_item.item_is_active = False  
+    bid_item.save() 
 
+    # Redirect back to main page 
+    return HttpResponseRedirect(source_address)
+               

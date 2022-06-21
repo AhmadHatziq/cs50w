@@ -17,6 +17,15 @@
 					<li class="list-group-item">Current bid count: {{ listing.item_bid_count }}</li>
 				</ul>
 				<br>
+
+				<!-- Only show button if current user is the owner and item is open for bidding -->
+				<div> 
+				{% if show_auction_close_button  %}
+					<a href=" {% url 'close_auction' %} " class="btn btn-danger" role="button">Close Auction</a>			
+				{% endif %}
+				</div>
+
+				<br>
 				<h3>Bidding history:</h3>
 				
 					<table class="table">
@@ -123,8 +132,6 @@
 			</div>
 	</div>
 	
-	<!-- NTS: Need to add watchlist, to bid, to close options --> 
-
 
 	
 {% endblock %}
