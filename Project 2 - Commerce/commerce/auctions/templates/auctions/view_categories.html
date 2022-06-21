@@ -1,0 +1,30 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h1>Categories</h1>
+
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Category</th>
+            <th scope="col">Link to Category </th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ category.category }}</td>
+                <td><a href="{% url 'view_listing_given_category' category.category %}" >More Details</a></td>
+              </tr>
+
+            {% empty %}
+            There are no categories at the moment. 
+
+            {% endfor %}    
+
+	
+{% endblock %}

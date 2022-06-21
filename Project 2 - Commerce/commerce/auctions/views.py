@@ -457,4 +457,25 @@ def close_auction(request):
 
     # Redirect back to main page 
     return HttpResponseRedirect(source_address)
-               
+
+# Show all categories               
+def view_categories(request): 
+
+    # Get categories. 
+    categories = Category.objects.all()
+
+    return render(request, "auctions/view_categories.html", {
+            "categories": categories
+        }) 
+
+def view_listing_given_category(request, category):
+
+    # Get all items related to that category (don't care about active status or not)
+    category_row = Category.objects.get(category=category)
+    items = Auction.objects.filter(item_category_id=category_row.id)
+    print(category, items)
+
+    return render(request, "auctions/view_specific_category.html", {
+            "listings": items, 
+            "category": category
+        })
