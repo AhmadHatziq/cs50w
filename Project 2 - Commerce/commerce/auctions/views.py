@@ -70,6 +70,7 @@ def append_top_bidder_to_active_listings():
     return active_listings_and_bid
            
 # Index view contains all active listings. 
+# Inactive listings are omitted. 
 def index(request):
 
     active_listings_and_bid = append_top_bidder_to_active_listings()
@@ -206,15 +207,28 @@ def create_listing(request):
 @login_required(login_url='/login')    
 def show_listing(request, listing_id): 
     
+    ''' DEPRACATED
     # Get all listings and filter down to current listing ID. 
     active_listings_and_bid = append_top_bidder_to_active_listings()
     current_listing = None 
     for listing in active_listings_and_bid: 
         if int(listing['item_id']) == int(listing_id): 
             current_listing = listing 
+    '''
+
+    # Get current listing 
+    current_listing = Auction.objects.get(id=listing_id)
             
     # Get bidding history regarding this listing ID 
     bidding_history = Bid.objects.filter(bid_item = Auction.objects.get(id=listing_id))
+
+    # Get current top bidder. 
+    # Used to create view for closed bids. 
+    highest_bid, highest_bidder = -1.0, None 
+    for bid in bidding_history: 
+        if highest_bid < float(bid.bid_amount):
+            highest_bid = float(bid.bid_amount)
+            highest_bidder = bid.bid_bidder
     
     # Get comments regarding this listing ID 
     comment_history = Comment.objects.filter(comment_listing = Auction.objects.get(id=listing_id))
@@ -234,7 +248,7 @@ def show_listing(request, listing_id):
         is_owner = True 
     # print('Is owner:', is_owner)
 
-    # Get boolean variable if item can be closed 
+    # Get boolean variable if item can be closed ie if username is the owner and item is still active.  
     show_auction_close_button = False 
     if is_owner == True and listing.item_is_active == True: 
         show_auction_close_button = True 
@@ -254,7 +268,9 @@ def show_listing(request, listing_id):
         "currently_watching": currently_watching, 
         "is_owner": is_owner, 
         "bidding_status": listing.item_is_active, 
-        "show_auction_close_button": show_auction_close_button
+        "show_auction_close_button": show_auction_close_button, 
+        "highest_bid": highest_bid, 
+        "highest_bidder": highest_bidder
     })
 
 @login_required(login_url='/login')   

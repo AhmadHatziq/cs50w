@@ -4,6 +4,22 @@
     <h2>Listing for {{ listing.item_name }} </h2>
 		
 	<div class="card" style="width: 25rem;">
+
+		<!-- Show winner if auction is closed-->
+		{% if bidding_status %}
+		{% else %} 
+			<div class="alert alert-primary" role="alert">
+				Auction has been closed. <br>
+				The winning bid is {{ highest_bidder }} with ${{ highest_bid }}
+			</div>
+		{% endif %}
+		
+		{% if currently_watching %}
+						<p>Item is being <b>watched</b></p>
+					{% else %}
+						<p>Item is <b>not watched</b></p>
+					{% endif %}
+
 		<div class="card-header"><h4>Details: {{ listing.item_description }}</h4></div>
 		<img class="card-img-top" src="{{ listing.item_image_url }}" alt="No image available for {{ listing.item_name }}">
 			<div class="card-body">
@@ -11,12 +27,14 @@
 				<p class="card-text">Category: {{ listing.item_category }}</p>
 				<p class="card-text">Starting bid: ${{ listing.item_starting_bid }}</p>
 				
+				<!--
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">Current highest bid: ${{ listing.item_max_bid }}</li>
 					<li class="list-group-item">Current highest bidder: {{ listing.item_current_highest_bidder }}</li>
 					<li class="list-group-item">Current bid count: {{ listing.item_bid_count }}</li>
 				</ul>
 				<br>
+				-->
 
 				<!-- Only show button if current user is the owner and item is open for bidding -->
 				<div> 
