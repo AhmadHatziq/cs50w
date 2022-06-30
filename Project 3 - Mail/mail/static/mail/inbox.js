@@ -75,7 +75,7 @@ function send_email() {
 
   })
   .catch(error => {
-    console.log('Error:', JSON.stringify(error)); 
+    console.log('Error:', JSON.stringify(error)); l
     alert('Error in sending message.\nPlease try again.', error); 
   });
 
@@ -102,5 +102,18 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
+  // Below function changes the first letter to uppercase. 
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  // Query the API for the emails. 
+  console.log(`Accessing for ${mailbox}`); 
+  fetch(`/emails/${mailbox}`)
+  .then(response => response.json())
+  .then(emails => {
+    // Print emails
+    console.log(emails);
+
+    // ... do something else with emails ...
+});
+
 }
