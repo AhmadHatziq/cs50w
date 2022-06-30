@@ -56,7 +56,7 @@ function send_email() {
     return response
   })
   .then(result => {
-      // Print result
+      // Log result
       console.log(result.json());
 
       // Throw generic error if status code is not 201. 
@@ -72,7 +72,7 @@ function send_email() {
   })
   .catch(error => {
     console.log('Error:', error); 
-    alert('Error in sending message\n', error); 
+    alert('Error in sending message.\nPlease try again.', error); 
   });
 
   return;
