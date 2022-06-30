@@ -9,8 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Process the user parameters when the user submitted the #compose-form form. 
   document.querySelector('#compose-form').onsubmit = () => {
     send_email();
+    load_mailbox('inbox'); 
     
-    // Return false temporarility for debugging. Will change to true once fully implemented. 
+    // NTS: Set to false. If we set to true, will get broken pipe error. 
+    // We will manually set the view to load_mailbox.  
     return false;
   };
 
@@ -58,6 +60,7 @@ function send_email() {
   .then(result => {
       // Log result
       console.log(result.json());
+      console.log(result);
 
       // Throw generic error if status code is not 201. 
       if (result.status != 201) {
@@ -66,12 +69,13 @@ function send_email() {
 
       // Throw Error if the term 'error' is in the returned JSON object. 
       if (JSON.stringify(result).includes('error')) {
+        console.log(JSON.stringify(result)); 
         throw JSON.stringify(result);
       }
 
   })
   .catch(error => {
-    console.log('Error:', error); 
+    console.log('Error:', JSON.stringify(error)); 
     alert('Error in sending message.\nPlease try again.', error); 
   });
 
