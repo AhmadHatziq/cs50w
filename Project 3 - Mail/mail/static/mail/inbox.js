@@ -28,8 +28,55 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+// Function to process the sending of emails. 
+// Is called when the compose-form is submitted. 
 function send_email() {
-  alert('Send email');
+  console.log('Sending email'); 
+
+  // Extract parameters from the user
+  const email_recipient = document.querySelector('#compose-recipients').value; 
+  const email_subject = document.querySelector('#compose-subject').value; 
+  const email_body = document.querySelector('#compose-body').value; 
+
+  // Log to console. 
+  let composed_email_log = `Email is for '${email_recipient}' with subject '${email_subject}' with body '${email_body}'`;
+  console.log(composed_email_log);
+
+  // Send email to API 
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+        recipients: email_recipient,
+        subject: email_subject,
+        body: email_body
+    })
+  })
+  .then(response => {
+    console.log(response); 
+    return response
+  })
+  .then(result => {
+      // Print result
+      console.log(result.json());
+
+      // Throw generic error if status code is not 201. 
+      if (result.status != 201) {
+        throw "Error in sending email"; 
+      }; 
+
+      // Throw Error if the term 'error' is in the returned JSON object. 
+      if (JSON.stringify(result).includes('error')) {
+        throw JSON.stringify(result);
+      }
+
+  })
+  .catch(error => {
+    console.log('Error:', error); 
+    alert('Error in sending message\n', error); 
+  });
+
+  return;
+
 };
 
 function compose_email() {
