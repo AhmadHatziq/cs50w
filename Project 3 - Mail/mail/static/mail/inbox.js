@@ -6,9 +6,31 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
 
+  // Process the user parameters when the user submitted the #compose-form form. 
+  document.querySelector('#compose-form').onsubmit = () => {
+    send_email();
+    
+    // Return false temporarility for debugging. Will change to true once fully implemented. 
+    return false;
+  };
+
+  // NTS: There are 2 ways to attach an event to the form, either addEventListener or altering the onsubmit.  
+  /*
+  document.querySelector('#compose-form').addEventListener('submit', function() {
+    console.log("Email compose form has been submitted. "); 
+    
+    return false; 
+  });
+  */ 
+
+
   // By default, load the inbox
   load_mailbox('inbox');
 });
+
+function send_email() {
+  alert('Send email');
+};
 
 function compose_email() {
 
