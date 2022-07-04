@@ -102,7 +102,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
-  // Below function changes the first letter to uppercase. 
+  // The function below changes the first letter to uppercase. 
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   // Query the API for the emails. 
@@ -111,7 +111,69 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
     // Print emails
-    console.log(emails);
+    // console.log(emails);
+
+    // Create table and header row. 
+    let email_table = document.createElement('table'); 
+    let header_head = document.createElement('thead'); 
+    let header_row = document.createElement("tr"); 
+    let header_data_1 = document.createElement("th"); 
+    let header_data_2 = document.createElement("th");
+    let header_data_3 = document.createElement("th");
+    header_data_1.textContent = "Sender"; 
+    header_data_2.textContent = "Subject"; 
+    header_data_3.textContent = "Timestamp"; 
+    header_row.appendChild(header_data_1); 
+    header_row.appendChild(header_data_2); 
+    header_row.appendChild(header_data_3); 
+    header_head.appendChild(header_row); 
+    header_head.className = 'thead-dark'; 
+    email_table.appendChild(header_head); 
+    email_table.className = 'table'; 
+
+    // Iterate over each email
+    for (let i = 0; i < emails.length; i++) {
+
+      // single_email represents a single JSON object. 
+      // Extract relevant information from JSON object. 
+      let single_email = emails[i];
+      let is_read = single_email['read']; 
+      let is_archived = single_email['archived']; 
+      let sender = single_email['sender']; 
+      let subject = single_email['subject']; 
+      let body = single_email['body']; 
+      let recipient_list = single_email['recipients']; 
+      let timestamp = single_email['timestamp']; 
+
+      // Create table elements 
+      let table_row = document.createElement("tr"); 
+      let table_data_1 = document.createElement("td"); 
+      let table_data_2 = document.createElement("td"); 
+      let table_data_3 = document.createElement("td"); 
+
+      // Set color to gray if email is read. 
+      let color_string = 'white'; 
+      if (is_read === true){ 
+        color_string = 'lightgrey';
+      }
+
+      // Assign data to the row elements 
+      table_data_1.textContent = sender; 
+      table_data_2.textContent = subject; 
+      table_data_3.textContent = timestamp; 
+
+      // Append row to the table 
+      table_row.appendChild(table_data_1); 
+      table_row.appendChild(table_data_2); 
+      table_row.appendChild(table_data_3); 
+      table_row.style.backgroundColor = color_string; 
+      email_table.appendChild(table_row); 
+      
+      // Append table to document div. 
+      let email_div_view = document.querySelector("#emails-view"); 
+      email_div_view.appendChild(email_table); 
+    }
+
 
     // ... do something else with emails ...
 });
