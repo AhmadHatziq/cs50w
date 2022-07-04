@@ -144,6 +144,7 @@ function load_mailbox(mailbox) {
       let body = single_email['body']; 
       let recipient_list = single_email['recipients']; 
       let timestamp = single_email['timestamp']; 
+      let email_id = single_email['id']; 
 
       // Create table elements 
       let table_row = document.createElement("tr"); 
@@ -162,6 +163,17 @@ function load_mailbox(mailbox) {
       table_data_2.textContent = subject; 
       table_data_3.textContent = timestamp; 
 
+      // Make the email subject clickable when the user hovers (like an anchor) and send user to view that particular email. 
+      table_data_2.addEventListener("mouseover", function() {
+        table_data_2.style = 'color: blue; text-decoration: underline; cursor: pointer;'; 
+      })
+      table_data_2.addEventListener("mouseout", function() {
+        table_data_2.style = ''; 
+      })
+      table_data_2.addEventListener("click", function() {
+        show_single_email(email_id, mailbox); 
+      }); 
+
       // Append row to the table 
       table_row.appendChild(table_data_1); 
       table_row.appendChild(table_data_2); 
@@ -177,5 +189,49 @@ function load_mailbox(mailbox) {
 
     // ... do something else with emails ...
 });
+
+}
+
+// Displays the contents of a single email. 
+// Function is called when a subject title is clicked. 
+function show_single_email(email_id, mailbox) {
+
+  // Clear the emails-view of any content. 
+  let email_div_view = document.querySelector("#emails-view"); 
+  email_div_view.innerHTML = '';
+
+  // Extract content of email and display to user. 
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(email => {
+    
+    // Process email contents
+    let is_read = email['read']; 
+    let is_archived = email['archived']; 
+    let sender = email['sender']; 
+    let subject = email['subject']; 
+    let body = email['body']; 
+    let recipient_list = email['recipients']; 
+    let timestamp = email['timestamp']; 
+    let email_id = email['id']; 
+
+    // Create div elements for email. 
+    let single_email_div = document.createElement("div");
+    single_email_div.innerHTML = `
+      <h3> Email Details:</h3> <br>
+      <h4> Subject: ${subject} </h4> <br>
+      <h5> From: ${sender} </h5> 
+      <h5> To: ${recipient_list} </h5> 
+      <h6> Received timestamp: ${timestamp} </h6> <br>
+      <h6> Email contents: </h6>
+      <div class="card">
+        <div class="card-body">
+          ${body}
+        </div>
+      </div>
+    `; 
+    email_div_view.appendChild(single_email_div)
+
+  });
 
 }
