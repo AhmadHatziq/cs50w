@@ -152,10 +152,12 @@ function load_mailbox(mailbox) {
       let table_data_2 = document.createElement("td"); 
       let table_data_3 = document.createElement("td"); 
 
-      // Set color to gray if email is read. 
+      // Set color to gray if email is read. Color is white if not read. 
       let color_string = 'white'; 
-      if (is_read === true){ 
+      if (is_read){ 
         color_string = 'lightgrey';
+      } else {
+        color_string = 'white'; 
       }
 
       // Assign data to the row elements 
@@ -278,6 +280,7 @@ function show_single_email(email_id, mailbox) {
     archive_button.className = 'btn btn-warning';
     archive_button.innerText = `${archive_button_string}`;  
     archive_button.id = 'archive_button'; 
+    archive_button.addEventListener('click', () => mark_email_as_archive(email_id)); 
     single_email_div.appendChild(archive_button); 
     single_email_div.appendChild(document.createElement("br")); 
     single_email_div.appendChild(document.createElement("br")); 
@@ -290,15 +293,64 @@ function show_single_email(email_id, mailbox) {
 
 };
 
+// Handles marking an email as archived or unarchived. 
+// email_id is the int representing email ID. 
+function mark_email_as_archive(email_id) {
+
+  // Fetch the email to get the current archive status. 
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(email => {
+
+    let current_archive_status = email['archived']; 
+
+    if (current_archive_status) {
+
+      // Send API call to set status as unarchived. 
+      fetch(`/emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          archived: false 
+        })
+      }); 
+
+      // Update button text to reflect the change to the user. 
+      let button_text = 'Archive'; 
+      let archive_button = document.getElementById('archive_button');
+      archive_button.innerText = button_text; 
+
+    } else {
+
+      // Send API call to set status as unarchived. 
+      fetch(`/emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          archived: true 
+        })
+      }); 
+
+      // Update button text to reflect the change to the user. 
+      let button_text = 'Unarchive'; 
+      let archive_button = document.getElementById('archive_button');
+      archive_button.innerText = button_text; 
+    }
+
+  });
+
+  // Once an email has been archived or unarchived, load the user's inbox. 
+  load_mailbox('inbox');
+
+};
+
 // Handles marking an email as read or unread.
-// email_id is the int representing email ID. is_read is the boolean variable representing if an email has been read or not.  
+// email_id is the int representing email ID. 
 function mark_email_as_read(email_id) {
 
   // Made function retrieve email again to keep it modular. 
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
-    current_read_status = email['read']; 
+    let current_read_status = email['read']; 
 
     if (current_read_status) {
 
@@ -315,6 +367,8 @@ function mark_email_as_read(email_id) {
       let read_button = document.getElementById('read_button');
       read_button.innerText = button_text; 
 
+      //console.log(`Marked as unread for ${email_id}`);
+
     } else {
 
       // Send API call to set status as read
@@ -329,6 +383,8 @@ function mark_email_as_read(email_id) {
       let button_text = 'Mark as Unread'
       let read_button = document.getElementById('read_button');
       read_button.innerText = button_text; 
+
+      //console.log(`Marked as read for ${email_id}`);
     }; 
 
   }); 
