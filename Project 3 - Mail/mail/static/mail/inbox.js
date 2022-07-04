@@ -93,7 +93,7 @@ function compose_email() {
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
-}
+};
 
 function load_mailbox(mailbox) {
   
@@ -190,7 +190,7 @@ function load_mailbox(mailbox) {
     // ... do something else with emails ...
 });
 
-}
+};
 
 // Displays the contents of a single email. 
 // Function is called when a subject title is clicked. 
@@ -257,6 +257,7 @@ function show_single_email(email_id, mailbox) {
     let reply_button = document.createElement("button");
     reply_button.className = 'btn btn-primary'; 
     reply_button.innerText = 'Reply'; 
+    reply_button.id = 'reply_button'; 
     reply_button.addEventListener('click', () => load_reply_email(recipient_list, subject, body, timestamp));
     single_email_div.appendChild(reply_button); 
     single_email_div.appendChild(document.createElement("br")); 
@@ -266,6 +267,8 @@ function show_single_email(email_id, mailbox) {
     let read_button = document.createElement('button'); 
     read_button.className = 'btn btn-success'
     read_button.innerText = `${read_button_string}`; 
+    read_button.id = 'read_button'; 
+    read_button.addEventListener('click', () => mark_email_as_read(email_id)); 
     single_email_div.appendChild(read_button); 
     single_email_div.appendChild(document.createElement("br")); 
     single_email_div.appendChild(document.createElement("br")); 
@@ -273,8 +276,8 @@ function show_single_email(email_id, mailbox) {
     // Create archive/unarchive button 
     let archive_button = document.createElement('button'); 
     archive_button.className = 'btn btn-warning';
-    archive_button.innerText = `${archive_button_string}`; 
-    archive_button.style = "display: inline-block;"; 
+    archive_button.innerText = `${archive_button_string}`;  
+    archive_button.id = 'archive_button'; 
     single_email_div.appendChild(archive_button); 
     single_email_div.appendChild(document.createElement("br")); 
     single_email_div.appendChild(document.createElement("br")); 
@@ -285,7 +288,51 @@ function show_single_email(email_id, mailbox) {
 
   });
 
-}
+};
+
+// Handles marking an email as read or unread.
+// email_id is the int representing email ID. is_read is the boolean variable representing if an email has been read or not.  
+function mark_email_as_read(email_id) {
+
+  // Made function retrieve email again to keep it modular. 
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(email => {
+    current_read_status = email['read']; 
+
+    if (current_read_status) {
+
+      // Send API call to set status as unread 
+      fetch(`/emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            read:false 
+        })
+      }); 
+
+      // Change button text to display the change to the user 
+      let button_text = 'Mark as Read'
+      let read_button = document.getElementById('read_button');
+      read_button.innerText = button_text; 
+
+    } else {
+
+      // Send API call to set status as read
+      fetch(`/emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            read:true
+        })
+      }); 
+
+      // Change button text to display the change to the user 
+      let button_text = 'Mark as Unread'
+      let read_button = document.getElementById('read_button');
+      read_button.innerText = button_text; 
+    }; 
+
+  }); 
+}; 
 
 // Loads up email composition form with 3 fields pre-filled: recipient, subject, body. 
 function load_reply_email(recipient, subject, body, timestamp) {
@@ -299,4 +346,4 @@ function load_reply_email(recipient, subject, body, timestamp) {
     document.querySelector('#compose-subject').value = `Re: ${subject}`;
     document.querySelector('#compose-body').value = `On ${timestamp} ${recipient} wrote: ${body} \n\n`;
 
-}
+};
