@@ -215,8 +215,27 @@ function show_single_email(email_id, mailbox) {
     let timestamp = email['timestamp']; 
     let email_id = email['id']; 
 
-    // Create div elements for email. 
+    // Mark this email as read. 
+    is_read = true; 
+    fetch(`/emails/${email_id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          read:true
+      })
+    })
+
+    // Create div elements for email contents. 
+    // Include buttons for replying, marking as read and archiving/unarchiving
+    // Read and Archiving buttons will change depending on current email state. 
     let single_email_div = document.createElement("div");
+    let read_button_string = 'Mark as Read'; 
+    if (is_read) {
+      read_button_string = 'Mark as Unread'; 
+    }
+    let archive_button_string = 'Archive';
+    if (is_archived) {
+      archive_button_string = 'Unarchive'; 
+    }
     single_email_div.innerHTML = `
       <h3> Email Details:</h3> <br>
       <h4> Subject: ${subject} </h4> <br>
@@ -229,9 +248,55 @@ function show_single_email(email_id, mailbox) {
           ${body}
         </div>
       </div>
-    `; 
+      <br>
+
+ 
+    `;
+
+    // Create reply button 
+    let reply_button = document.createElement("button");
+    reply_button.className = 'btn btn-primary'; 
+    reply_button.innerText = 'Reply'; 
+    reply_button.addEventListener('click', () => load_reply_email(recipient_list, subject, body, timestamp));
+    single_email_div.appendChild(reply_button); 
+    single_email_div.appendChild(document.createElement("br")); 
+    single_email_div.appendChild(document.createElement("br")); 
+
+    // Create mark-as-read/unread button. 
+    let read_button = document.createElement('button'); 
+    read_button.className = 'btn btn-success'
+    read_button.innerText = `${read_button_string}`; 
+    single_email_div.appendChild(read_button); 
+    single_email_div.appendChild(document.createElement("br")); 
+    single_email_div.appendChild(document.createElement("br")); 
+
+    // Create archive/unarchive button 
+    let archive_button = document.createElement('button'); 
+    archive_button.className = 'btn btn-warning';
+    archive_button.innerText = `${archive_button_string}`; 
+    archive_button.style = "display: inline-block;"; 
+    single_email_div.appendChild(archive_button); 
+    single_email_div.appendChild(document.createElement("br")); 
+    single_email_div.appendChild(document.createElement("br")); 
+
+
+    // Append email div back to original email view div. 
     email_div_view.appendChild(single_email_div)
 
   });
+
+}
+
+// Loads up email composition form with 3 fields pre-filled: recipient, subject, body. 
+function load_reply_email(recipient, subject, body, timestamp) {
+
+    // Show compose view and hide other views
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'block';
+  
+    // Pre-fill up composition fields
+    document.querySelector('#compose-recipients').value = `${recipient}`;
+    document.querySelector('#compose-subject').value = `Re: ${subject}`;
+    document.querySelector('#compose-body').value = `On ${timestamp} ${recipient} wrote: ${body} \n\n`;
 
 }
