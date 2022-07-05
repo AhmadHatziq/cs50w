@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Process the user parameters when the user submitted the #compose-form form. 
   document.querySelector('#compose-form').onsubmit = () => {
     send_email();
-    load_mailbox('inbox'); 
+    load_mailbox('sent'); 
     
     // NTS: Set to false. If we set to true, will get broken pipe error. 
     // We will manually set the view to load_mailbox.  
@@ -79,7 +79,7 @@ function send_email() {
     alert('Error in sending message.\nPlease try again.', error); 
   });
 
-  return;
+  
 
 };
 
@@ -260,7 +260,7 @@ function show_single_email(email_id, mailbox) {
     reply_button.className = 'btn btn-primary'; 
     reply_button.innerText = 'Reply'; 
     reply_button.id = 'reply_button'; 
-    reply_button.addEventListener('click', () => load_reply_email(recipient_list, subject, body, timestamp));
+    reply_button.addEventListener('click', () => load_reply_email(sender, subject, body, timestamp));
     single_email_div.appendChild(reply_button); 
     single_email_div.appendChild(document.createElement("br")); 
     single_email_div.appendChild(document.createElement("br")); 
@@ -275,15 +275,17 @@ function show_single_email(email_id, mailbox) {
     single_email_div.appendChild(document.createElement("br")); 
     single_email_div.appendChild(document.createElement("br")); 
 
-    // Create archive/unarchive button 
-    let archive_button = document.createElement('button'); 
-    archive_button.className = 'btn btn-warning';
-    archive_button.innerText = `${archive_button_string}`;  
-    archive_button.id = 'archive_button'; 
-    archive_button.addEventListener('click', () => mark_email_as_archive(email_id)); 
-    single_email_div.appendChild(archive_button); 
-    single_email_div.appendChild(document.createElement("br")); 
-    single_email_div.appendChild(document.createElement("br")); 
+    // Create archive/unarchive button for mails not in sentbox 
+    if (!mailbox.includes('sent')) { 
+      let archive_button = document.createElement('button'); 
+      archive_button.className = 'btn btn-warning';
+      archive_button.innerText = `${archive_button_string}`;  
+      archive_button.id = 'archive_button'; 
+      archive_button.addEventListener('click', () => mark_email_as_archive(email_id)); 
+      single_email_div.appendChild(archive_button); 
+      single_email_div.appendChild(document.createElement("br")); 
+      single_email_div.appendChild(document.createElement("br")); 
+    }; 
 
 
     // Append email div back to original email view div. 
@@ -391,15 +393,15 @@ function mark_email_as_read(email_id) {
 }; 
 
 // Loads up email composition form with 3 fields pre-filled: recipient, subject, body. 
-function load_reply_email(recipient, subject, body, timestamp) {
+function load_reply_email(sender, subject, body, timestamp) {
 
     // Show compose view and hide other views
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#compose-view').style.display = 'block';
   
     // Pre-fill up composition fields
-    document.querySelector('#compose-recipients').value = `${recipient}`;
+    document.querySelector('#compose-recipients').value = `${sender}`;
     document.querySelector('#compose-subject').value = `Re: ${subject}`;
-    document.querySelector('#compose-body').value = `On ${timestamp} ${recipient} wrote: ${body} \n\n`;
+    document.querySelector('#compose-body').value = `On ${timestamp} ${sender} wrote: ${body} \n\n`;
 
 };
