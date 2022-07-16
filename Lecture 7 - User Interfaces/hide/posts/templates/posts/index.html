@@ -68,6 +68,10 @@
             // If hide button is clicked, delete the post
             document.addEventListener('click', event => {
                 const element = event.target;
+
+                console.log(`This element ${element} was clicked.`);
+
+                // Only buttons have the 'hide' class
                 if (element.className === 'hide') {
                     element.parentElement.style.animationPlayState = 'running';
                     element.parentElement.addEventListener('animationend', () =>  {

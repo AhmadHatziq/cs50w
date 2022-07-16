@@ -28,6 +28,7 @@
             window.onscroll = () => {
                 if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                     load();
+                    console.log(`Start: ${counter}. End: ${counter + quantity - 1}`);
                 }
             };
 
@@ -43,7 +44,7 @@
                 fetch(`/posts?start=${start}&end=${end}`)
                 .then(response => response.json())
                 .then(data => {
-                    data.posts.forEach(add_post);
+                    data.posts.forEach(add_post); // For each post, run the add_post content. 
                 })
             };
 
