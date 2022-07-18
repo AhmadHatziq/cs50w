@@ -7,8 +7,10 @@ from .models import Flight, Passenger
 
 # Create your views here.
 def index(request):
+    flights = Flight.objects.all()
+    print('flights: ', flights)
     return render(request, "flights/index.html", {
-        "flights": Flight.objects.all()
+        "flights": flights
     })
 
 
@@ -17,6 +19,8 @@ def flight(request, flight_id):
         flight = Flight.objects.get(id=flight_id)
     except Flight.DoesNotExist:
         raise Http404("Flight not found.")
+    print('flight: ', flight)
+    print('passengers: ', flight.passengers.all())
     return render(request, "flights/flight.html", {
         "flight": flight,
         "passengers": flight.passengers.all(),
