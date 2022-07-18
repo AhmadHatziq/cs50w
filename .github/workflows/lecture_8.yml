@@ -9,5 +9,6 @@ jobs:
     - name: Run Django unit tests
       run: |
         pip3 install --user django
+        cd 'cs50w/Lecture 8 - Testing CICD/airline0'
         python3 manage.py test
-      working-directory: ./cs50w/Lecture\ 8\ -\ Testing\ CICD/airline0/
+      
