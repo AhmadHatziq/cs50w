@@ -10,4 +10,4 @@ jobs:
       run: |
         pip3 install --user django
         python3 manage.py test
-      working-directory: /Lecture\ 8\ -\ Testing\ CICD/airline0/
+      working-directory: ./cs50w/Lecture\ 8\ -\ Testing\ CICD/airline0/
