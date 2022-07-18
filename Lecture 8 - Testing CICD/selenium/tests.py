@@ -4,12 +4,15 @@ import unittest
 
 from selenium import webdriver
 
+from webdriver_manager.chrome import ChromeDriverManager
+
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 def file_uri(filename):
     return pathlib.Path(os.path.abspath(filename)).as_uri()
 
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 
 class WebpageTests(unittest.TestCase):
