@@ -61,3 +61,19 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+'''
+    Test out adding a follower to a user as hard to do so via Admin GUI. 
+'''
+def hardcode_make_b_follow_a(request):
+    user_a = User.objects.get(username = 'a')
+    user_b = User.objects.get(username = 'b')
+    
+    # If b follows a, need to 1) add user a to b's following list. 2) add user b to a's follower list. 
+    user_b.following.add(user_a)
+    user_a.followers.add(user_b)
+    print('User B is now following User A')
+    print('B is following: ', user_b.following.all())
+    print('A followers: ', user_a.followers.all())
+
+    return render(request, "network/index.html")
