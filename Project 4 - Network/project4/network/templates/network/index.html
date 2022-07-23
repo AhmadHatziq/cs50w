@@ -1,5 +1,23 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    <!-- <div class="card-header"><h4>All Posts</h4></div> --> 
+    <h4>All Posts</h4>
+    <div class="card-body">
+        <div class="row card">
+            <h5>New Post</h5>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Enter your post: </label>
+                    <textarea class="form-control" name="post" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Post</button>
+            </form>
+        </div>
+        <br>
+        <div class="row card">
+            <p>Placeholder Content</p>
+        </div>
+    </div>
 {% endblock %}
