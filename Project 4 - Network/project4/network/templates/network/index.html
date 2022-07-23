@@ -1,12 +1,11 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <!-- <div class="card-header"><h4>All Posts</h4></div> --> 
     <h4>All Posts</h4>
     <div class="card-body">
         <div class="row card">
             <h5>New Post</h5>
-            <form action="" method="post">
+            <form action = " {% url 'new_post' %} " method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1">Enter your post: </label>

@@ -62,10 +62,35 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-'''
-    Test out adding a follower to a user as hard to do so via Admin GUI. 
-'''
+def new_post(request): 
+    '''
+    Called when the post form is submitted. 
+    Aims to store the new post data to the database and returns the user back to the index route. 
+    '''
+    if request.method == "POST":
+    
+        # Extract posted content and current username. 
+        post_content = request.POST["post"]
+        username = request.user.username
+
+        print(f'User: {username}')
+        print(f'Content: {post_content}')
+
+        # Create a message to inform user that comment was sent successfully. 
+        context_dict = {'message': 'Your post was submitted successfully.'}
+
+        return render(request, "network/index.html", context_dict)
+    else: 
+        return render(request, "network/index.html")
+
+
+
+    
+
 def hardcode_make_b_follow_a(request):
+    '''
+    Test out adding a follower to a user as hard to do so via Admin GUI. 
+    '''
     user_a = User.objects.get(username = 'a')
     user_b = User.objects.get(username = 'b')
     
