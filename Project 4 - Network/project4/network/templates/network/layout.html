@@ -42,6 +42,13 @@
           </nav>
         
         <div class="body">
+            <!-- Show message if it exists in context -->
+            {% if message %}
+                <div class="alert alert-warning" role="alert"> > 
+                    {{ message }}
+                </div>
+            {% endif %}
+
             {% block body %}
             {% endblock %}
         </div>
