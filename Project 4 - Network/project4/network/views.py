@@ -4,10 +4,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post, FollowRelation, Like
 
 
 def index(request):
+
+    # Check if the session object has a banner message. 
+    # If so, extract and remove it. And send it to index.html inside the context.  
+    if 'banner_message' in request.session:
+        banner_message = request.session['banner_message']
+        del request.session['banner_message']
+
+        context_dict = {'message': 'Your post was submitted successfully.'}
+        return render(request, "network/index.html", context_dict)
+
     return render(request, "network/index.html")
 
 
@@ -73,13 +83,24 @@ def new_post(request):
         post_content = request.POST["post"]
         username = request.user.username
 
-        print(f'User: {username}')
-        print(f'Content: {post_content}')
+        # Log down content and username
+        # print('\nUser submitted a new post.')
+        # print(f'User: {username}')
+        # print(f'Content: {post_content}\n')
 
-        # Create a message to inform user that comment was sent successfully. 
-        context_dict = {'message': 'Your post was submitted successfully.'}
+        # Create new POST object and save to database. 
+        new_post = Post(
+            post_text_content = post_content, 
+            post_user = User.objects.get(username = username)
+        )
+        new_post.save()
+        print(f"\nSaved new post into POST model: {new_post}\n")
 
-        return render(request, "network/index.html", context_dict)
+        # Set session variable for banner_message and redirect to index.html 
+        request.session['banner_message'] = 'Your post was submitted successfully.'
+        source_address = (request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(source_address)
+
     else: 
         return render(request, "network/index.html")
 
