@@ -29,6 +29,9 @@ class Post(models.Model):
     post_text_content = models.CharField(max_length=255)
     post_user =  models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'comment_poster')
 
+    def __str__(self): 
+        return f"Post content: '{self.post_text_content}'. Posted by: {self.post_user.username}"
+
 class Like(models.Model): 
     """
     Represents a Like of a User for a Post. 
