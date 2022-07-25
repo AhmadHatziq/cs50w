@@ -2,6 +2,9 @@
 
 {% block body %}
     <h4>All Posts</h4>
+
+    <!-- Display form to submit a new post for logged in users -->
+    {% if user.is_authenticated %}
     <div class="card-body">
         <div class="row card">
             <h5>New Post</h5>
@@ -16,6 +19,7 @@
         </div>
         <br>
     </div>
+    {% endif %}
 
     {% for post in page_obj %} 
     <div class="card">
