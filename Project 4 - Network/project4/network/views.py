@@ -135,11 +135,11 @@ def get_pagination_objects(request):
     Returns a context dictionary to be passed to the template. 
     '''
 
-    # Extract all social media posts. 
-    social_media_posts = Post.objects.all()
+    # Extract all social media posts. Sort to let the latest one appear first.  
+    social_media_posts = Post.objects.all().order_by('-post_timestamp__hour', '-post_timestamp__minute', '-post_timestamp__second')
 
-    # Set pagination to display to 5 per page 
-    paginator = Paginator(social_media_posts, 5)
+    # Set pagination to display to 10 per page 
+    paginator = Paginator(social_media_posts, 10)
     
     # Extract out page_obg and generate page_range 
     page_number = request.GET.get('page')
