@@ -34,6 +34,7 @@ class Post(models.Model):
     """
     post_text_content = models.CharField(max_length=255)
     post_user =  models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'comment_poster')
+    post_timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self): 
         return f"Post content: '{self.post_text_content}'. Posted by: {self.post_user.username}"

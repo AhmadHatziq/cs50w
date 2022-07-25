@@ -5,7 +5,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username", "email", "password", "last_login", "date_joined", "is_staff")
 
 class PostAdmin(admin.ModelAdmin):         
-    list_display = ("id", "post_text_content", "post_user")
+    list_display = ("id", "post_text_content", "post_user", "post_timestamp")
 
 class LikeAdmin(admin.ModelAdmin): 
     list_display = ("id", "liked_post", "liked_by")
