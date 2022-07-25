@@ -1,0 +1,72 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    
+    <!-- Show error message if user does not exist -->
+    {% if error_message %}
+        <div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center">
+                <h1 class="display-1 fw-bold">404</h1>
+                <p class="fs-3"> <span class="text-danger">Opps!</span> User profile not found.</p>
+                <p class="lead">
+                    {{ error_message }}
+                    </p>
+                <a href="index.html" class="btn btn-primary">Go Home</a>
+            </div>
+        </div>
+    {% else %}
+
+    <div class="card" style="border-radius: 15px;">
+        <div class="card-body p-4">
+          <div class="d-flex text-black">
+            <div class="flex-shrink-0">
+                {% load static %}
+                <img src="{% static 'network/images/user_profile_1.png' %}" alt="Generic user profile picture"
+                class="img-fluid" style="width: 180px; border-radius: 10px;">
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="mb-1">{{ username }}</h5>
+              <p class="mb-2 pb-1" style="color: #2b2a2a;">Email: {{ user_email }}</p>
+              <p class="mb-2 pb-1" style="color: #2b2a2a;">Date joined: {{ user_join_date }}</p>
+              <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
+                style="background-color: #efefef;">
+                <div class="px-3">
+                  <p class="small text-muted mb-1">Posts</p>
+                  <p class="mb-0">{{ post_count }}</p>
+                </div>
+                <div class="px-3">
+                  <p class="small text-muted mb-1">Followers</p>
+                  <p class="mb-0">XX</p>
+                </div>
+                <div class="px-3">
+                    <p class="small text-muted mb-1">Following</p>
+                    <p class="mb-0">YY</p>
+                  </div>
+              </div>
+              <div class="d-flex pt-1">
+                <!-- Display follow/unfollow buttons if user is not user_profile -->
+                {% if allow_follow_button %}
+                    <button type="button" class="btn btn-primary flex-grow-1">(Un)Follow</button>
+                {% else %} 
+                    <button type="button" disabled class="btn btn-primary flex-grow-1">(Un)Follow</button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show user posts -->
+      <h4>Posts: </h4>
+        {% for post in posts %} 
+        <div class="card">
+            <div class="card-body"> 
+                    <p class="card-title">Post content: {{ post.post_text_content }}</p>
+                    <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    
+    {% endif %}
+
+{% endblock %}

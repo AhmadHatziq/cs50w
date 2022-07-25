@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator 
 from django.db import IntegrityError
@@ -6,7 +8,6 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Post, FollowRelation, Like
-
 
 def index(request):
 
@@ -170,3 +171,43 @@ def hardcode_make_b_follow_a(request):
     print('A followers: ', user_a.followers.all())
 
     return render(request, "network/index.html")
+
+def display_user_profile(request, username): 
+    '''
+    Displays the user profile given the username. 
+    Uses the 'user_profile.html' template file. 
+    '''
+
+    # Checks if the username is valid. If so, shows the posts made by that user. 
+    try:
+        
+        # Extract user information
+        user_object = User.objects.get(username=username)
+        user_email = user_object.email 
+        user_join_date = user_object.date_joined.date() 
+        
+        # Only allow un/follow button if user is logged in and not the profile user
+        allow_follow_button = False
+        if request.user.is_authenticated:
+            current_username = request.user.username
+            if current_username != username:
+                allow_follow_button = True 
+
+        # Extract posts, sort by time. 
+        posts_made_by_user = Post.objects.filter(post_user = user_object)
+        posts_made_by_user = posts_made_by_user.order_by('-post_timestamp__hour', '-post_timestamp__minute', '-post_timestamp__second')
+        
+        # Pass parameters in context dictionary and render template. 
+        context_dict = {
+            'user_email': user_email, 
+            'user_join_date': user_join_date, 
+            'username': username, 
+            'posts': posts_made_by_user, 
+            'post_count': len(posts_made_by_user), 
+            'allow_follow_button': allow_follow_button
+        }
+        return render(request, "network/user_profile.html", context_dict)
+    except User.DoesNotExist:
+        error_message = f"The user you are looking for ('{username}') does not exist."
+        return render(request, "network/user_profile.html", {"error_message": error_message})
+
