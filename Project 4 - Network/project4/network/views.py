@@ -116,9 +116,15 @@ def test_pagination(request):
     # Set pagination to display to 5 per page 
     paginator = Paginator(social_media_posts, 5)
     
+    # Extract out page_obg and generate page_range 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'network/paginator_test.html', {'page_obj' : page_obj})
+    page_range = list(paginator.page_range)
+    context_dict = {
+        'page_obj' : page_obj, 
+        'page_range': page_range 
+    }
+    return render(request, 'network/paginator_test.html', context_dict)
 
 
 
