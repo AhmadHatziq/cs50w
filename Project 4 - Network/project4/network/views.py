@@ -10,16 +10,19 @@ from .models import User, Post, FollowRelation, Like
 
 def index(request):
 
+    # Processes all posts in the DB for pagination. 
+    context_dict = get_pagination_objects(request)
+
     # Check if the session object has a banner message. 
     # If so, extract and remove it. And send it to index.html inside the context.  
     if 'banner_message' in request.session:
         banner_message = request.session['banner_message']
         del request.session['banner_message']
 
-        context_dict = {'message': 'Your post was submitted successfully.'}
+        context_dict['message'] = 'Your post was submitted successfully.'
         return render(request, "network/index.html", context_dict)
 
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", context_dict)
 
 
 def login_view(request):
@@ -126,7 +129,28 @@ def test_pagination(request):
     }
     return render(request, 'network/paginator_test.html', context_dict)
 
+def get_pagination_objects(request): 
+    '''
+    Helper function to obtain media post as a pagination dictionary. 
+    Returns a context dictionary to be passed to the template. 
+    '''
 
+    # Extract all social media posts. 
+    social_media_posts = Post.objects.all()
+
+    # Set pagination to display to 5 per page 
+    paginator = Paginator(social_media_posts, 5)
+    
+    # Extract out page_obg and generate page_range 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    page_range = list(paginator.page_range)
+    context_dict = {
+        'page_obj' : page_obj, 
+        'page_range': page_range 
+    }
+
+    return context_dict 
 
 
     
