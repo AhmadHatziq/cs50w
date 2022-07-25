@@ -7,6 +7,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+import json 
+
 from .models import User, Post, FollowRelation, Like
 
 def index(request):
@@ -64,10 +66,12 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
+        # Attempt to create new user and followRelation 
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
+            followRelation = FollowRelation(follower=user)
+            followRelation.save() 
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."
@@ -154,8 +158,6 @@ def get_pagination_objects(request):
     return context_dict 
 
 
-    
-
 def hardcode_make_b_follow_a(request):
     '''
     Test out adding a follower to a user as hard to do so via Admin GUI. 
@@ -182,19 +184,29 @@ def display_user_profile(request, username):
     try:
         
         # Extract user information
-        user_object = User.objects.get(username=username)
-        user_email = user_object.email 
-        user_join_date = user_object.date_joined.date() 
+        user_profile_object = User.objects.get(username=username)
+        user_email = user_profile_object.email 
+        user_join_date = user_profile_object.date_joined.date() 
         
-        # Only allow un/follow button if user is logged in and not the profile user
-        allow_follow_button = False
+        # Only allow un/follow button if user is logged in and not the profile user. 
+        # Also checks that if the user is logged on, determine if the user is currently following the user profile. 
+        allow_follow_button, currently_following = False, False
         if request.user.is_authenticated:
             current_username = request.user.username
+            current_user_object = User.objects.get(username=current_username)
             if current_username != username:
                 allow_follow_button = True 
+            
+            # Queries and gets the current followers that the current user is following 
+            followRelation = FollowRelation.objects.get(follower=current_user_object) 
+            users_currently_following = followRelation.users_following.all()
+            if user_profile_object in users_currently_following: 
+                currently_following = True 
+
+
 
         # Extract posts, sort by time. 
-        posts_made_by_user = Post.objects.filter(post_user = user_object)
+        posts_made_by_user = Post.objects.filter(post_user = user_profile_object)
         posts_made_by_user = posts_made_by_user.order_by('-post_timestamp__hour', '-post_timestamp__minute', '-post_timestamp__second')
         
         # Pass parameters in context dictionary and render template. 
@@ -204,10 +216,51 @@ def display_user_profile(request, username):
             'username': username, 
             'posts': posts_made_by_user, 
             'post_count': len(posts_made_by_user), 
-            'allow_follow_button': allow_follow_button
+            'allow_follow_button': allow_follow_button, 
+            'currently_following': currently_following
         }
         return render(request, "network/user_profile.html", context_dict)
     except User.DoesNotExist:
         error_message = f"The user you are looking for ('{username}') does not exist."
         return render(request, "network/user_profile.html", {"error_message": error_message})
+
+def follow(request): 
+    '''
+    Handles when a user wants to follow or unfollow. 
+    Is called via POST using asynchronous JS. 
+    '''
+    if request.method == "POST": 
+
+        # Extract parameters sent from JSON body. 
+        data = json.loads(request.body)
+        print('JSON body object:', data)
+        current_user = data['current_user']
+        target_user = data['target_user']
+        current_follow_status = (str(data['current_follow_status'])).lower()
+        # print(current_follow_status)
+
+        # Extract user objects from database. 
+        current_user_object = User.objects.get(username=current_user)
+        target_user_object = User.objects.get(username=target_user)
+
+        # Extract the followRelation 
+        followRelation = FollowRelation.objects.get(follower=current_user_object)
+
+        # Update depending on current_follow_status 
+        if current_follow_status in ['true', 'True']:
+            # As user is already following the target, will proceed to unfollow.
+            if target_user_object in followRelation.users_following.all(): 
+                followRelation.users_following.remove(target_user_object) 
+                print(f'\n{current_user_object.username} has unfollowed {target_user_object.username}\n')
+                return HttpResponse(status=204)
+             
+        elif current_follow_status in ['false', 'False']:  
+            # As user is not following the target, will proceed to add the follow-relation.
+            followRelation.users_following.add(target_user_object) 
+            print(f'\n{current_user_object.username} has followed {target_user_object.username}\n')
+            return HttpResponse(status=204)
+        else: 
+            print('no')
+
+    return HttpResponse(status=500)
 

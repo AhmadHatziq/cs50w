@@ -1,5 +1,54 @@
 {% extends "network/layout.html" %}
 
+{% block javascript %}
+{% if user.is_authenticated %}
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Attach function to follow/unfollow button
+            document.querySelector('#follow_button').addEventListener('click', () => follow_or_unfollow()); 
+            
+        }); 
+
+        // Function that sends an API call to the '/follow' route. 
+        // Handles both following and unfollowing events. 
+        function follow_or_unfollow(){ 
+            // Get user to follow or unfollow. 
+            const user_profile = document.querySelector('#user_profile').innerHTML; 
+
+            // Get current user. 
+            const current_user = '{{ user.username }}'; 
+
+            // Check if un/follow button is activated. Return & do nothing if the button is not activated. 
+            // Button is only active if both profile and current users are not the same. 
+            let is_button_active = JSON.parse('{{ allow_follow_button }}'.toLowerCase());  
+            if (!is_button_active) {
+                return; 
+            }; 
+
+            let current_following = JSON.parse('{{ currently_following }}'.toLowerCase()); 
+            const csrftoken = '{{ csrf_token }}'
+
+            // POST parameters to the '/follow' route using async JavaScript. 
+            fetch(`/follow`, {
+                method: 'POST', 
+                headers: {'X-CSRFToken': csrftoken},
+                body: JSON.stringify({
+                    current_user: current_user, 
+                    target_user: user_profile, 
+                    current_follow_status: current_following, 
+                })
+            })
+
+            // Wait 1 second1 before reloading the page. 
+            setTimeout(function(){ location.reload(); }, 1000);
+            
+        }; 
+    </script>
+{% endif %}
+{% endblock %} 
+
 {% block body %}
     
     <!-- Show error message if user does not exist -->
@@ -25,7 +74,7 @@
                 class="img-fluid" style="width: 180px; border-radius: 10px;">
             </div>
             <div class="flex-grow-1 ms-3">
-              <h5 class="mb-1">{{ username }}</h5>
+              <h5 class="mb-1" id="user_profile">{{ username }}</h5>
               <p class="mb-2 pb-1" style="color: #2b2a2a;">Email: {{ user_email }}</p>
               <p class="mb-2 pb-1" style="color: #2b2a2a;">Date joined: {{ user_join_date }}</p>
               <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
@@ -46,7 +95,11 @@
               <div class="d-flex pt-1">
                 <!-- Display follow/unfollow buttons if user is not user_profile -->
                 {% if allow_follow_button %}
-                    <button type="button" class="btn btn-primary flex-grow-1">(Un)Follow</button>
+                    {% if currently_following %} 
+                        <button type="button" id="follow_button" class="btn btn-primary flex-grow-1">UnFollow</button>
+                    {% else %} 
+                        <button type="button" id="follow_button" class="btn btn-primary flex-grow-1">Follow</button>
+                    {% endif %}
                 {% else %} 
                     <button type="button" disabled class="btn btn-primary flex-grow-1">(Un)Follow</button>
                 {% endif %}
