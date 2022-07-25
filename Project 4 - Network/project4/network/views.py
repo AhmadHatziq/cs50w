@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator 
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -103,6 +104,22 @@ def new_post(request):
 
     else: 
         return render(request, "network/index.html")
+
+def test_pagination(request):    
+    '''
+    Test out the pagination in Django, before integrating it into index.html. 
+    '''
+    
+    # Extract all social media posts. 
+    social_media_posts = Post.objects.all()
+
+    # Set pagination to display to 5 per page 
+    paginator = Paginator(social_media_posts, 5)
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'network/paginator_test.html', {'page_obj' : page_obj})
+
 
 
 
