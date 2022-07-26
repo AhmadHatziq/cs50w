@@ -8,7 +8,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ("id", "post_text_content", "post_user", "post_timestamp")
 
 class LikeAdmin(admin.ModelAdmin): 
-    list_display = ("id", "liked_post", "liked_by")
+    list_display = ("id", "liked_post", "get_users_that_liked")
 
 class FollowRelationAdmin(admin.ModelAdmin): 
     list_display = ("id", "follower", "get_users_being_followed")

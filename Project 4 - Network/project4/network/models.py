@@ -41,10 +41,13 @@ class Post(models.Model):
 
 class Like(models.Model): 
     """
-    Represents a Like of a User for a Post. 
+    Represents a Like of a Post by a group of user(s). 
     """
     liked_post = models.ForeignKey(Post, on_delete = models.CASCADE) 
-    liked_by = models.ForeignKey(User, on_delete = models.CASCADE)
+    liked_by_users = models.ManyToManyField(User, blank = True)
+    
+    def get_users_that_liked(self): 
+        return "\n".join([u.username for u in self.liked_by_users.all()])
 
 
 

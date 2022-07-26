@@ -14,7 +14,7 @@ from .models import User, Post, FollowRelation, Like
 def index(request):
 
     # Processes all posts in the DB for pagination. 
-    context_dict = get_pagination_objects(request)
+    context_dict = get_paginated_posts(request)
 
     # Check if the session object has a banner message. 
     # If so, extract and remove it. And send it to index.html inside the context.  
@@ -85,6 +85,7 @@ def new_post(request):
     '''
     Called when the post form is submitted. 
     Aims to store the new post data to the database and returns the user back to the index route. 
+    Also creates a Like object for the new post, with no users inside. 
     '''
     if request.method == "POST":
     
@@ -102,8 +103,16 @@ def new_post(request):
             post_text_content = post_content, 
             post_user = User.objects.get(username = username)
         )
+
         new_post.save()
-        print(f"\nSaved new post into POST model: {new_post}\n")
+        print(f'[{datetime.now()}] - /new_post: New post created with contents: {new_post}')
+
+        # Create new Like object and save to DB. 
+        new_like = Like(
+            liked_post = new_post
+        )
+        new_like.save() 
+        print(f'[{datetime.now()}] - /new_post: New like created with contents: {new_like}')
 
         # Set session variable for banner_message and redirect to index.html 
         request.session['banner_message'] = 'Your post was submitted successfully.'
@@ -134,7 +143,7 @@ def test_pagination(request):
     }
     return render(request, 'network/paginator_test.html', context_dict)
 
-def get_pagination_objects(request): 
+def get_paginated_posts(request): 
     '''
     Helper function to obtain media post as a pagination dictionary. 
     Returns a context dictionary to be passed to the template. 
@@ -156,23 +165,6 @@ def get_pagination_objects(request):
     }
 
     return context_dict 
-
-
-def hardcode_make_b_follow_a(request):
-    '''
-    Test out adding a follower to a user as hard to do so via Admin GUI. 
-    '''
-    user_a = User.objects.get(username = 'a')
-    user_b = User.objects.get(username = 'b')
-    
-    # If b follows a, need to 1) add user a to b's following list. 2) add user b to a's follower list. 
-    user_b.following.add(user_a)
-    user_a.followers.add(user_b)
-    print('User B is now following User A')
-    print('B is following: ', user_b.following.all())
-    print('A followers: ', user_a.followers.all())
-
-    return render(request, "network/index.html")
 
 def display_user_profile(request, username): 
     '''
