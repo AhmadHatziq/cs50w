@@ -203,12 +203,26 @@ def display_user_profile(request, username):
             if user_profile_object in users_currently_following: 
                 currently_following = True 
 
-
-
         # Extract posts, sort by time. 
         posts_made_by_user = Post.objects.filter(post_user = user_profile_object)
         posts_made_by_user = posts_made_by_user.order_by('-post_timestamp__hour', '-post_timestamp__minute', '-post_timestamp__second')
         
+        # Extract follower count for user profile. 
+        # Iterate through all users and increment count if they are following the user profile. 
+        # Very inefficent due to data model. 
+        all_users = User.objects.all()
+        follower_count = 0 
+        for user in all_users: 
+            user_follow_relation = FollowRelation.objects.get(follower=user)
+            if user_profile_object in user_follow_relation.users_following.all(): 
+                follower_count+= 1 
+                # print(f'{user.username} is following {user_profile_object.username}')
+        # print('Follower count:', follower_count)
+
+        # Extract following count for user profile. 
+        user_profile_follow_relation = FollowRelation.objects.get(follower=user_profile_object)
+        following_count = len(user_profile_follow_relation.users_following.all())
+
         # Pass parameters in context dictionary and render template. 
         context_dict = {
             'user_email': user_email, 
@@ -217,7 +231,9 @@ def display_user_profile(request, username):
             'posts': posts_made_by_user, 
             'post_count': len(posts_made_by_user), 
             'allow_follow_button': allow_follow_button, 
-            'currently_following': currently_following
+            'currently_following': currently_following, 
+            'follower_count': follower_count, 
+            'following_count': following_count 
         }
         return render(request, "network/user_profile.html", context_dict)
     except User.DoesNotExist:
@@ -227,13 +243,13 @@ def display_user_profile(request, username):
 def follow(request): 
     '''
     Handles when a user wants to follow or unfollow. 
-    Is called via POST using asynchronous JS. 
+    Is called via POST using asynchronous JavaScript. 
     '''
     if request.method == "POST": 
 
         # Extract parameters sent from JSON body. 
         data = json.loads(request.body)
-        print('JSON body object:', data)
+        print(f'[{datetime.now()}] JSON body object received in /follow:', data)
         current_user = data['current_user']
         target_user = data['target_user']
         current_follow_status = (str(data['current_follow_status'])).lower()
@@ -251,16 +267,18 @@ def follow(request):
             # As user is already following the target, will proceed to unfollow.
             if target_user_object in followRelation.users_following.all(): 
                 followRelation.users_following.remove(target_user_object) 
-                print(f'\n{current_user_object.username} has unfollowed {target_user_object.username}\n')
+                print(f'[{datetime.now()}] - /follow: {current_user_object.username} has unfollowed {target_user_object.username}')
                 return HttpResponse(status=204)
              
         elif current_follow_status in ['false', 'False']:  
             # As user is not following the target, will proceed to add the follow-relation.
             followRelation.users_following.add(target_user_object) 
-            print(f'\n{current_user_object.username} has followed {target_user_object.username}\n')
+            print(f'[{datetime.now()}] - /follow: {current_user_object.username} has followed {target_user_object.username}')
             return HttpResponse(status=204)
         else: 
-            print('no')
+            print(f'[{datetime.now()}] - /follow: Internal server error.')
+            return HttpResponse(status=500)
 
+    print(f'[{datetime.now()}] - /follow: Internal server error.')
     return HttpResponse(status=500)
 
