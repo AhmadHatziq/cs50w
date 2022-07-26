@@ -94,9 +94,10 @@
               </div>
               <div class="d-flex pt-1">
                 <!-- Display follow/unfollow buttons if user is not user_profile -->
+                <!-- Display 'Follow' or 'Unfollow' depending on the current_following status -->
                 {% if allow_follow_button %}
                     {% if currently_following %} 
-                        <button type="button" id="follow_button" class="btn btn-primary flex-grow-1">UnFollow</button>
+                        <button type="button" id="follow_button" class="btn btn-primary flex-grow-1">Unfollow</button>
                     {% else %} 
                         <button type="button" id="follow_button" class="btn btn-primary flex-grow-1">Follow</button>
                     {% endif %}
