@@ -41,7 +41,7 @@ class Post(models.Model):
 
 class Like(models.Model): 
     """
-    Represents a Like of a Post by a group of user(s). 
+    Represents a Like of a Post by a group of user(s). Will be automatically created for each new Post. 
     """
     liked_post = models.ForeignKey(Post, on_delete = models.CASCADE) 
     liked_by_users = models.ManyToManyField(User, blank = True)
