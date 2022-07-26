@@ -274,3 +274,5 @@ def follow(request):
     print(f'[{datetime.now()}] - /follow: Internal server error.')
     return HttpResponse(status=500)
 
+def test_like(request): 
+    return render(request, "network/like_toggle_test.html")

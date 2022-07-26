@@ -1,0 +1,39 @@
+{% extends "network/layout.html" %}
+
+{% block javascript %} 
+<script>
+    const whiteHeartUnicode = '\u2661';
+    const blackHeartUnicode = '\u2665';
+    const redHeartEmoticon = '❤️'; 
+    const whiteHeartEmoticon = '🤍'; 
+    
+    // button.addEventListener('click', toggle());
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Attach function to button
+        document.querySelector('#like_button').addEventListener('click', () => toggle_like_icon()); 
+        }); 
+
+    function toggle_like_icon() {
+        const button = document.querySelector('#like_button');
+        const like = button.textContent;
+        if( like==whiteHeartEmoticon ) {
+            button.textContent = redHeartEmoticon;
+        } else {
+            button.textContent = whiteHeartEmoticon;
+        }
+    }; 
+</script>
+{% endblock %}
+
+{% block css %} 
+{% endblock %} 
+
+{% block body %}
+    <h4>Testing for like button</h4>
+
+    <!-- <button id="like_button">♡</button> --> 
+    <button id="like_button">🤍</button>
+
+{% endblock %}
