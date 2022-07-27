@@ -12,5 +12,7 @@ urlpatterns = [
     path("profile/<str:username>", views.display_user_profile, name="display_user_profile"), 
     path("follow", views.follow, name="follow"), 
     path("like", views.like, name="like"), 
-    path("edit_post", views.edit_post, name="edit_post")
+    path("edit_post_via_POST", views.edit_post_via_POST, name="edit_post_via_POST"), 
+    path("edit_post_via_AJAX", views.edit_post_via_AJAX, name="edit_post_via_AJAX"), 
+    
 ]

@@ -22,19 +22,56 @@
         // Discard button will display back the original post content and hide the edit form. 
         document.querySelectorAll('.discard_changes_button').forEach(discard_button => {
             discard_button.addEventListener('click', discard_button_click); 
-        })
+        }); 
+
+        // Attach submit lister for all forms with class 'edit_form_form' 
+        document.querySelectorAll('.edit_post_form_form').forEach(edit_form => {
+            edit_form.addEventListener('submit', edit_form_submit); 
+        }); 
 
         // Hide all edit forms. 
-        document.querySelectorAll('.edit_post_form').forEach(edit_post_form => {
-            edit_post_form.style.display = 'none'; 
+        document.querySelectorAll('.edit_post_form_div').forEach(edit_post_form_div => {
+            edit_post_form_div.style.display = 'none'; 
         }); 
     }); 
+
+    // Handles the edit of posts asynchronously, without reloading the page. 
+    function edit_form_submit(e) {
+        const csrftoken = '{{ csrf_token }}'
+        let form = this; 
+        let post_container = this.parentNode.parentNode; 
+        let new_post = post_container.querySelector('.new_post_content').value; 
+        let post_id = post_container.querySelector('.post_id').value; 
+        let edit_form =  post_container.querySelector('.edit_post_form_div'); 
+        let post_content = post_container.querySelector('.post_content'); 
+        
+        // Change current post content being displayed. 
+        let previous_post = post_container.querySelector('.post_content_p'); 
+        previous_post.textContent = new_post; 
+
+        // Send new_post to backend and save into DB.
+        fetch(`/edit_post_via_AJAX`, {
+                method: 'POST', 
+                headers: {'X-CSRFToken': csrftoken},
+                body: JSON.stringify({
+                    post_id: post_id, 
+                    new_post_content: new_post
+                })
+            }); 
+    
+        // Hide back the form and display the post content. 
+        edit_form.style.display = 'none'; 
+        post_content.style.display = 'block'; 
+
+        // Prevent the form from being submitted. 
+        e.preventDefault(); 
+    }; 
 
     // When the discard button is clicked, hide the edit form and display back the post contents. 
     function discard_button_click(e) {
         let discard_button = this; 
         let post_div = discard_button.parentNode.parentNode; 
-        let edit_form =  post_div.querySelector('.edit_post_form'); 
+        let edit_form =  post_div.querySelector('.edit_post_form_div'); 
         let post_content = post_div.querySelector('.post_content'); 
 
         edit_form.style.display = 'none'; 
@@ -44,7 +81,7 @@
     function edit_button_click(e) {
         let edit_button = this; 
         let post_div = edit_button.parentNode.parentNode; 
-        let edit_form = post_div.querySelector('.edit_post_form'); 
+        let edit_form = post_div.querySelector('.edit_post_form_div'); 
         let post_content = post_div.querySelector('.post_content'); 
         
         // Hide post content and display edit form instead. 
@@ -145,7 +182,7 @@
     <div class="card">
         <div class="card-body"> 
                 <div class="post_content">
-                    <p class="card-title">Post content: {{ post.post_text_content }}</p>
+                    <p class="card-title post_content_p">Post content: {{ post.post_text_content }}</p>
                     <p class="card-text">Posted by: {{ post.post_user }}</p>
                     <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
 
@@ -168,15 +205,14 @@
                     
                     <p>Like count: <p class="post_like_count">{{ post.like_count }}</p></p>
                 </div>
-                <div class="edit_post_form">
-                    <form action = "{% url 'edit_post' %}" method="post">
-                        {% csrf_token %}
+                <div class="edit_post_form_div">
+                    <form action = "" method="post" class="edit_post_form_form">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Edit your post: </label>
-                            <textarea class="form-control" name="new_post" rows="3">{{ post.post_text_content }}</textarea>
-                            <input type="text" name="post_id" value="{{ post.post_id }}" hidden>
+                            <textarea class="form-control new_post_content" name="new_post" rows="3">{{ post.post_text_content }}</textarea>
+                            <input type="text" name="post_id" class="post_id" value="{{ post.post_id }}" hidden>
                         </div>
-                        <button type="submit" class="btn btn-success">Submit Edits</button>
+                        <button type="submit" class="btn btn-success submit_edits_button">Submit Edits</button>
                     </form>
                     <button class="btn btn-danger discard_changes_button">Discard Changes</button>
                 </div>

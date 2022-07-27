@@ -360,8 +360,9 @@ def like(request):
 
     return HttpResponse(status=500)
 
-def edit_post(request): 
+def edit_post_via_POST(request): 
     '''
+    NOT USED as specs requires edits to be done asynchronously, not via POST and page reloads. 
     Route is used when the user wants to edit an existing post. 
     Data is sent via a form using POST. 
     '''
@@ -376,10 +377,32 @@ def edit_post(request):
         post_to_edit = Post.objects.get(id=post_id)
         post_to_edit.post_text_content = new_post_content
         post_to_edit.save() 
-        print(f"[{datetime.now()}] - /edit_post - Updated post #{post_id}'s contents to {new_post_content}")
+        print(f"[{datetime.now()}] - /edit_post_via_POST - Updated post #{post_id}'s contents to {new_post_content}")
 
         # Return the user back to the index page.
         # With success message of edit changes to the post. 
         request.session['banner_message'] = 'Your post was edited successfully.'
         return HttpResponseRedirect(reverse("index"))
     pass
+
+def edit_post_via_AJAX(request):
+    '''
+    Used to handle post edits. 
+    Done via AJAX. 
+    '''
+    if request.method == 'POST': 
+        
+        # Extract parameters from JSON body. 
+        data = json.loads(request.body)
+        print(f'[{datetime.now()}] JSON body object received in /edit_post_via_AJAX:', data)
+        post_id = data['post_id']
+        new_post_content = data['new_post_content']
+
+        # Update post content in the DB. 
+        post_to_edit = Post.objects.get(id=post_id)
+        post_to_edit.post_text_content = new_post_content
+        post_to_edit.save() 
+        print(f"[{datetime.now()}] - /edit_post_via_AJAX - Updated post #{post_id}'s contents to {new_post_content}")
+
+        return HttpResponse(status=204)
+
