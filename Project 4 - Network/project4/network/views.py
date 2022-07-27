@@ -150,15 +150,20 @@ def get_paginated_posts(request):
     '''
 
     # Extract all social media posts. Sort to let the latest one appear first.  
-    social_media_posts = Post.objects.all().order_by('post_timestamp__hour', 'post_timestamp__minute', 'post_timestamp__second')
+    social_media_posts = Post.objects.all().order_by('-post_timestamp')
 
     # Process social media posts and attach 'like' button for each post. 
-    print(type(social_media_posts))
+    processed_posts = []
     for post in social_media_posts:  
-        print(post.post_text_content)
+        single_post_processed = {
+            'post_text_content': post.post_text_content, 
+            'post_user': post.post_user, 
+            'post_timestamp': post.post_timestamp
+        }
+        processed_posts.append(single_post_processed)
 
-    # Set pagination to display to 10 per page 
-    paginator = Paginator(social_media_posts, 10)
+    # Set pagination to display to 10 per page. Input to Paginator is a list. 
+    paginator = Paginator(processed_posts, 10)
     
     # Extract out page_obg and generate page_range 
     page_number = request.GET.get('page')
