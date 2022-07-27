@@ -1,5 +1,38 @@
 {% extends "network/layout.html" %}
 
+{% block javascript %} 
+<script>
+    const redHeartEmoticon = '❤️'; 
+    const whiteHeartEmoticon = '🤍'; 
+    const blackHeartEmoticon = '🖤'; 
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('#like_button').addEventListener('click', () => like_button_click()); 
+    }); 
+
+    // Handles when the like button is clicked by a logged-in user. 
+    // Sends an async request to the backend to process the like. 
+    // Changes the icon to indicate that the post has been liked/unliked. 
+    function like_button_click() {
+        const button = document.querySelector('#like_button');
+        const like = button.textContent;
+
+        if ( like==whiteHeartEmoticon ) {
+            // Current status is an unlike. User has liked the post. 
+            button.textContent = redHeartEmoticon;
+            alert('Liking this post'); 
+
+        } else if ( like == redHeartEmoticon) {
+
+            // Current status is a like. User has unliked the post. 
+            button.textContent = whiteHeartEmoticon;
+            alert('Unliking this post'); 
+
+        }
+    }; 
+</script>
+{% endblock %}
+
 {% block body %}
     <h4>All Posts</h4>
 
@@ -21,12 +54,27 @@
     </div>
     {% endif %}
 
+    <!-- Display the content for each post. Includes 'like' functionality -->
     {% for post in page_obj %} 
     <div class="card">
         <div class="card-body"> 
                 <p class="card-title">Post content: {{ post.post_text_content }}</p>
                 <p class="card-text">Posted by: {{ post.post_user }}</p>
                 <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
+
+                <!-- Disable like button if user is not logged in -->
+                <!-- Displays different icons depending on current like status -->
+                {% if post.isUserLoggedIn %}
+                    {% if post.hasUserLikedPost %}
+                        <button id="like_button">❤️</button>
+                    {% else %} 
+                        <button id="like_button">🤍</button>
+                    {% endif %}
+                {% else %} 
+                    <button id="like_button" disabled>❤️</button> 
+                {% endif %}
+                
+                <p>Like count: {{ post.like_count }}</p>
         </div>
     </div>
     {% endfor %}

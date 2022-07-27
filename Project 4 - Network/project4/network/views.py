@@ -169,18 +169,21 @@ def get_paginated_posts(request):
 
         # Check if the currently logged in user has liked the post. 
         isUserLoggedIn = False
-        didUserLikePost = False
+        hasUserLikedPost = False
+        like_count = 0
         if len(username) > 0:  
             isUserLoggedIn = True 
 
             like_object = Like.objects.get(liked_post=post)
             user_object = User.objects.get(username=username) 
+            like_count = len(like_object.liked_by_users.all())
 
             if user_object in like_object.liked_by_users.all(): 
-                didUserLikePost = True 
+                hasUserLikedPost = True 
         
         single_post_processed['isUserLoggedIn'] = isUserLoggedIn
-        single_post_processed['didUserLikePost'] = didUserLikePost
+        single_post_processed['hasUserLikedPost'] = hasUserLikedPost
+        single_post_processed['like_count'] = like_count 
             
         # Append single post dictionary to the list. 
         processed_posts.append(single_post_processed)
