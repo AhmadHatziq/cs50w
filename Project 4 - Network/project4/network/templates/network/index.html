@@ -7,26 +7,71 @@
     const blackHeartEmoticon = '🖤'; 
 
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('#like_button').addEventListener('click', () => like_button_click()); 
+        document.querySelectorAll('.like_button').forEach(like_button => { 
+            like_button.addEventListener('click', like_button_click)
+        })
     }); 
 
     // Handles when the like button is clicked by a logged-in user. 
     // Sends an async request to the backend to process the like. 
     // Changes the icon to indicate that the post has been liked/unliked. 
-    function like_button_click() {
-        const button = document.querySelector('#like_button');
-        const like = button.textContent;
+    function like_button_click(e) {
+        const csrftoken = '{{ csrf_token }}'
+        let button = this;
+        let like = button.textContent;
+        let current_user = '{{ user.username }}';
+        let post_id = button.dataset['post_id']; 
+        let post_div = button.parentNode; 
+        let like_count_p_tag = post_div.querySelector('.post_like_count'); 
+        let like_id = button.dataset['like_id']; 
+
+        // console.log(this); 'this' represents the button being pressed. 
+        // console.log(e); 'e' represents the PointerEvent that triggers the function. 
+
 
         if ( like==whiteHeartEmoticon ) {
-            // Current status is an unlike. User has liked the post. 
-            button.textContent = redHeartEmoticon;
-            alert('Liking this post'); 
 
+            // Current status is an unlike. User has liked the post. 
+
+            // Send API request to indicate that the current user has liked this post. 
+            // Will send the username, post id and like_end_state status 
+            // like_end_state is true if we want the end state to be a like from this user. 
+            fetch(`/like`, {
+                method: 'POST', 
+                headers: {'X-CSRFToken': csrftoken},
+                body: JSON.stringify({
+                    current_user: current_user, 
+                    post_id: post_id, 
+                    like_id: like_id, 
+                    desired_end_state: 'like', 
+                })
+            }); 
+
+            // Update front end by toggling button and incrementing follower count. 
+            button.textContent = redHeartEmoticon;
+            let current_count = parseInt(like_count_p_tag.innerText); 
+            current_count = current_count + 1; 
+            like_count_p_tag.innerText = current_count; 
+            
         } else if ( like == redHeartEmoticon) {
 
             // Current status is a like. User has unliked the post. 
+            fetch(`/like`, {
+                method: 'POST', 
+                headers: {'X-CSRFToken': csrftoken},
+                body: JSON.stringify({
+                    current_user: current_user, 
+                    post_id: post_id, 
+                    like_id: like_id, 
+                    desired_end_state: 'unlike', 
+                })
+            }); 
+
+            // Update front end by toggling button and incrementing follower count. 
             button.textContent = whiteHeartEmoticon;
-            alert('Unliking this post'); 
+            let current_count = parseInt(like_count_p_tag.innerText); 
+            current_count = current_count - 1; 
+            like_count_p_tag.innerText = current_count; 
 
         }
     }; 
@@ -62,19 +107,21 @@
                 <p class="card-text">Posted by: {{ post.post_user }}</p>
                 <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
 
+                <data post_id="{{ post.post_id }}"></data>
+
                 <!-- Disable like button if user is not logged in -->
                 <!-- Displays different icons depending on current like status -->
                 {% if post.isUserLoggedIn %}
                     {% if post.hasUserLikedPost %}
-                        <button id="like_button">❤️</button>
+                        <button class="like_button" data-post_id="{{ post.post_id }}" data-like_id="{{ post.like_id }}">❤️</button>
                     {% else %} 
-                        <button id="like_button">🤍</button>
+                        <button class="like_button" data-post_id="{{ post.post_id }}" data-like_id="{{ post.like_id }}">🤍</button>
                     {% endif %}
                 {% else %} 
-                    <button id="like_button" disabled>❤️</button> 
+                    <button class="like_button" disabled>❤️</button> 
                 {% endif %}
                 
-                <p>Like count: {{ post.like_count }}</p>
+                <p>Like count: <p class="post_like_count">{{ post.like_count }}</p></p>
         </div>
     </div>
     {% endfor %}

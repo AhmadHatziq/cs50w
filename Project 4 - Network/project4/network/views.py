@@ -164,27 +164,31 @@ def get_paginated_posts(request):
         single_post_processed = {
             'post_text_content': post.post_text_content, 
             'post_user': post.post_user, 
-            'post_timestamp': post.post_timestamp
+            'post_timestamp': post.post_timestamp, 
+            'post_id': post.id
         }
+
+        # Extract Like parameters 
+        like_object = Like.objects.get(liked_post=post)
+        like_count = len(like_object.liked_by_users.all())
+        like_id = like_object.id
+
+        single_post_processed['like_count'] = like_count 
+        single_post_processed['like_id'] = like_id 
 
         # Check if the currently logged in user has liked the post. 
         isUserLoggedIn = False
         hasUserLikedPost = False
-        like_count = 0
         if len(username) > 0:  
             isUserLoggedIn = True 
-
-            like_object = Like.objects.get(liked_post=post)
             user_object = User.objects.get(username=username) 
-            like_count = len(like_object.liked_by_users.all())
-
+            
             if user_object in like_object.liked_by_users.all(): 
                 hasUserLikedPost = True 
         
         single_post_processed['isUserLoggedIn'] = isUserLoggedIn
         single_post_processed['hasUserLikedPost'] = hasUserLikedPost
-        single_post_processed['like_count'] = like_count 
-            
+        
         # Append single post dictionary to the list. 
         processed_posts.append(single_post_processed)
 
@@ -308,4 +312,44 @@ def follow(request):
             return HttpResponse(status=500)
 
     print(f'[{datetime.now()}] - /follow: Internal server error.')
+    return HttpResponse(status=500)
+
+def like(request): 
+    '''
+    Handles when a user likes a post. 
+    Is called via POST using asynchronous JavaScript. 
+    '''
+    if request.method == 'POST': 
+        
+        # Extract parameters from JSON body. 
+        data = json.loads(request.body)
+        print(f'[{datetime.now()}] JSON body object received in /like:', data)
+        current_user = data['current_user']
+        post_id = data['post_id']
+        target_like_id = data['like_id']
+        desired_end_state = data['desired_end_state'] 
+
+        # Extract from models 
+        user_object = User.objects.get(username=current_user)
+        like_object = Like.objects.get(id=target_like_id) 
+
+        # Process API request and set to like/unlike
+        if desired_end_state == 'like': 
+
+            # Add the user to the group that liked this post, if not done so. 
+            if user_object not in like_object.liked_by_users.all():  
+                like_object.liked_by_users.add(user_object)
+            print(f'[{datetime.now()}] - /like - LIKE: {current_user} liked post #{post_id} with like ID #{target_like_id}')
+            return HttpResponse(status=204)
+        
+        elif desired_end_state == 'unlike': 
+            
+            # Remove the user from the users that liked this post, if present. 
+            if user_object in like_object.liked_by_users.all(): 
+                like_object.liked_by_users.remove(user_object)
+            print(f'[{datetime.now()}] - /like - UNLIKE: {current_user} unliked post #{post_id} with like ID #{target_like_id}')
+            return HttpResponse(status=204)
+        else: 
+            return HttpResponse(status=500)
+
     return HttpResponse(status=500)
