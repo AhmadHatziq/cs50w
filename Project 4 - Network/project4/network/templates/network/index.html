@@ -7,10 +7,51 @@
     const blackHeartEmoticon = '🖤'; 
 
     document.addEventListener('DOMContentLoaded', function() {
+
+        // Attach click listeners to all like buttons. 
         document.querySelectorAll('.like_button').forEach(like_button => { 
             like_button.addEventListener('click', like_button_click)
+        }); 
+
+        // Attach click listeners to all edit buttons. 
+        document.querySelectorAll('.edit_button').forEach(edit_button => {
+            edit_button.addEventListener('click', edit_button_click)
+        }); 
+
+        // Attach click listeners to all discard_changes_button buttons. 
+        // Discard button will display back the original post content and hide the edit form. 
+        document.querySelectorAll('.discard_changes_button').forEach(discard_button => {
+            discard_button.addEventListener('click', discard_button_click); 
         })
+
+        // Hide all edit forms. 
+        document.querySelectorAll('.edit_post_form').forEach(edit_post_form => {
+            edit_post_form.style.display = 'none'; 
+        }); 
     }); 
+
+    // When the discard button is clicked, hide the edit form and display back the post contents. 
+    function discard_button_click(e) {
+        let discard_button = this; 
+        let post_div = discard_button.parentNode.parentNode; 
+        let edit_form =  post_div.querySelector('.edit_post_form'); 
+        let post_content = post_div.querySelector('.post_content'); 
+
+        edit_form.style.display = 'none'; 
+        post_content.style.display = 'block'; 
+    }; 
+
+    function edit_button_click(e) {
+        let edit_button = this; 
+        let post_div = edit_button.parentNode.parentNode; 
+        let edit_form = post_div.querySelector('.edit_post_form'); 
+        let post_content = post_div.querySelector('.post_content'); 
+        
+        // Hide post content and display edit form instead. 
+        edit_form.style.display = 'block'; 
+        post_content.style.display = 'none'; 
+
+    }; 
 
     // Handles when the like button is clicked by a logged-in user. 
     // Sends an async request to the backend to process the like. 
@@ -103,25 +144,42 @@
     {% for post in page_obj %} 
     <div class="card">
         <div class="card-body"> 
-                <p class="card-title">Post content: {{ post.post_text_content }}</p>
-                <p class="card-text">Posted by: {{ post.post_user }}</p>
-                <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
+                <div class="post_content">
+                    <p class="card-title">Post content: {{ post.post_text_content }}</p>
+                    <p class="card-text">Posted by: {{ post.post_user }}</p>
+                    <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
 
-                <data post_id="{{ post.post_id }}"></data>
-
-                <!-- Disable like button if user is not logged in -->
-                <!-- Displays different icons depending on current like status -->
-                {% if post.isUserLoggedIn %}
-                    {% if post.hasUserLikedPost %}
-                        <button class="like_button" data-post_id="{{ post.post_id }}" data-like_id="{{ post.like_id }}">❤️</button>
-                    {% else %} 
-                        <button class="like_button" data-post_id="{{ post.post_id }}" data-like_id="{{ post.like_id }}">🤍</button>
+                    <!-- Only show Edit Button if current_user is the post_owner-->
+                    {% if post.isPostOwner %}
+                        <button type="button" class="btn btn-info edit_button">Edit</button> <br> <br>
                     {% endif %}
-                {% else %} 
-                    <button class="like_button" disabled>❤️</button> 
-                {% endif %}
-                
-                <p>Like count: <p class="post_like_count">{{ post.like_count }}</p></p>
+
+                    <!-- Disable like button if user is not logged in -->
+                    <!-- Displays different icons depending on current like status -->
+                    {% if post.isUserLoggedIn %}
+                        {% if post.hasUserLikedPost %}
+                            <button class="like_button" data-post_id="{{ post.post_id }}" data-like_id="{{ post.like_id }}">❤️</button>
+                        {% else %} 
+                            <button class="like_button" data-post_id="{{ post.post_id }}" data-like_id="{{ post.like_id }}">🤍</button>
+                        {% endif %}
+                    {% else %} 
+                        <button class="like_button" disabled>❤️</button> 
+                    {% endif %}
+                    
+                    <p>Like count: <p class="post_like_count">{{ post.like_count }}</p></p>
+                </div>
+                <div class="edit_post_form">
+                    <form action = "{% url 'edit_post' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Edit your post: </label>
+                            <textarea class="form-control" name="new_post" rows="3">{{ post.post_text_content }}</textarea>
+                            <input type="text" name="post_id" value="{{ post.post_id }}" hidden>
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit Edits</button>
+                    </form>
+                    <button class="btn btn-danger discard_changes_button">Discard Changes</button>
+                </div>
         </div>
     </div>
     {% endfor %}

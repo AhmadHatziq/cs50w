@@ -22,7 +22,7 @@ def index(request):
         banner_message = request.session['banner_message']
         del request.session['banner_message']
 
-        context_dict['message'] = 'Your post was submitted successfully.'
+        context_dict['message'] = banner_message
         return render(request, "network/index.html", context_dict)
 
     return render(request, "network/index.html", context_dict)
@@ -177,17 +177,23 @@ def get_paginated_posts(request):
         single_post_processed['like_id'] = like_id 
 
         # Check if the currently logged in user has liked the post. 
+        # Check if the current user is the post owner. 
         isUserLoggedIn = False
         hasUserLikedPost = False
+        isPostOwner = False
         if len(username) > 0:  
             isUserLoggedIn = True 
             user_object = User.objects.get(username=username) 
             
             if user_object in like_object.liked_by_users.all(): 
                 hasUserLikedPost = True 
+
+            if username == post.post_user.username: 
+                isPostOwner = True 
         
         single_post_processed['isUserLoggedIn'] = isUserLoggedIn
         single_post_processed['hasUserLikedPost'] = hasUserLikedPost
+        single_post_processed['isPostOwner'] = isPostOwner
         
         # Append single post dictionary to the list. 
         processed_posts.append(single_post_processed)
@@ -353,3 +359,27 @@ def like(request):
             return HttpResponse(status=500)
 
     return HttpResponse(status=500)
+
+def edit_post(request): 
+    '''
+    Route is used when the user wants to edit an existing post. 
+    Data is sent via a form using POST. 
+    '''
+    if request.method == 'POST': 
+        
+        # Extract posted content and current username. 
+        new_post_content = request.POST["new_post"]
+        username = request.user.username
+        post_id = request.POST['post_id']
+
+        # Put edits into the DB. 
+        post_to_edit = Post.objects.get(id=post_id)
+        post_to_edit.post_text_content = new_post_content
+        post_to_edit.save() 
+        print(f"[{datetime.now()}] - /edit_post - Updated post #{post_id}'s contents to {new_post_content}")
+
+        # Return the user back to the index page.
+        # With success message of edit changes to the post. 
+        request.session['banner_message'] = 'Your post was edited successfully.'
+        return HttpResponseRedirect(reverse("index"))
+    pass
