@@ -45,6 +45,9 @@ class Like(models.Model):
     """
     liked_post = models.ForeignKey(Post, on_delete = models.CASCADE) 
     liked_by_users = models.ManyToManyField(User, blank = True)
+
+    def __str__(self): 
+        return f"Like object for the post '{self.liked_post.post_text_content}' which is liked by: {self.get_users_that_liked()}"
     
     def get_users_that_liked(self): 
         return "\n".join([u.username for u in self.liked_by_users.all()])

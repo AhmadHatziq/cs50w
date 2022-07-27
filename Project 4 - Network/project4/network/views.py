@@ -152,14 +152,37 @@ def get_paginated_posts(request):
     # Extract all social media posts. Sort to let the latest one appear first.  
     social_media_posts = Post.objects.all().order_by('-post_timestamp')
 
+    # Extract the current user (if logged in)
+    # If not logged in, username will be '' ie an empty string of length 0. 
+    username = request.user.username
+
     # Process social media posts and attach 'like' button for each post. 
     processed_posts = []
     for post in social_media_posts:  
+
+        # Extract out contents from QuerySet. 
         single_post_processed = {
             'post_text_content': post.post_text_content, 
             'post_user': post.post_user, 
             'post_timestamp': post.post_timestamp
         }
+
+        # Check if the currently logged in user has liked the post. 
+        isUserLoggedIn = False
+        didUserLikePost = False
+        if len(username) > 0:  
+            isUserLoggedIn = True 
+
+            like_object = Like.objects.get(liked_post=post)
+            user_object = User.objects.get(username=username) 
+
+            if user_object in like_object.liked_by_users.all(): 
+                didUserLikePost = True 
+        
+        single_post_processed['isUserLoggedIn'] = isUserLoggedIn
+        single_post_processed['didUserLikePost'] = didUserLikePost
+            
+        # Append single post dictionary to the list. 
         processed_posts.append(single_post_processed)
 
     # Set pagination to display to 10 per page. Input to Paginator is a list. 
