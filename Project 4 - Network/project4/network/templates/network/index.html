@@ -47,7 +47,7 @@
         
         // Change current post content being displayed. 
         let previous_post = post_container.querySelector('.post_content_p'); 
-        previous_post.textContent = new_post; 
+        previous_post.textContent = ("Post content: ").concat(new_post); 
 
         // Send new_post to backend and save into DB.
         fetch(`/edit_post_via_AJAX`, {
