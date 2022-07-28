@@ -183,7 +183,7 @@
         <div class="card-body"> 
                 <div class="post_content">
                     <p class="card-title post_content_p">Post content: {{ post.post_text_content }}</p>
-                    <p class="card-text">Posted by: {{ post.post_user }}</p>
+                    <p class="card-text">Posted by: <a href="{% url 'display_user_profile' post.post_user%}"> {{ post.post_user }} </a></p>
                     <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
 
                     <!-- Only show Edit Button if current_user is the post_owner-->
