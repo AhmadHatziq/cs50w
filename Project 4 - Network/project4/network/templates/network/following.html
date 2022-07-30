@@ -1,0 +1,49 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<div class="card-body">
+    <div class="row card">
+        {% if num_users_following == 0 %}
+            <h5>You are currently not following anyone </h5>
+        {% else %}
+            <h5>You are currently following these user(s): </h5>
+            
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for user in users_following %} 
+                    <tr>
+                        <th scope="row"> {{ forloop.counter }} </th>
+                        <td> <a href="{% url 'display_user_profile' user.username%}">{{ user.username }} </a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+<div class="card" style="width: 18rem;">
+    <h4>Posts:</h4>
+    <ul class="list-group list-group-flush">
+
+        {% for post in page_obj %} 
+            <li class="list-group-item">
+                <p class="card-title post_content_p">Post content: {{ post.post_text_content }}</p>
+                <p class="card-text">Posted by: <a href="{% url 'display_user_profile' post.post_user%}"> {{ post.post_user }} </a></p>
+                <p class="card-text">Posted on: {{ post.post_timestamp }}</p>
+            </li>
+        {% endfor %}
+
+    </ul>
+  </div>
+
+{% endblock %}

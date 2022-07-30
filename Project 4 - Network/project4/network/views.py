@@ -406,3 +406,81 @@ def edit_post_via_AJAX(request):
 
         return HttpResponse(status=204)
 
+def display_following_users(request): 
+    '''
+    Will display the posts from users that the current user is following. 
+    '''
+
+    # Get current user 
+    current_user = request.user.username 
+    current_user_object = User.objects.get(username=current_user)
+
+    # Get user's FollowRelation object 
+    current_follow_relation = FollowRelation.objects.get(follower=current_user_object)
+
+    # Get users that the current user is following. 
+    users_following = current_follow_relation.users_following.all() 
+
+    # Get all posts from these users. 
+    posts = [] 
+    for user in users_following: 
+        specific_user_posts = Post.objects.filter(post_user=user)
+        for post in list(specific_user_posts): 
+            posts.append(post)
+
+    # Process each post. 
+    processed_posts = []
+    for post in posts: 
+        
+        single_post_processed = {
+            'post_text_content': post.post_text_content, 
+            'post_user': post.post_user, 
+            'post_timestamp': post.post_timestamp, 
+            'post_id': post.id
+        }
+
+        # Extract Like parameters 
+        like_object = Like.objects.get(liked_post=post)
+        like_count = len(like_object.liked_by_users.all())
+        like_id = like_object.id
+
+        single_post_processed['like_count'] = like_count 
+        single_post_processed['like_id'] = like_id 
+
+        # Check if the currently logged in user has liked the post. 
+        # Check if the current user is the post owner. 
+        isUserLoggedIn = True
+        hasUserLikedPost = False
+        isPostOwner = False
+
+        current_user_object = User.objects.get(username=current_user) 
+
+        if current_user_object in like_object.liked_by_users.all(): 
+            hasUserLikedPost = True 
+
+        if current_user == post.post_user.username: 
+            isPostOwner = True 
+
+        single_post_processed['isUserLoggedIn'] = isUserLoggedIn
+        single_post_processed['hasUserLikedPost'] = hasUserLikedPost
+        single_post_processed['isPostOwner'] = isPostOwner
+
+        # Append single post dictionary to the list. 
+        processed_posts.append(single_post_processed)
+
+    # Set pagination to display to 10 per page. Input to Paginator is a list. 
+    paginator = Paginator(processed_posts, 10)
+    
+    # Extract out page_obg and generate page_range 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    page_range = list(paginator.page_range)
+    context_dict = {
+        'page_obj' : page_obj, 
+        'page_range': page_range, 
+        'num_users_following': len(users_following), 
+        'users_following': list(users_following)
+    }
+
+    # Render the following.html template
+    return render(request, 'network/following.html', context_dict)
