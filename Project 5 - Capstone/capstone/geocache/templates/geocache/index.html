@@ -1,5 +1,15 @@
 {% extends "geocache/layout.html" %}
 
+{% block javascript %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+{% endblock %}
+
 {% block body %}
     <h1>Hello from index</h1>
+    
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+    </form>
 {% endblock %}

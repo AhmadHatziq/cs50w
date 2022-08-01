@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from geoposition.fields import GeopositionField
 
 
 class User(AbstractUser):
@@ -22,6 +23,7 @@ class Geocache(models.Model):
     users_following =  models.ManyToManyField(User, blank=True, related_name='users_following')
     expiry_time = timestamp = models.DateTimeField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    position = GeopositionField()
 
     def __str__(self): 
         return f"Location is {self.latitude} lat, {self.longitude} lon. Currently is {self.isFound}. Posted by {self.poster.username}"
@@ -46,3 +48,13 @@ class DiscussionBoard(models.Model):
 
     def __str__(self): 
         return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} at {self.timestamp}"
+
+class PointOfInterest(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=50)
+    zipcode = models.CharField(max_length=10)
+    position = GeopositionField(blank=True)
+
+    class Meta:
+        verbose_name_plural = 'points of interest'

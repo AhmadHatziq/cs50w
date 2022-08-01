@@ -8,6 +8,8 @@ from django.urls import reverse
 from . import utils
 from .models import User 
 
+from .models import PointOfInterest
+
 API_KEY = utils.load_google_maps_API_key()
 
 def index(request): 
@@ -63,3 +65,17 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "geocache/register.html")
+
+def test_geoposition(request):
+    pois = PointOfInterest.objects.all()
+    return render(request, 'geocache/test_geoposition.html', 
+    {
+        'pois': pois, 'API_KEY': API_KEY
+        }
+        )
+
+
+
+
+
+
