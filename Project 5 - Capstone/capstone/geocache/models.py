@@ -18,7 +18,7 @@ class Geocache(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     isFound = models.BooleanField(default=False)
     poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name='poster')
-    founder = models.ForeignKey(User, on_delete=models.CASCADE, related_name='founder', blank=True)
+    founder = models.ManyToManyField(User, blank=True, related_name='founder')
     users_following =  models.ManyToManyField(User, blank=True, related_name='users_following')
     expiry_time = timestamp = models.DateTimeField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -28,6 +28,9 @@ class Geocache(models.Model):
 
     def get_users_following(self): 
         return "\n".join([u.username for u in self.users_following.all()])
+
+    def get_founders(self): 
+        return "\n".join([u.username for u in self.founder.all()])
 
 
 class DiscussionBoard(models.Model): 
