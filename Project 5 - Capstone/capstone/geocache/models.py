@@ -8,3 +8,35 @@ class User(AbstractUser):
     """
     def __str__(self): 
         return f"{self.username}"
+
+class Geocache(models.Model): 
+    """
+    Represents a geocache. Contains the user that created this, the geolocation, current status (found or opened). 
+    Each geocache location has a limited time to be solved. 
+    """
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    isFound = models.BooleanField(default=False)
+    poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name='poster')
+    founder = models.ForeignKey(User, on_delete=models.CASCADE, related_name='founder', blank=True)
+    users_following =  models.ManyToManyField(User, blank=True, related_name='users_following')
+    expiry_time = timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self): 
+        return f"Location is {self.latitude} lat, {self.longitude} lon. Currently is {self.isFound}. Posted by {self.poster.username}"
+
+
+class DiscussionBoard(models.Model): 
+    """
+    Represents the discussion board regarding a single geocache. Is made of comments (text and images) from people discussing. 
+    First post is the hint from the poster regarding the location of the geocache. 
+    """
+    geocache = models.ForeignKey(Geocache, on_delete=models.CASCADE)
+    comment_poster = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment_text = models.CharField(max_length=255, blank=True)
+    comment_image = models.ImageField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self): 
+        return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} at {self.timestamp}"
