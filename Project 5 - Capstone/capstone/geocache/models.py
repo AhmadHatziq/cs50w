@@ -26,6 +26,9 @@ class Geocache(models.Model):
     def __str__(self): 
         return f"Location is {self.latitude} lat, {self.longitude} lon. Currently is {self.isFound}. Posted by {self.poster.username}"
 
+    def get_users_following(self): 
+        return "\n".join([u.username for u in self.users_following.all()])
+
 
 class DiscussionBoard(models.Model): 
     """
