@@ -67,6 +67,9 @@ def register(request):
         return render(request, "geocache/register.html")
 
 def test_geoposition(request):
+    '''
+    Code taken from https://github.com/philippbosch/django-geoposition/blob/master/example/templates/poi_list.html
+    '''
     pois = PointOfInterest.objects.all()
     return render(request, 'geocache/test_geoposition.html', 
     {
