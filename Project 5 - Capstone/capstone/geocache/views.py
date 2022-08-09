@@ -66,6 +66,13 @@ def register(request):
     else:
         return render(request, "geocache/register.html")
 
+def main_map(request): 
+    context_dict = {
+        'API_KEY': API_KEY
+    }
+
+    return render(request, 'geocache/main_map.html', context_dict)
+
 def test_geoposition(request):
     '''
     Code taken from https://github.com/philippbosch/django-geoposition/blob/master/example/templates/poi_list.html

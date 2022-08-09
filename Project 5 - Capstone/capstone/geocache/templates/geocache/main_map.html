@@ -1,0 +1,52 @@
+{% extends "geocache/layout.html" %}
+
+{% block title %} Main Map {% endblock %}
+
+{% block javascript %}
+<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key={{API_KEY}}"></script>
+<script>
+
+    var userPosition = null; 
+
+    /* 
+        If supported, run the getCurrentPosition() method.
+        If the getCurrentPosition() method is successful, it returns a coordinates object to the function specified in the parameter (showPosition). 
+        The second parameter of the getCurrentPosition() method is used to handle errors. 
+        It specifies a function to run if it fails to get the user's location. 
+    */ 
+    function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(setUserPosition), handleLocationError;
+        } 
+    }; 
+    function setUserPosition(position) {
+        userPosition = position; 
+        let lat = position.coords.latitude; 
+        let lon = position.coords.longitude; 
+        console.log(`Obtained user position as latitude: ${lat} , longitude: ${lon}.`); 
+    
+    }; 
+    function handleLocationError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable."); 
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out."); 
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred in getting user location.");
+                break;
+        }
+    }; 
+
+</script>
+{% endblock %}
+
+{% block body %}
+    <h1>Hello from main map</h1>
+    <button onclick="getLocation()">Test</button>
+{% endblock %}
