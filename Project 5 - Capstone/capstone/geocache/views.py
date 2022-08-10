@@ -13,6 +13,9 @@ from .models import PointOfInterest
 API_KEY = utils.load_google_maps_API_key()
 
 def index(request): 
+    '''
+    Index.html will get user coordinates and store it on the client-side. 
+    '''
     return render(request, "geocache/index.html")
 
 def login_view(request):
@@ -66,7 +69,10 @@ def register(request):
     else:
         return render(request, "geocache/register.html")
 
-def main_map(request): 
+def view_map(request): 
+    '''
+    Renders the map as well as geocaches (solved and not solved). 
+    '''
     context_dict = {
         'API_KEY': API_KEY
     }

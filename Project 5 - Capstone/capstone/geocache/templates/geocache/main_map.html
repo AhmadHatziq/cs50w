@@ -104,24 +104,16 @@
     // Will load these functions when the page is loaded. 
     document.addEventListener('DOMContentLoaded', function() {
         initializeMap(); 
-        // setTimeout(function(){ initializeMap(); }, 6000); 
         
     }); 
-
-    document.addEventListener('load', function(e) {
-        // getLocation();
-        // initializeMap(); 
-    }); 
-
-    
-
 </script>
 {% endblock %}
 
 {% block body %}
-    <h1>Hello from main map</h1>
-    <button onclick="getLocation()">Test</button>
+    <h1>Hello from view map</h1>
 
     <h1>Map: </h1>
     <div id="map-canvas"></div>
+
+    
 {% endblock %}
