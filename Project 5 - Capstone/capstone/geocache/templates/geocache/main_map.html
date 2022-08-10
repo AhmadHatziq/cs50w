@@ -7,7 +7,8 @@
     #map-canvas {
         height: 600px;
     }
-</style>{% endblock %}
+</style>
+{% endblock %}
 
 {% block javascript %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key={{API_KEY}}"></script>
@@ -89,6 +90,7 @@
                 </div>
             `;
 
+            // Load static resource, the home map icon. 
             {% load static %}
             let home_icon_url = "{% static 'geocache/images/home_map_icon.png' %}"
             addMarker(userLatitude, userLongitude, "Current user location", htmlContent, home_icon_url); 
@@ -104,7 +106,6 @@
     // Will load these functions when the page is loaded. 
     document.addEventListener('DOMContentLoaded', function() {
         initializeMap(); 
-        
     }); 
 </script>
 {% endblock %}
