@@ -2,6 +2,57 @@
 
 {% block javascript %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script>
+    var userPosition = null; 
+
+     // ==============================================================================================================================================
+    // This code block will get the user coordinates and populate the variable 'userPositon and store into the local storage. 
+    /* 
+        If supported, run the getCurrentPosition() method.
+        If the getCurrentPosition() method is successful, it returns a coordinates object to the function specified in the parameter (showPosition). 
+        The second parameter of the getCurrentPosition() method is used to handle errors. 
+        It specifies a function to run if it fails to get the user's location. 
+    */ 
+    function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(setUserPosition, handleLocationError);
+        } 
+    }; 
+    function setUserPosition(position) {
+        userPosition = position; 
+        let lon = position.coords.longitude; 
+        let lat = position.coords.latitude; 
+        console.log(`Obtained user position as longitude: ${lon} , latitude: ${lat}.`); 
+        
+        // Save user coordinates to local storage if it does not exist. 
+        if (!localStorage.getItem('userLongitude')) {
+            localStorage.setItem('userLongitude', lon);
+            localStorage.setItem('userLatitude', lat);
+        };
+    
+    }; 
+    function handleLocationError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable."); 
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out."); 
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred in getting user location.");
+                break;
+        }
+    }; 
+    // ==============================================================================================================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        getLocation(); 
+    }); 
+</script>
 {% endblock %}
 
 {% block body %}
