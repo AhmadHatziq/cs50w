@@ -17,6 +17,7 @@ class Geocache(models.Model):
     """
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    hint = models.CharField(max_length=255, blank=True)
     isFound = models.BooleanField(default=False)
     poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name='poster')
     founder = models.ManyToManyField(User, blank=True, related_name='founder')
