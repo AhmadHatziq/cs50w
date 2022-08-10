@@ -56,11 +56,19 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Hello from index</h1>
+    <h1>Welcome to Geocache</h1>
     
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
-    </form>
+    <p>
+        What is a geocaching? It is an outdoor recreational activity, in which participants 
+        hide and seek containers, called "geocaches" or "caches", at specific locations marked by coordinates all over the world
+    </p>
+
+    <p>
+        This application allows you to create geocaches, view current unsolved caches and discuss them with your friends! 
+    </p>
+
+    <p>
+        Go forth and explore the world.
+    </p>
+
 {% endblock %}
