@@ -78,8 +78,10 @@
 
                 // Test adding a single point with info window. 
                 // Code taken from: https://developers.google.com/maps/documentation/javascript/infowindows
-                addMarker(1.3540503, 103.9492165, "Test marker", contentString); 
-
+                addMarker(1.3540503, 103.9492165, "Test marker 1", contentString); 
+                addMarker(1.344493811558665, 103.95403430108395, "Test market 2", contentString); 
+                
+                console.log(bounds); 
                 map.fitBounds(bounds);
             }; 
 

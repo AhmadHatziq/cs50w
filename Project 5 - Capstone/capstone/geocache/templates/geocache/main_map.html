@@ -2,46 +2,114 @@
 
 {% block title %} Main Map {% endblock %}
 
+{% block css %} 
+<style>
+    #map-canvas {
+        height: 600px;
+    }
+</style>{% endblock %}
+
 {% block javascript %}
 <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key={{API_KEY}}"></script>
 <script>
 
-    var userPosition = null; 
+    var map = null; 
+    var bounds = null; 
 
-    /* 
-        If supported, run the getCurrentPosition() method.
-        If the getCurrentPosition() method is successful, it returns a coordinates object to the function specified in the parameter (showPosition). 
-        The second parameter of the getCurrentPosition() method is used to handle errors. 
-        It specifies a function to run if it fails to get the user's location. 
-    */ 
-    function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(setUserPosition), handleLocationError;
-        } 
+    // This code block will create & populate the google maps with markers. 
+    // ==============================================================================================================================================
+    function addMarker(lat, lng, title, contentString) {
+        var position = new google.maps.LatLng(lat, lng);
+        var marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: title
+        });
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+        });
+        marker.addListener("click", () => {
+            infowindow.open({
+            anchor: marker,
+            map,
+            shouldFocus: false,
+            });
+        });
+        bounds.extend(position);
     }; 
-    function setUserPosition(position) {
-        userPosition = position; 
-        let lat = position.coords.latitude; 
-        let lon = position.coords.longitude; 
-        console.log(`Obtained user position as latitude: ${lat} , longitude: ${lon}.`); 
+
+    function initializeMap() {
+        map = new google.maps.Map(document.getElementById('map-canvas'));
+        bounds = new google.maps.LatLngBounds();
+
+        const contentString = `
+            <div id=content> 
+
+                <h1 id=firstHeading class=firstHeading>Uluru</h1>
+                <div id=bodyContent>
+                    <p> 
+                        <b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large  
+                        sandstone rock formation in the southern part of the  
+                        Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi)  
+                        south west of the nearest large town, Alice Springs; 450&#160;km  
+                        (280&#160;mi) by road. Kata Tjuta and Uluru are the two major  
+                        features of the Uluru - Kata Tjuta National Park. Uluru is  
+                        sacred to the Pitjantjatjara and Yankunytjatjara, the  
+                        Aboriginal people of the area. It has many springs, waterholes,  
+                        rock caves and ancient paintings. Uluru is listed as a World  
+                        Heritage Site.
+                    </p> 
+                    <p>
+                        Attribution: Uluru, <a href=https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194>' 
+                        https://en.wikipedia.org/w/index.php?title=Uluru</a>  
+                        (last visited June 22, 2009).
+                    </p> 
+                </div> 
+            </div>
+            `; 
+
+        // Add 2 test markers
+        addMarker(1.3540503, 103.9392165, "Test marker 1", contentString); 
+        addMarker(1.344493811558665, 103.95403430108395, "Test marker 2", contentString); 
+
+        // Add user position if it exists in the local storage (obtained from index.html)
+        if (localStorage.getItem('userLongitude')) {
+           
+            let userLongitude = parseFloat(localStorage.getItem('userLongitude'));
+            let userLatitude = parseFloat(localStorage.getItem('userLatitude')); 
+            console.log('Extracted user coordinates from local storage: ', userLongitude, userLatitude); 
+            
+            let htmlContent = `
+                <div id=content>
+                    <h1 id=firstHeading class=firstHeading>Your current location.</h1>
+                    <div id=bodyContent>
+                        <p>You are currently here!</p>
+                    </div>
+                </div>
+            `;
+            addMarker(userLatitude, userLongitude, "Current user location", htmlContent); 
+            
+        };
+
+        // Resize map to fit all markers
+        map.fitBounds(bounds);
+    }; 
+
+    // ==============================================================================================================================================
+
+    // Will load these functions when the page is loaded. 
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeMap(); 
+        // setTimeout(function(){ initializeMap(); }, 6000); 
+        
+    }); 
+
+    document.addEventListener('load', function(e) {
+        // getLocation();
+        // initializeMap(); 
+    }); 
+
     
-    }; 
-    function handleLocationError(error) {
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                alert("User denied the request for Geolocation.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("Location information is unavailable."); 
-                break;
-            case error.TIMEOUT:
-                alert("The request to get user location timed out."); 
-                break;
-            case error.UNKNOWN_ERROR:
-                alert("An unknown error occurred in getting user location.");
-                break;
-        }
-    }; 
 
 </script>
 {% endblock %}
@@ -49,4 +117,7 @@
 {% block body %}
     <h1>Hello from main map</h1>
     <button onclick="getLocation()">Test</button>
+
+    <h1>Map: </h1>
+    <div id="map-canvas"></div>
 {% endblock %}
