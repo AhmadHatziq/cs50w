@@ -79,6 +79,10 @@ def view_map(request):
 
     return render(request, 'geocache/main_map.html', context_dict)
 
+def submit_geocache(request): 
+
+    return render(request, 'geocache/submit_geocache.html')
+
 def test_geoposition(request):
     '''
     Code taken from https://github.com/philippbosch/django-geoposition/blob/master/example/templates/poi_list.html

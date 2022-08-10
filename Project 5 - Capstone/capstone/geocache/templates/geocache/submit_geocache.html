@@ -1,0 +1,41 @@
+{% extends "geocache/layout.html" %}
+
+{% block title %} Input Geocache {% endblock %}
+
+{% block body %}
+
+<h5>ㅤSubmit New Geocache Details:</h5>
+<form action = "" method="post">
+    {% csrf_token %}
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="latitude" class="col-form-label">ㅤLatitude:ㅤ </label>
+        </div>
+        <div class="col-auto">
+            <input type="number" id="latitude" name="latitude" class="form-control" step="0.0001" min="0" >
+        </div>
+    </div>
+
+    <br>
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="longitude" class="col-form-label">ㅤLongitude: </label>
+        </div>
+        <div class="col-auto">
+            <input type="number" id="longitude" name="longitude" class="form-control" step="0.0001" min="0" >
+        </div>
+    </div>
+
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="geocache_text_hint">ㅤDescribe & give hints about your geocache: </label>
+            <textarea class="form-control" name="geocache_text_hint" id="geocache_text_hint" rows="3" cols="3"></textarea>
+        </div>
+        
+    </div>
+
+    <br>
+    <button type="submit" class="btn btn-primary">Submit Geocache</button>
+</form>
+
+{% endblock %}
