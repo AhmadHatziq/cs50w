@@ -80,8 +80,16 @@ def view_map(request):
     return render(request, 'geocache/main_map.html', context_dict)
 
 def submit_geocache(request): 
+    '''
+    Handles the event where the user either wants to submit a new geocache or 
+    is POSTING data from a geocache form. 
+    '''
 
-    return render(request, 'geocache/submit_geocache.html')
+    context_dict = {
+        'API_KEY': API_KEY
+    }
+    
+    return render(request, 'geocache/submit_geocache.html', context_dict)
 
 def test_geoposition(request):
     '''

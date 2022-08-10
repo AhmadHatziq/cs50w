@@ -2,6 +2,103 @@
 
 {% block title %} Input Geocache {% endblock %}
 
+{% block css %}
+<style>
+    #map-canvas {
+        height: 600px;
+    };
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key={{API_KEY}}"></script>
+
+<script>
+
+    var map = null; 
+    var bounds = null; 
+
+    // Constant variables are used to calculate map bounds based single user point. 
+    const top_left_lat = 1.3624088222704636; 
+    const top_left_lon = 103.94336908232712; 
+    const bottom_right_lat = 1.3526053172211636; 
+    const bottom_right_lon = 103.97291650639787; 
+    const reference_lat = 1.3597848751193766; 
+    const reference_lon = 103.95766544650813;
+
+    function addMarker(lat, lng, title, contentString, icon_url) {
+        var position = new google.maps.LatLng(lat, lng);
+        var marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: title, 
+            icon: icon_url
+        });
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+        });
+        marker.addListener("click", () => {
+            infowindow.open({
+            anchor: marker,
+            map,
+            shouldFocus: false,
+            });
+        });
+        bounds.extend(position);
+    }; 
+
+    function initializeMap() {
+        map = new google.maps.Map(document.getElementById('map-canvas'));
+        bounds = new google.maps.LatLngBounds();
+
+        // Set bounds to user position if it exists in the local storage (obtained from index.html)
+        if (localStorage.getItem('userLongitude')) {
+           
+            let userLongitude = parseFloat(localStorage.getItem('userLongitude'));
+            let userLatitude = parseFloat(localStorage.getItem('userLatitude')); 
+            console.log('Extracted user coordinates from local storage with longitude: ', userLongitude,' and latitude: ', userLatitude); 
+            
+            var position = new google.maps.LatLng(userLatitude, userLongitude);
+            bounds.extend(position);
+
+            
+            let upper_lat = userLatitude + (top_left_lat - reference_lat);
+            let upper_lon = userLongitude - (reference_lon - top_left_lon);
+            var position_upper_bounds = new google.maps.LatLng(upper_lat, upper_lon);
+            bounds.extend(position_upper_bounds); 
+
+            let lower_lat = userLatitude - (reference_lat - bottom_right_lat);
+            let lower_lon = userLongitude + (bottom_right_lon - reference_lon);
+            var position_lower_bounds = new google.maps.LatLng(lower_lat, lower_lon); 
+            bounds.extend(position_lower_bounds); 
+            
+            
+        };
+
+        // Resize map to fit 
+        map.fitBounds(bounds);
+
+        // Add event listener to extract coordinates clicked by user and populate the fields. 
+        map.addListener("click", (mapsMouseEvent) => {
+            let clicked_coordinates = mapsMouseEvent.latLng.toJSON(); 
+            let clicked_lat = clicked_coordinates["lat"];
+            let clicked_lon = clicked_coordinates["lng"];
+
+            document.getElementById("latitude_input").value = clicked_lat;
+            document.getElementById("longitude_input").value = clicked_lon;
+
+        }); 
+    }; 
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeMap(); 
+    }); 
+
+</script>
+{% endblock %}
+
 {% block body %}
 
 <h5>ㅤSubmit New Geocache Details:</h5>
@@ -9,20 +106,22 @@
     {% csrf_token %}
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <label for="latitude" class="col-form-label">ㅤLatitude:ㅤ </label>
+            <label for="latitude_input" class="col-form-label">ㅤLatitude:ㅤ </label>
         </div>
         <div class="col-auto">
-            <input type="number" id="latitude" name="latitude" class="form-control" step="0.0001" min="0" >
+            <input type="number" id="latitude_input" name="latitude" class="form-control" step="0.0001" min="0" 
+                data-toggle="tooltip" title="Click on the map below to auto-fill">
         </div>
     </div>
 
     <br>
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <label for="longitude" class="col-form-label">ㅤLongitude: </label>
+            <label for="longitude_input" class="col-form-label">ㅤLongitude: </label>
         </div>
         <div class="col-auto">
-            <input type="number" id="longitude" name="longitude" class="form-control" step="0.0001" min="0" >
+            <input type="number" id="longitude_input" name="longitude" class="form-control" step="0.0001" min="0" 
+                data-toggle="tooltip" title="Click on the map below to auto-fill">
         </div>
     </div>
 
@@ -37,5 +136,8 @@
     <br>
     <button type="submit" class="btn btn-primary">Submit Geocache</button>
 </form>
+
+<h1>Map: </h1>
+<div id="map-canvas"></div>
 
 {% endblock %}
