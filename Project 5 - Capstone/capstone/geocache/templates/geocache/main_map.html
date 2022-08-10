@@ -18,12 +18,13 @@
 
     // This code block will create & populate the google maps with markers. 
     // ==============================================================================================================================================
-    function addMarker(lat, lng, title, contentString) {
+    function addMarker(lat, lng, title, contentString, icon_url) {
         var position = new google.maps.LatLng(lat, lng);
         var marker = new google.maps.Marker({
             position: position,
             map: map,
-            title: title
+            title: title, 
+            icon: icon_url
         });
         const infowindow = new google.maps.InfoWindow({
             content: contentString,
@@ -87,7 +88,10 @@
                     </div>
                 </div>
             `;
-            addMarker(userLatitude, userLongitude, "Current user location", htmlContent); 
+
+            {% load static %}
+            let home_icon_url = "{% static 'geocache/images/home_map_icon.png' %}"
+            addMarker(userLatitude, userLongitude, "Current user location", htmlContent, home_icon_url); 
             
         };
 
