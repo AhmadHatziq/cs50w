@@ -81,19 +81,29 @@ def view_map(request):
 
 def submit_geocache(request): 
     '''
-    Handles the event where the user either wants to submit a new geocache or 
+    Handles the event where the user either wants to get the form to submit a new geocache (GET) or 
     is POSTING data from a geocache form. 
     '''
 
-    context_dict = {
-        'API_KEY': API_KEY
-    }
+    # Returns the form to the user. 
+    if request.method == "GET":
+        context_dict = {
+            'API_KEY': API_KEY
+        }
+        
+        return render(request, 'geocache/submit_geocache.html', context_dict)
+
+    if request.method == "POST": 
+        pass 
+
+
+
     
-    return render(request, 'geocache/submit_geocache.html', context_dict)
 
 def test_geoposition(request):
     '''
     Code taken from https://github.com/philippbosch/django-geoposition/blob/master/example/templates/poi_list.html
+    Used for testing. 
     '''
     pois = PointOfInterest.objects.all()
     return render(request, 'geocache/test_geoposition.html', 
@@ -102,8 +112,11 @@ def test_geoposition(request):
         }
         )
 
-
-
+def error(request): 
+    '''
+    Returns an error page. Used for testing. 
+    '''
+    return render(request, 'geocache/error.html')
 
 
 
