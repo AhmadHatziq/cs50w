@@ -22,12 +22,11 @@ class Geocache(models.Model):
     poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name='poster')
     founder = models.ManyToManyField(User, blank=True, related_name='founder')
     users_following =  models.ManyToManyField(User, blank=True, related_name='users_following')
-    expiry_time = timestamp = models.DateTimeField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    position = GeopositionField()
+    # position = GeopositionField()
 
     def __str__(self): 
-        return f"Location is {self.latitude} lat, {self.longitude} lon. Currently is {self.isFound}. Posted by {self.poster.username}"
+        return f"Location is {self.latitude} lat, {self.longitude} lon. isFound is {self.isFound}. Posted by {self.poster.username}"
 
     def get_users_following(self): 
         return "\n".join([u.username for u in self.users_following.all()])
@@ -50,6 +49,7 @@ class DiscussionBoard(models.Model):
     def __str__(self): 
         return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} at {self.timestamp}"
 
+'''
 class PointOfInterest(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)
@@ -59,3 +59,5 @@ class PointOfInterest(models.Model):
 
     class Meta:
         verbose_name_plural = 'points of interest'
+'''
+

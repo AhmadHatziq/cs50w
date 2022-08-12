@@ -28,27 +28,6 @@
     const reference_lat = 1.3597848751193766; 
     const reference_lon = 103.95766544650813;
 
-    function addMarker(lat, lng, title, contentString, icon_url) {
-        var position = new google.maps.LatLng(lat, lng);
-        var marker = new google.maps.Marker({
-            position: position,
-            map: map,
-            title: title, 
-            icon: icon_url
-        });
-        const infowindow = new google.maps.InfoWindow({
-            content: contentString,
-        });
-        marker.addListener("click", () => {
-            infowindow.open({
-            anchor: marker,
-            map,
-            shouldFocus: false,
-            });
-        });
-        bounds.extend(position);
-    }; 
-
     function initializeMap() {
         map = new google.maps.Map(document.getElementById('map-canvas'));
         bounds = new google.maps.LatLngBounds();
@@ -109,7 +88,7 @@
             <label for="latitude_input" class="col-form-label">ㅤLatitude:ㅤ </label>
         </div>
         <div class="col-auto">
-            <input type="number" id="latitude_input" name="latitude" class="form-control" step="0.0001" min="0" 
+            <input type="number" id="latitude_input" name="latitude" class="form-control" step="any" min="0" required 
                 data-toggle="tooltip" title="Click on the map below to auto-fill">
         </div>
     </div>
@@ -120,7 +99,7 @@
             <label for="longitude_input" class="col-form-label">ㅤLongitude: </label>
         </div>
         <div class="col-auto">
-            <input type="number" id="longitude_input" name="longitude" class="form-control" step="0.0001" min="0" 
+            <input type="number" id="longitude_input" name="longitude" class="form-control" step="any" min="0" required
                 data-toggle="tooltip" title="Click on the map below to auto-fill">
         </div>
     </div>
@@ -128,7 +107,7 @@
     <div class="row g-3 align-items-center">
         <div class="col-auto">
             <label for="geocache_text_hint">ㅤDescribe & give hints about your geocache: </label>
-            <textarea class="form-control" name="geocache_text_hint" id="geocache_text_hint" rows="3" cols="3"></textarea>
+            <textarea class="form-control" name="geocache_text_hint" id="geocache_text_hint" rows="3" cols="3" required></textarea>
         </div>
         
     </div>
