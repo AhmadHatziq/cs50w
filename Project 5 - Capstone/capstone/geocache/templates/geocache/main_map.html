@@ -7,6 +7,19 @@
     #map-canvas {
         height: 600px;
     }
+    dl dt{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    }
+    dl dd{
+        display: inline-block;
+        margin: 0px 10px;
+        padding-bottom: 0;
+        vertical-align: middle;
+    }
+
 </style>
 {% endblock %}
 
@@ -74,6 +87,12 @@
         addMarker(1.3540503, 103.9392165, "Test marker 1", contentString); 
         addMarker(1.344493811558665, 103.95403430108395, "Test marker 2", contentString); 
 
+        // Iterate over stored geocaches and add markers to the map. 
+        let test_var = JSON.parse('{{ geocaches|safe }}');
+        
+        
+        console.log(test_var); 
+
         // Add user position if it exists in the local storage (obtained from index.html)
         if (localStorage.getItem('userLongitude')) {
            
@@ -112,6 +131,24 @@
 
 {% block body %}
     <h1>Hello from view map</h1>
+
+    <div id="legend">
+        <dl>
+            <dd>Legend:</dd>
+
+            <dt><img src="{% static 'geocache/images/home_map_icon.png' %}"></dt>
+            <dd>Your current location</dd>
+        
+            <dt><img src="{% static 'geocache/images/blue_map_icon.png' %}"></dt>
+            <dd>Created geocaches</dd>
+
+            <dt><img src="{% static 'geocache/images/green_map_icon.png' %}"></dt>
+            <dd>Undiscovered</dd>
+
+            <dt><img src="{% static 'geocache/images/red_map_icon.png' %}"></dt>
+            <dd>Discovered</dd>
+        </dl>
+    </div>
 
     <h1>Map: </h1>
     <div id="map-canvas"></div>
