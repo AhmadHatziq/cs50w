@@ -135,6 +135,8 @@ def view_map(request):
             'latitude': str(geocache_post.latitude), 
             'longitude': str(geocache_post.longitude), 
             'hint': geocache_post.hint, 
+            'poster': str(geocache_post.poster), 
+            'timestamp': str(geocache_post.timestamp.isoformat()), 
             'id': str(geocache_post.id)
         }
         processed_geoposts.append(single_geocache)

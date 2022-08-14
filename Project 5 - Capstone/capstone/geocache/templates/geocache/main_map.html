@@ -87,11 +87,25 @@
         addMarker(1.3540503, 103.9392165, "Test marker 1", contentString); 
         addMarker(1.344493811558665, 103.95403430108395, "Test marker 2", contentString); 
 
-        // Iterate over stored geocaches and add markers to the map. 
-        let test_var = JSON.parse('{{ geocaches|safe }}');
+        // Instantiate JSON object from JSON string from Django. 
+        let geocaches = JSON.parse('{{ geocaches|safe }}');
+        console.log(`Created JSON from server:`); 
+        console.log(geocaches); 
         
-        
-        console.log(test_var); 
+        // Iterate over each geocache and plot the coordinates and content. 
+        for(let i = 0; i < geocaches.length; i++ ) {
+            
+            // Extract out each geocache details
+            let geocache = geocaches[i]; 
+            let latitude = geocache.latitude; 
+            let longitude = geocache.longitude; 
+            let hint = geocache.hint; 
+            let date_string = geocache.timestamp; 
+            let date_object = new Date(date_string);
+
+            console.log(date_object); 
+            console.log(geocache); 
+        }; 
 
         // Add user position if it exists in the local storage (obtained from index.html)
         if (localStorage.getItem('userLongitude')) {
