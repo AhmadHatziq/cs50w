@@ -201,9 +201,8 @@ def submit_geocache(request):
 
     return render(request, 'geocache/error.html')
 
-
-
-    
+def discussion_board(request): 
+    return render(request, 'geocache/discussion_board.html')
 
 def test_geoposition(request):
     '''
@@ -213,9 +212,8 @@ def test_geoposition(request):
     # pois = PointOfInterest.objects.all()
     return render(request, 'geocache/test_geoposition.html', 
     {
-        'pois': pois, 'API_KEY': API_KEY
-        }
-        )
+        'API_KEY': API_KEY
+    })
 
 def error(request): 
     '''
