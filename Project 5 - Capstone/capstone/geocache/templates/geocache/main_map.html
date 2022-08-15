@@ -97,14 +97,21 @@
             
             // Extract out each geocache details
             let geocache = geocaches[i]; 
-            let latitude = geocache.latitude; 
-            let longitude = geocache.longitude; 
+            let latitude = parseFloat(geocache.latitude); 
+            let longitude = parseFloat(geocache.longitude); 
+            let title = geocache.title; 
             let hint = geocache.hint; 
             let date_string = geocache.timestamp; 
             let date_object = new Date(date_string);
+            let num_users_solved = parseInt(geocache.num_users_solved); 
 
-            console.log(date_object); 
-            console.log(geocache); 
+            let html_content = `
+                <div id=content>
+                    <h1 id=firstHeading class=firstHeading> Title </h1>
+                </div>
+            `; 
+
+            
         }; 
 
         // Add user position if it exists in the local storage (obtained from index.html)

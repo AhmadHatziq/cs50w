@@ -135,8 +135,11 @@ def view_map(request):
             'latitude': str(geocache_post.latitude), 
             'longitude': str(geocache_post.longitude), 
             'hint': geocache_post.hint, 
+            'title': geocache_post.title, 
             'poster': str(geocache_post.poster), 
             'timestamp': str(geocache_post.timestamp.isoformat()), 
+            'num_users_solved': len(geocache_post.founder.all()), 
+            'DISCUSSION_BOARD_PLACEHOLDER': 'DISCUSSION_BOARD_PLACEHOLDER', 
             'id': str(geocache_post.id)
         }
         processed_geoposts.append(single_geocache)
@@ -176,6 +179,7 @@ def submit_geocache(request):
         longitude = request.POST['longitude']
         geocache_text_hint = request.POST['geocache_text_hint']
         poster = request.user.username 
+        geocache_title = request.POST['geocache_title']
 
         # Store into the DB. 
         user_object = User.objects.get(username = poster)
@@ -183,6 +187,7 @@ def submit_geocache(request):
             latitude = float(latitude), 
             longitude = float(longitude), 
             hint = geocache_text_hint, 
+            title = geocache_title,
             isFound = False, 
             poster = User.objects.get(username = poster), 
         )

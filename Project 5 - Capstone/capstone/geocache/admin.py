@@ -5,7 +5,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username", "email", "password", "last_login", "date_joined", "is_staff")
 
 class GeocacheAdmin(admin.ModelAdmin): 
-    list_display = ("id", "latitude", "longitude", "hint", "isFound", "poster", "get_founders", "timestamp", "get_users_following")
+    list_display = ("id", "latitude", "longitude", "title", "hint", "isFound", "poster", "get_founders", "timestamp", "get_users_following")
 
 class DiscussionBoardAdmin(admin.ModelAdmin): 
     list_display = ("id", "geocache", "comment_poster", "comment_text", "comment_image", "timestamp")
