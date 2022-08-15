@@ -101,16 +101,34 @@
             let longitude = parseFloat(geocache.longitude); 
             let title = geocache.title; 
             let hint = geocache.hint; 
+            let poster = geocache.poster; 
+            let num_users_solved = parseInt(geocache.num_users_solved); 
+            let icon_location = geocache.icon_location; // Eg: "/static/geocache/images/blue_map_icon.png"
+
+            // Extract datetime and parse it. 
             let date_string = geocache.timestamp; 
             let date_object = new Date(date_string);
-            let num_users_solved = parseInt(geocache.num_users_solved); 
+            let date_string_parsed = ("0" + date_object.getUTCDate()).slice(-2) + "/" +
+                ("0" + (date_object.getUTCMonth()+1)).slice(-2) + "/" +
+                date_object.getUTCFullYear(); 
+            let time_string_parsed = ("0" + date_object.getUTCHours()).slice(-2) + ":" +
+                ("0" + date_object.getUTCMinutes()).slice(-2) + ":" +
+                ("0" + date_object.getUTCSeconds()).slice(-2);
 
+            // Generate HTML content which will appear in the pop up. 
             let html_content = `
                 <div id=content>
-                    <h1 id=firstHeading class=firstHeading> Title </h1>
+                    <h1 id=firstHeading class=firstHeading> ${title} </h1>
+                    <div id=bodyContent>
+                        <p> ${hint} </p>
+                        <p> ${num_users_solved} user(s) have found this geocache </p>
+                        <p> This geocache was created by ${poster} on ${date_string_parsed} at ${time_string_parsed}</p>
+                    </div>
                 </div>
             `; 
 
+            // Add the marker. 
+            addMarker(latitude, longitude, title, html_content, icon_location); 
             
         }; 
 
