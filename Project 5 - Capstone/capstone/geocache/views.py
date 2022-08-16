@@ -287,9 +287,15 @@ def geocache_discussion_post(request, geocache_id):
         return error(request)
     
     discussion_board_posts = DiscussionBoard.objects.filter(geocache = geocache_object)
+
+    # Format API string to generate maps image. 
+    image_string = ("https://maps.googleapis.com/maps/api/staticmap?zoom=18&size=600x300&maptype=roadmap"
+                    "&markers=color:red%7Clabel:X%7C{},{}&key={}").format(geocache_object.latitude, geocache_object.longitude, API_KEY)
     
     context_dict['geocache'] = geocache_object
+    context_dict['geocache_image_url'] = image_string
     context_dict['discussion_board_posts'] = discussion_board_posts
+    
 
     return render(request, 'geocache/geocache_discussion_post.html', context_dict)
 
