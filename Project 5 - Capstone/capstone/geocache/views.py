@@ -271,9 +271,27 @@ def discussion_board(request):
         'created_geocaches_list': created_geocaches
     }
 
-    print(undiscovered_geocaches)
-
     return render(request, 'geocache/discussion_board.html', context_dict)
+
+def geocache_discussion_post(request, geocache_id): 
+    '''
+    Returns a page containing all discussion board posts regarding the geocache. 
+    '''
+    context_dict = {}
+
+    # Extract out Geocache and DiscussionBoard posts 
+    geocache_object = None
+    try:
+        geocache_object = Geocache.objects.get(id = int(geocache_id))
+    except Geocache.DoesNotExist:
+        return error(request)
+    
+    discussion_board_posts = DiscussionBoard.objects.filter(geocache = geocache_object)
+    
+    context_dict['geocache'] = geocache_object
+    context_dict['discussion_board_posts'] = discussion_board_posts
+
+    return render(request, 'geocache/geocache_discussion_post.html', context_dict)
 
 def test_geoposition(request):
     '''
