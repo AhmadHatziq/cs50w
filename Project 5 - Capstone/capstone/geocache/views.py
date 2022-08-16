@@ -132,7 +132,7 @@ def process_geocache(request):
             'timestamp': str(geocache_post.timestamp.isoformat()), 
             'num_users_solved': len(geocache_post.founder.all()), 
             'DISCUSSION_BOARD_PLACEHOLDER': 'DISCUSSION_BOARD_PLACEHOLDER', 
-            'geocache_category': geocache_category, 
+            'category': geocache_category, 
             'id': str(geocache_post.id)
         }
         processed_geoposts.append(single_geocache)
@@ -215,7 +215,7 @@ def submit_geocache(request):
         new_discussionboard_post = DiscussionBoard(
             geocache = new_geocache_post, 
             comment_poster = User.objects.get(username = poster), 
-            comment_text = geocache_title + ".\n" + geocache_text_hint
+            comment_text = "Hi guys, I created a geocache called: " + geocache_title + ".\nThe hint is: " + geocache_text_hint
         )
         new_discussionboard_post.save() 
         print(f'Saved new discussionboard post into DiscussionBoard: {new_discussionboard_post}')
@@ -236,23 +236,42 @@ def discussion_board(request):
     # Extract and process the geocache data. 
     processed_geocaches = process_geocache(request)
 
-    # Filter the geocache data according to the 3 categories. 
+    # Filter the geocache data according to the 3 categories. Also extract the latest discussion board post for each geocache. 
     undiscovered_geocaches, discovered_geocaches, created_geocaches = [], [], []
     for geocache in processed_geocaches: 
         geocache_category = geocache['category']
+        geocache_id = int(geocache['id'])
+
+        # Extract latest discussion board post and add it into the dictionary. 
+        geocache_object = Geocache.objects.get(id=geocache_id)
+        latest_geocache_boardpost = DiscussionBoard.objects.filter(geocache = geocache_object).latest('timestamp')
+        new_geocache_dict = geocache.copy() 
+        new_geocache_dict['latest_post_text'] = str(latest_geocache_boardpost.comment_text)
+        new_geocache_dict['latest_post_poster'] = str(latest_geocache_boardpost.comment_poster)
+        timestamp_string = str(latest_geocache_boardpost.timestamp)
+        date = timestamp_string.split(' ')[0]
+        year = date.split('-')[0]
+        month = date.split('-')[1]
+        day = date.split('-')[2]
+        time = timestamp_string.split(' ')[1]
+        hour = time.split(':')[0]
+        min = time.split(':')[1]
+        new_geocache_dict['latest_post_datetime'] = "{}/{}/{} at {}:{}".format(day, month, year, hour, min)
 
         if geocache_category == 'created': 
-            created_geocaches.append(geocache) 
+            created_geocaches.append(new_geocache_dict) 
         elif geocache_category == 'discovered': 
-            discovered_geocaches.append(geocache)
+            discovered_geocaches.append(new_geocache_dict)
         elif geocache_category == 'undiscovered': 
-            undiscovered_geocaches.append(geocache)
+            undiscovered_geocaches.append(new_geocache_dict)
 
     context_dict = {
         'undiscovered_geocaches_list': undiscovered_geocaches, 
         'discovered_geocaches_list': discovered_geocaches, 
         'created_geocaches_list': created_geocaches
     }
+
+    print(undiscovered_geocaches)
 
     return render(request, 'geocache/discussion_board.html', context_dict)
 

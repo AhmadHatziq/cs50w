@@ -31,60 +31,79 @@
     
                     <div class="forum-title">
                         <div class="pull-right forum-desc">
-                            <samll>Total undiscovered geocaches: PLACEHOLDER NUMBER</samll>
+                            <samll>Total undiscovered geocaches: {{ undiscovered_geocaches_list|length }}</samll>
                         </div>
                         <h3>Undiscovered Geocaches</h3>
                     </div>
-    
+
+                    <!-- Display undiscovered geocaches-->
+                    {% for geocache in undiscovered_geocaches_list %}
                     <div class="forum-item active">
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="forum-icon">
                                     <i><img src = "/static/geocache/images/blue_map_icon.png"></i>
                                 </div>
-                                <a href="forum_post.html" class="forum-item-title">Title for 1 Geocache</a>
-                                <div class="forum-sub-title">Hint about that geocache</div>
+                                <a href="" class="forum-item-title"> {{ geocache.title }}</a>
+                                <div class="forum-sub-title"> 
+                                    <p> {{ geocache.latest_post_text }} </p> 
+                                    <p> Last post was by {{ geocache.latest_post_poster }} on {{ geocache.latest_post_datetime }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
+                    {% endfor %}
+    
                     <div class="forum-title">
                         <div class="pull-right forum-desc">
-                            <samll>Total discovered geocaches: PLACEHOLDER NUMBER</samll>
+                            <samll>Total discovered geocaches: {{ discovered_geocaches_list|length }}</samll>
                         </div>
                         <h3>Discovered Geocaches</h3>
                     </div>
-    
-                    <div class="forum-item">
+
+                    <!-- Display discovered geocaches -->
+                    {% for geocache in discovered_geocaches_list %}
+                    <div class="forum-item ">
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="forum-icon">
-                                    <i class="fa fa-clock-o"></i>
+                                    <i><img src = "/static/geocache/images/red_map_icon.png"></i>
                                 </div>
-                                <a href="forum_post.html" class="forum-item-title">Lorem Ipsum is simply dummy text. </a>
-                                <div class="forum-sub-title">Various versions have evolved over the years, sometimes by accident, sometimes on purpose passage of Lorem Ipsum (injected humour and the like).</div>
+                                <a href="" class="forum-item-title"> {{ geocache.title }}</a>
+                                <div class="forum-sub-title"> 
+                                    <p> {{ geocache.latest_post_text }} </p> 
+                                    <p> Last post was by {{ geocache.latest_post_poster }} on {{ geocache.latest_post_datetime }}</p>
+                                </div>
                             </div>
+                        </div>
                     </div>
-
+                    {% endfor %}
+    
                     <div class="forum-title">
                         <div class="pull-right forum-desc">
-                            <samll>Total created geocaches: PLACEHOLDER NUMBER</samll>
+                            <samll>Total created geocaches: {{ created_geocaches_list|length }}</samll>
                         </div>
                         <h3>Created Geocaches</h3>
                     </div>
-    
-                    <div class="forum-item">
+
+                    <!-- Display created geocaches -->
+                    {% for geocache in created_geocaches_list %}
+                    <div class="forum-item ">
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="forum-icon">
-                                    <i class="fa fa-clock-o"></i>
+                                    <i><img src = "/static/geocache/images/blue_map_icon.png"></i>
                                 </div>
-                                <a href="forum_post.html" class="forum-item-title">Lorem Ipsum is simply dummy text. </a>
-                                <div class="forum-sub-title">Various versions have evolved over the years, sometimes by accident, sometimes on purpose passage of Lorem Ipsum (injected humour and the like).</div>
+                                <a href="" class="forum-item-title"> {{ geocache.title }}</a>
+                                <div class="forum-sub-title"> 
+                                    <p> {{ geocache.latest_post_text }} </p> 
+                                    <p> Last post was by {{ geocache.latest_post_poster }} on {{ geocache.latest_post_datetime }}</p>
+                                </div>
                             </div>
+                        </div>
                     </div>
+                    {% endfor %}
                     
-                        
                 </div>
             </div>
         </div>
