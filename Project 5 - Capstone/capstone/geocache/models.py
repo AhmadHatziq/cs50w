@@ -27,7 +27,7 @@ class Geocache(models.Model):
     # position = GeopositionField()
 
     def __str__(self): 
-        return f"Location is {self.latitude} lat, {self.longitude} lon. isFound is {self.isFound}. Posted by {self.poster.username}"
+        return f"Location is {self.latitude} lat, {self.longitude} lon. Title is {self.title}. Posted by {self.poster.username}"
 
     def get_users_following(self): 
         return "\n".join([u.username for u in self.users_following.all()])
@@ -48,7 +48,7 @@ class DiscussionBoard(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self): 
-        return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} at {self.timestamp}"
+        return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} at {self.timestamp}. Comment: {self.comment_text}"
 
 '''
 class PointOfInterest(models.Model):

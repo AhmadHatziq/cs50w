@@ -70,6 +70,7 @@ def register(request):
 
 def process_geocache(request): 
     '''
+    Helper function for view_map(...) and submit_geocache(...). 
     Extracts the Geocache data from the DB and processes it according to the current user. 
     Returns a list of processed Geocaches. 
     '''
@@ -94,7 +95,7 @@ def process_geocache(request):
         if current_user in founders: 
             is_founder = True 
 
-        # Determine which icon to use based on is_owner and is_founder. 
+        # Assigns a category & determines which icon to use based on is_owner and is_founder. 
         # Icon used is based on category. 
         geocache_category = ''
         STATIC_ICON_DIRECTORY = r'/static/geocache/images/'
@@ -188,7 +189,7 @@ def submit_geocache(request):
         
         return render(request, 'geocache/submit_geocache.html', context_dict)
 
-    # Process form info sent to the server. 
+    # Process form info sent to the server. Creates the Geocache and first post for the Discussion Board. 
     if request.method == "POST": 
 
         # Extract parameters. 
@@ -198,7 +199,7 @@ def submit_geocache(request):
         poster = request.user.username 
         geocache_title = request.POST['geocache_title']
 
-        # Store into the DB. 
+        # Store into the Geocache DB. 
         new_geocache_post = Geocache(
             latitude = float(latitude), 
             longitude = float(longitude), 
@@ -209,6 +210,15 @@ def submit_geocache(request):
         )
         new_geocache_post.save()
         print(f'Saved new geocache into GEOCACHE: {new_geocache_post}')
+
+        # Store into the Discussion Board DB. 
+        new_discussionboard_post = DiscussionBoard(
+            geocache = new_geocache_post, 
+            comment_poster = User.objects.get(username = poster), 
+            comment_text = geocache_title + ".\n" + geocache_text_hint
+        )
+        new_discussionboard_post.save() 
+        print(f'Saved new discussionboard post into DiscussionBoard: {new_discussionboard_post}')
 
         # Redirect to map with message that the geocache has been saved. 
         request.session['banner_message'] = 'Geocache successfully saved. Please see it in the map below.'
