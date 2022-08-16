@@ -44,7 +44,7 @@
                                 <div class="forum-icon">
                                     <i><img src = "/static/geocache/images/blue_map_icon.png"></i>
                                 </div>
-                                <a href="" class="forum-item-title"> {{ geocache.title }}</a>
+                                <a href="{% url 'geocache_discussion_post' geocache.id %}" class="forum-item-title"> {{ geocache.title }}</a>
                                 <div class="forum-sub-title"> 
                                     <p> {{ geocache.latest_post_text }} </p> 
                                     <p> Last post was by {{ geocache.latest_post_poster }} on {{ geocache.latest_post_datetime }}</p>
@@ -69,7 +69,7 @@
                                 <div class="forum-icon">
                                     <i><img src = "/static/geocache/images/red_map_icon.png"></i>
                                 </div>
-                                <a href="" class="forum-item-title"> {{ geocache.title }}</a>
+                                <a href="{% url 'geocache_discussion_post' geocache.id %}" class="forum-item-title"> {{ geocache.title }}</a>
                                 <div class="forum-sub-title"> 
                                     <p> {{ geocache.latest_post_text }} </p> 
                                     <p> Last post was by {{ geocache.latest_post_poster }} on {{ geocache.latest_post_datetime }}</p>
@@ -94,7 +94,7 @@
                                 <div class="forum-icon">
                                     <i><img src = "/static/geocache/images/blue_map_icon.png"></i>
                                 </div>
-                                <a href="" class="forum-item-title"> {{ geocache.title }}</a>
+                                <a href="{% url 'geocache_discussion_post' geocache.id %}" class="forum-item-title"> {{ geocache.title }}</a>
                                 <div class="forum-sub-title"> 
                                     <p> {{ geocache.latest_post_text }} </p> 
                                     <p> Last post was by {{ geocache.latest_post_poster }} on {{ geocache.latest_post_datetime }}</p>
