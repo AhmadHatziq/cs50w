@@ -82,6 +82,10 @@
                       <div class="row">
                           <div class="col-md-9">
                               <div class="forum-item-title"> {{ post.comment_text }} </div>
+                              {% if post.comment_image %}
+                                <img src = "{{ post.comment_image.url }}" alt="image comment from {{ post.comment_poster }}" 
+                                width="600" height="300">
+                              {% endif %}
                               <div class="forum-sub-title"> 
                                   <p> Posted by {{ post.comment_poster }} on {{ post.timestamp}} </p> 
                               </div>

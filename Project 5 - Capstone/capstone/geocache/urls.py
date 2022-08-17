@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings 
+from django.conf.urls.static import static
 
 from . import views
 
@@ -13,4 +15,4 @@ urlpatterns = [
     path("geocache_discussion_post/<str:geocache_id>", views.geocache_discussion_post, name="geocache_discussion_post"),  
     path("test_geoposition", views.test_geoposition, name="test_geoposition"), 
     path("error", views.error, name="error")
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
