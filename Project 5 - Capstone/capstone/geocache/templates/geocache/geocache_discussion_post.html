@@ -83,8 +83,9 @@
                           <div class="col-md-9">
                               <div class="forum-item-title"> {{ post.comment_text }} </div>
                               {% if post.comment_image %}
+                                <br>
                                 <img src = "{{ post.comment_image.url }}" alt="image comment from {{ post.comment_poster }}" 
-                                width="600" height="300">
+                                width="600" height="300"> 
                               {% endif %}
                               <div class="forum-sub-title"> 
                                   <p> Posted by {{ post.comment_poster }} on {{ post.timestamp}} </p> 
@@ -103,7 +104,7 @@
                         {% csrf_token %}
                         <p>
                           <label for="comment_text">Comment text: </label>
-                          <input type="text" name="comment_text" id="comment_text" required>
+                          <input type="text" name="comment_text" id="comment_text" required style="width:400px;font-size:14pt;">
                         </p>
                         <p>
                           <label for="image_file">Image file:</label>
