@@ -5,6 +5,28 @@
 {% block javascript %}
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // Attach function to the 4 map toggle buttons
+    document.querySelector('#roadmap_button').addEventListener('click', () => toggle_terrain("roadmap"));
+    document.querySelector('#satellite_button').addEventListener('click', () => toggle_terrain("satellite"));
+    document.querySelector('#hybrid_button').addEventListener('click', () => toggle_terrain("hybrid"));
+    document.querySelector('#terrain_button').addEventListener('click', () => toggle_terrain("terrain"));
+    
+  }); 
+
+  var image_template_string_prefix = JSON.parse('{{ image_template_string_prefix|safe }}');
+  var image_template_string_suffix = JSON.parse('{{ image_template_string_suffix|safe }}');
+  
+  // Terrain type must be of type: roadmap, satellite, hybrid, and terrain
+  function toggle_terrain(terrain_type) {
+    var map_tag = document.getElementById("map_image"); 
+    var final_image_url = image_template_string_prefix + terrain_type + image_template_string_suffix; 
+    map_tag.src = final_image_url; 
+  }; 
+</script>
 {% endblock %}
 
 {% block body %}
@@ -29,7 +51,23 @@
                 <div class="ibox-content m-b-sm border-bottom">
                     <div class="p-xs">
                         <h2>Geocache location: </h2>
-                        <img src="{{ geocache_image_url }}" alt="Google Maps Image for Geocache Location">
+
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                          <label class="btn btn-secondary active" id="roadmap_button">
+                            <input type="radio" name="options"  checked> Roadmap
+                          </label>
+                          <label class="btn btn-secondary" id="satellite_button">
+                            <input type="radio" name="options"  autocomplete="off"> Satellite
+                          </label>
+                          <label class="btn btn-secondary" id="hybrid_button">
+                            <input type="radio" name="options"  autocomplete="off"> Hybrid
+                          </label>
+                          <label class="btn btn-secondary" id="terrain_button">
+                            <input type="radio" name="options"  autocomplete="off"> Terrain
+                          </label>
+                        </div>
+
+                        <img id="map_image" src="{{ geocache_image_url }}" alt="Google Maps Image for Geocache Location">
                     </div>
                 </div>
     
@@ -45,8 +83,7 @@
                           <div class="col-md-9">
                               <div class="forum-item-title"> {{ post.comment_text }} </div>
                               <div class="forum-sub-title"> 
-                                  <p> Posted by {{ post.comment_poster }} </p> 
-                                  <p> Posted at {{ post.timestamp }}</p>
+                                  <p> Posted by {{ post.comment_poster }} on {{ post.timestamp}} </p> 
                               </div>
                           </div>
                       </div>
