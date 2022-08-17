@@ -84,8 +84,8 @@
             `; 
 
         // Add 2 test markers
-        addMarker(1.3540503, 103.9392165, "Test marker 1", contentString); 
-        addMarker(1.344493811558665, 103.95403430108395, "Test marker 2", contentString); 
+        // addMarker(1.3540503, 103.9392165, "Test marker 1", contentString); 
+        // addMarker(1.344493811558665, 103.95403430108395, "Test marker 2", contentString); 
 
         // Instantiate JSON object from JSON string from Django. 
         let geocaches = JSON.parse('{{ geocaches|safe }}');
@@ -169,7 +169,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Hello from view map</h1>
+    <h1>Map:</h1>
 
     <div id="legend">
         <dl>
@@ -189,7 +189,7 @@
         </dl>
     </div>
 
-    <h1>Map: </h1>
+    
     <div id="map-canvas"></div>
 
     
