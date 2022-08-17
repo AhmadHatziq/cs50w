@@ -104,7 +104,7 @@ def process_geocache(request):
         # Icon used is based on category. 
         geocache_category = ''
         STATIC_ICON_DIRECTORY = r'/static/geocache/images/'
-        OWNER_ICON, UNFOUND_ICON, FOUND_ICON = 'blue_map_icon.png', 'blue_map_icon.png', 'red_map_icon.png' 
+        OWNER_ICON, UNFOUND_ICON, FOUND_ICON = 'blue_map_icon.png', 'green_map_icon.png', 'red_map_icon.png' 
         icon_location = ''
         if is_owner: 
             icon_location = STATIC_ICON_DIRECTORY + OWNER_ICON
