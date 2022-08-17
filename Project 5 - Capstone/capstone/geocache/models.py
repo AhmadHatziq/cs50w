@@ -44,11 +44,11 @@ class DiscussionBoard(models.Model):
     geocache = models.ForeignKey(Geocache, on_delete=models.CASCADE)
     comment_poster = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_text = models.CharField(max_length=255, blank=True)
-    comment_image = models.ImageField(blank=True)
+    comment_image = models.ImageField(blank=True, upload_to = "image_storage/")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self): 
-        return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} at {self.timestamp}. Comment: {self.comment_text}"
+        return f"Comment made for geocache #{self.geocache.id} posted by {self.comment_poster.username} with image {self.comment_image} at {self.timestamp}. Comment: {self.comment_text}"
 
 '''
 class PointOfInterest(models.Model):

@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms 
 
 from . import utils
 from .models import User, Geocache, DiscussionBoard 
@@ -11,6 +12,10 @@ from .models import User, Geocache, DiscussionBoard
 import json
 
 API_KEY = utils.load_google_maps_API_key()
+
+class CommentForm(forms.Form): 
+    comment_text = forms.CharField() 
+    image_file = forms.ImageField()
 
 def index(request): 
     '''
@@ -275,10 +280,37 @@ def discussion_board(request):
 
 def geocache_discussion_post(request, geocache_id): 
     '''
-    Returns a page containing all discussion board posts regarding the geocache. 
+    Returns a page containing all discussion board posts regarding the geocache if request is GET. 
+    Process comment form info if request is POST. 
     '''
     context_dict = {}
 
+    # Process comment form information if GET. Then, display the comments back but with a banner message to inform that the comment is sent. 
+    if request.method == "POST":
+        context_dict['message'] = 'Comment successfully entered.'
+
+        # Access parameters from the form. Comment text is compulsory but not images. 
+        poster = request.POST['comment_poster']
+        geocache_id = request.POST['geocache_id']
+        comment_text = request.POST['comment_text']
+        image_file = None
+        if len(request.FILES) > 0: 
+            image_file = request.FILES['image_file']
+        
+        # Save data into database Model. 
+        geocache_object = Geocache.objects.get(id = int(geocache_id))
+        user_object = User.objects.get(username = poster)
+        discussion_board_object = DiscussionBoard(
+            geocache = geocache_object, 
+            comment_poster = user_object, 
+            comment_text = comment_text, 
+            comment_image = image_file
+        )
+        discussion_board_object.save()
+        print(f'Saved new discussionboard post into DiscussionBoard: {discussion_board_object}')
+        # Proceed with re-rendering the comment page. 
+
+        
     # Extract out Geocache and DiscussionBoard posts 
     geocache_object = None
     try:
@@ -294,15 +326,16 @@ def geocache_discussion_post(request, geocache_id):
     image_template_string_prefix = "https://maps.googleapis.com/maps/api/staticmap?zoom=18&size=600x300&maptype=" 
     image_template_string_suffix = "&markers=color:red%7Clabel:X%7C{},{}&key={}".format(geocache_object.latitude, geocache_object.longitude, API_KEY)
     
-
+    # Store Geocache object, image URLs and DiscussionBoard posts
     context_dict['geocache'] = geocache_object
     context_dict['geocache_image_url'] = image_string
     context_dict['image_template_string_prefix'] = json.dumps(image_template_string_prefix)
     context_dict['image_template_string_suffix'] = json.dumps(image_template_string_suffix)
     context_dict['discussion_board_posts'] = discussion_board_posts
+    context_dict['comment_poster'] = request.user.username
     
-
     return render(request, 'geocache/geocache_discussion_post.html', context_dict)
+
 
 def test_geoposition(request):
     '''
