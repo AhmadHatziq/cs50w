@@ -103,6 +103,7 @@
             let hint = geocache.hint; 
             let poster = geocache.poster; 
             let num_users_solved = parseInt(geocache.num_users_solved); 
+            let geocache_id = geocache.id
             let icon_location = geocache.icon_location; // Eg: "/static/geocache/images/blue_map_icon.png"
 
             // Extract datetime and parse it. 
@@ -122,6 +123,7 @@
                     <div id=bodyContent>
                         <p> ${hint} </p>
                         <p> ${num_users_solved} user(s) have found this geocache </p>
+                        <p> Follow the discussion <a href='/geocache_discussion_post/${geocache_id}'>here</a> </p>
                         <p> This geocache was created by ${poster} on ${date_string_parsed} at ${time_string_parsed}</p>
                     </div>
                 </div>
