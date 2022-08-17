@@ -53,11 +53,26 @@
         bounds.extend(position);
     }; 
 
+    /*
+        This function is attached to the button defined in the Google Map pop-up HTML div content. 
+        The aim is to toggle the found/not found status for a Geocache (to the user) and 
+        sends the request asynchronously to the backend. 
+    */
+    function toggleFound(event) {
+        let mouseClickEvent = event; 
+        let button = mouseClickEvent.srcElement;
+        let currentStatus = button.innerHTML; 
+
+        // Toggle the text content to the user
+        
+
+    }
+
     function initializeMap() {
         map = new google.maps.Map(document.getElementById('map-canvas'));
         bounds = new google.maps.LatLngBounds();
 
-        const contentString = `
+        const testContentString = `
             <div id=content> 
 
                 <h1 id=firstHeading class=firstHeading>Uluru</h1>
@@ -105,6 +120,7 @@
             let num_users_solved = parseInt(geocache.num_users_solved); 
             let geocache_id = geocache.id
             let icon_location = geocache.icon_location; // Eg: "/static/geocache/images/blue_map_icon.png"
+            let geocache_category = geocache.category; 
 
             // Extract datetime and parse it. 
             let date_string = geocache.timestamp; 
@@ -116,8 +132,30 @@
                 ("0" + date_object.getUTCMinutes()).slice(-2) + ":" +
                 ("0" + date_object.getUTCSeconds()).slice(-2);
 
+            // Determine button contents depending on the current category (either discovered, undiscovered or created)
+            let button_content = null; 
+            switch (geocache_category) {
+                case "undiscovered": 
+                    button_content = `
+                    <button onclick="toggleFound(event)" id="${poster+geocache_id}">Found!</button>
+                    `; 
+                    break; 
+                case "discovered": 
+                    button_content = ` 
+                    <button onclick="toggleFound(event)" id="${poster+geocache_id}">Undiscover</button>
+                    `; 
+                    break; 
+                case "created": 
+                    // If the current user is the owner, there should be no button present. 
+                    button_content = ``;
+                    break; 
+                default: 
+                    console.log('Error in assigning button content.'); 
+            }; 
+            
+
             // Generate HTML content which will appear in the pop up. 
-            let html_content = `
+            let html_content_prefix = `
                 <div id=content>
                     <h1 id=firstHeading class=firstHeading> ${title} </h1>
                     <div id=bodyContent>
@@ -125,9 +163,12 @@
                         <p> ${num_users_solved} user(s) have found this geocache </p>
                         <p> Follow the discussion <a href='/geocache_discussion_post/${geocache_id}'>here</a> </p>
                         <p> This geocache was created by ${poster} on ${date_string_parsed} at ${time_string_parsed}</p>
+            `; 
+            let html_content_suffix = `            
                     </div>
                 </div>
             `; 
+            let html_content = html_content_prefix + button_content + html_content_suffix; 
 
             // Add the marker. 
             addMarker(latitude, longitude, title, html_content, icon_location); 
