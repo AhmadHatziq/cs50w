@@ -58,13 +58,48 @@
         The aim is to toggle the found/not found status for a Geocache (to the user) and 
         sends the request asynchronously to the backend. 
     */
-    function toggleFound(event) {
+    function toggleFound(event, geocache_id) {
         let mouseClickEvent = event; 
         let button = mouseClickEvent.srcElement;
-        let currentStatus = button.innerHTML; 
+        let currentStatus = (button.innerHTML).valueOf(); 
+        let current_user = '{{ logged_in_user }}'; 
+    
 
-        // Toggle the text content to the user
-        
+        // Have different conditions based on the button content. 
+        // Toggle the text content to the user (to reflect UI change) & fetch data to backend. 
+        switch(currentStatus) {
+            case "Found!": 
+
+                // Toggle button content to the user. 
+                button.innerHTML = "Undiscover"; 
+                button.className = "btn btn-danger"; 
+
+                // Sends a PUT request to the backend of the desired state. 
+
+                break; 
+
+            case "Undiscover": 
+
+                // Toggle button content to the user. 
+                button.innerHTML = "Found!"; 
+                button.className = "btn btn-success"; 
+
+                // Sends a PUT request to the backed of the desired state. 
+                /*
+                fetch(`/emails/${email_id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        read:true
+                    })
+                });
+                */ 
+
+
+                break; 
+
+            default: 
+                console.log('Error in Switch-Case for toggleFound function.')
+        }; 
 
     }
 
@@ -121,6 +156,7 @@
             let geocache_id = geocache.id
             let icon_location = geocache.icon_location; // Eg: "/static/geocache/images/blue_map_icon.png"
             let geocache_category = geocache.category; 
+            
 
             // Extract datetime and parse it. 
             let date_string = geocache.timestamp; 
@@ -137,12 +173,14 @@
             switch (geocache_category) {
                 case "undiscovered": 
                     button_content = `
-                    <button onclick="toggleFound(event)" id="${poster+geocache_id}">Found!</button>
+                    <button onclick="toggleFound(event, ${geocache_id})" id="${poster+geocache_id}" 
+                    class="btn btn-success">Found!</button>
                     `; 
                     break; 
                 case "discovered": 
                     button_content = ` 
-                    <button onclick="toggleFound(event)" id="${poster+geocache_id}">Undiscover</button>
+                    <button onclick="toggleFound(event, ${geocache_id})" id="${poster+geocache_id}" 
+                    class="btn btn-danger">Undiscover</button>
                     `; 
                     break; 
                 case "created": 
