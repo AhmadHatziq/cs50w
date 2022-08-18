@@ -61,6 +61,8 @@
     function toggleFound(event, geocache_id) {
         let mouseClickEvent = event; 
         let button = mouseClickEvent.srcElement;
+        let containerDiv = button.parentNode; 
+        let num_users_solved = containerDiv.querySelector('.num_users_solved'); 
         let currentStatus = (button.innerHTML).valueOf(); 
         let current_user = '{{ logged_in_user }}'; 
         const csrftoken = '{{ csrf_token }}'
@@ -70,9 +72,10 @@
         switch(currentStatus) {
             case "Found!": 
 
-                // Toggle button content to the user. 
+                // Toggle button content and count of users solved to the user. 
                 button.innerHTML = "Undiscover"; 
                 button.className = "btn btn-danger"; 
+                num_users_solved.innerHTML = parseInt(num_users_solved.innerHTML) + 1; 
 
                 // Sends a PUT request to the backend of the desired state. 
                 fetch(`/view_map`, {
@@ -89,9 +92,10 @@
 
             case "Undiscover": 
 
-                // Toggle button content to the user. 
+                // Toggle button content and count of users solved to the user. 
                 button.innerHTML = "Found!"; 
                 button.className = "btn btn-success"; 
+                num_users_solved.innerHTML = parseInt(num_users_solved.innerHTML) - 1; 
 
                 // Sends a PUT request to the backend of the desired state. 
                 fetch(`/view_map`, {
@@ -178,7 +182,7 @@
                     <h1 id=firstHeading class=firstHeading> ${title} </h1>
                     <div id=bodyContent>
                         <p> ${hint} </p>
-                        <p> ${num_users_solved} user(s) have found this geocache </p>
+                        <p> <p class="num_users_solved">${num_users_solved}</p> user(s) have found this geocache </p>
                         <p> Follow the discussion <a href='/geocache_discussion_post/${geocache_id}'>here</a> </p>
                         <p> This geocache was created by ${poster} on ${date_string_parsed} at ${time_string_parsed}</p>
             `; 
