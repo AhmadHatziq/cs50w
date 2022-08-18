@@ -147,38 +147,48 @@ def process_geocache(request):
 def view_map(request): 
     '''
     Renders the map as well as geocaches (solved and not solved). 
+    GET request is to get the map, PUT request is to update the state (if the user has solved the Geocache or not). 
     '''
 
-    # Extracts the Google maps API key out. 
-    context_dict = {
-        'API_KEY': API_KEY
-    }
+    if request.method == 'PUT': 
+        pass
 
-    # Checks if banner message exists and add it to the context dict if so. 
-    # Used when redirecting after user has submitted a geocache. 
-    if 'banner_message' in request.session: 
-        banner_message = request.session['banner_message']
-        del request.session['banner_message']
-        context_dict['message'] = banner_message
+    elif request.method == 'GET': 
 
-    # Extract the geocache data out. 
-    goecache_posts = Geocache.objects.all() 
-    current_user = User.objects.get(username=request.user.username)
+        # Extracts the Google maps API key out. 
+        context_dict = {
+            'API_KEY': API_KEY
+        }
 
-    # Process the geocache posts and check if: 
-    #   (i)     the current user is the owner (user pin will show a different color)
-    #   (ii)    that post has been found yet by the user
-    processed_geoposts = process_geocache(request)
-    
-    # Add processed geoposts to context dictionary. 
-    # Convert to json dumps so that JavaScript can recreate the object. 
-    # We use the json library as in JavaScript, strings have double quotes. 
-    # But in Python, it can be single quotes (which messes up JavaScript's JSON parser). 
-    # Taken from https://stackoverflow.com/questions/4162642/single-vs-double-quotes-in-json
+        # Checks if banner message exists and add it to the context dict if so. 
+        # Used when redirecting after user has submitted a geocache. 
+        if 'banner_message' in request.session: 
+            banner_message = request.session['banner_message']
+            del request.session['banner_message']
+            context_dict['message'] = banner_message
 
-    context_dict['geocaches'] = json.dumps(processed_geoposts)
+        # Extract the geocache data out. 
+        goecache_posts = Geocache.objects.all() 
+        current_user = User.objects.get(username=request.user.username)
 
-    return render(request, 'geocache/main_map.html', context_dict)
+        # Process the geocache posts and check if: 
+        #   (i)     the current user is the owner (user pin will show a different color)
+        #   (ii)    that post has been found yet by the user
+        processed_geoposts = process_geocache(request)
+        
+        # Add processed geoposts to context dictionary. 
+        # Convert to json dumps so that JavaScript can recreate the object. 
+        # We use the json library as in JavaScript, strings have double quotes. 
+        # But in Python, it can be single quotes (which messes up JavaScript's JSON parser). 
+        # Taken from https://stackoverflow.com/questions/4162642/single-vs-double-quotes-in-json
+
+        context_dict['geocaches'] = json.dumps(processed_geoposts)
+        context_dict['logged_in_user'] = str(request.user.username); 
+
+        return render(request, 'geocache/main_map.html', context_dict)
+
+    # Request should be either of type GET or PUT. 
+    return error(request)
 
 def submit_geocache(request): 
     '''
