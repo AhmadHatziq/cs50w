@@ -151,7 +151,38 @@ def view_map(request):
     '''
 
     if request.method == 'PUT': 
-        pass
+        
+        # Extract data out. 
+        data = json.loads(request.body)
+        print('Data sent via PUT to /view_map: ', data)
+        user = data['user']
+        status_to_set_to = data['status_to_set_to']
+        geocache_id = data['geocache_id']
+
+        # Query database and get models for current state. 
+        user_object = User.objects.get(username=user)
+        geocache_object = Geocache.objects.get(id = int(geocache_id))
+        users_that_have_found_geocache = geocache_object.founder.all()
+
+        # Set to different states according to argument. 
+        if status_to_set_to == 'found': 
+            
+            # Check if the current user is in the list of found users. If not, add the user in. 
+            if user_object not in users_that_have_found_geocache: 
+                geocache_object.founder.add(user_object)
+
+            print('Added {} to found_users for geocache id {}'.format(user, geocache_id))
+
+        elif status_to_set_to == 'not_found': 
+
+            # Check if the current user is in the list of found users. If so, remove the user. 
+            if user_object in users_that_have_found_geocache: 
+                geocache_object.founder.remove(user_object)
+
+            print('Removed {} from found_users for geocache id {}'.format(user, geocache_id))
+
+        print('List of founders for geocache {}: {}'.format(geocache_id, geocache_object.founder.all()))
+        return HttpResponse(status=204)
 
     elif request.method == 'GET': 
 

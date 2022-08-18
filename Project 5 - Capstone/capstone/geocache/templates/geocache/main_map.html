@@ -63,8 +63,8 @@
         let button = mouseClickEvent.srcElement;
         let currentStatus = (button.innerHTML).valueOf(); 
         let current_user = '{{ logged_in_user }}'; 
+        const csrftoken = '{{ csrf_token }}'
     
-
         // Have different conditions based on the button content. 
         // Toggle the text content to the user (to reflect UI change) & fetch data to backend. 
         switch(currentStatus) {
@@ -75,6 +75,15 @@
                 button.className = "btn btn-danger"; 
 
                 // Sends a PUT request to the backend of the desired state. 
+                fetch(`/view_map`, {
+                    method: 'PUT', 
+                    headers: {'X-CSRFToken': csrftoken},
+                    body: JSON.stringify({
+                        user: current_user, 
+                        geocache_id: geocache_id, 
+                        status_to_set_to: 'found'
+                    })
+                }); 
 
                 break; 
 
@@ -84,15 +93,16 @@
                 button.innerHTML = "Found!"; 
                 button.className = "btn btn-success"; 
 
-                // Sends a PUT request to the backed of the desired state. 
-                /*
-                fetch(`/emails/${email_id}`, {
-                    method: 'PUT',
+                // Sends a PUT request to the backend of the desired state. 
+                fetch(`/view_map`, {
+                    method: 'PUT', 
+                    headers: {'X-CSRFToken': csrftoken},
                     body: JSON.stringify({
-                        read:true
+                        user: current_user, 
+                        geocache_id: geocache_id, 
+                        status_to_set_to: 'not_found'
                     })
-                });
-                */ 
+                }); 
 
 
                 break; 
