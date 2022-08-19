@@ -200,8 +200,10 @@ The contents of the directory represents a standard Django application. The nota
 
 # Demo Video Link 
 
-[![IMAGE ALT TEXT](http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](http://www.youtube.com/watch?v=dQw4w9WgXcQ)
-
 <a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ">
 <img src="http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Demo Video">
 </a>
+
+<div>
+    <iframe class="youtubeplayer" width="700" height="455" src="http://www.youtube.com/embed/ScfXNmDkvHo?wmode=opaque" frameborder="0" allowfullscreen></iframe>
+</div>
