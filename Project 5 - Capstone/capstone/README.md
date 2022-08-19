@@ -196,7 +196,15 @@ The contents of the directory represents a standard Django application. The nota
 ```
 # Python Package Dependencies & Setup
 
+The list of dependencies can be found in [`requirements.txt`](https://github.com/AhmadHatziq/cs50w/blob/main/Project%205%20-%20Capstone/capstone/requirements.txt). 
+
+The application was developed using a Windows11 64-bit machine running Anaconda and Python version 3.9.12.  
+
 # How To Run The Application 
+
+Before running the application, ensure that all dependencies are installed and a valid Google Maps API key is obtained. The Google Maps API key can be obtained [here](https://developers.google.com/maps/documentation/javascript/get-api-key).
+
+
 
 # Demo Video Link 
 
