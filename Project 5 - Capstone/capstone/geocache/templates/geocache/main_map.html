@@ -55,6 +55,34 @@
     }; 
 
     /*
+        Updates the global JSON array when a geocache is marked as 'found' or 'unfound'. 
+        Used to rerender the icons. 
+    */
+    function updateGeocaches(geocaches_input, geocache_id, status) {
+        let id = parseInt(geocache_id); 
+        let objIndex = geocaches_input.findIndex((obj => obj.id == parseInt(geocache_id)));
+        // console.log('Before:', geocaches_input[objIndex].num_users_solved); 
+        // console.log('Before: ', geocaches_input[objIndex])
+
+        switch(status) {
+            case "found": 
+                geocaches_input[objIndex].num_users_solved = geocaches_input[objIndex].num_users_solved + 1; 
+                geocaches_input[objIndex].is_founder = "True"; 
+                geocaches_input[objIndex].category = "discovered"; 
+                geocaches_input[objIndex].icon_location = "/static/geocache/images/red_map_icon.png"; 
+                break; 
+            case "unfound": 
+                geocaches_input[objIndex].num_users_solved = geocaches_input[objIndex].num_users_solved - 1; 
+                geocaches_input[objIndex].is_founder = "False"; 
+                geocaches_input[objIndex].category = "undiscovered"; 
+                geocaches_input[objIndex].icon_location = "/static/geocache/images/green_map_icon.png"; 
+                break; 
+        }; 
+        // console.log('After:', geocaches_input[objIndex].num_users_solved); 
+        // console.log('After: ', geocaches_input[objIndex])
+    }; 
+
+    /*
         This function is attached to the button defined in the Google Map pop-up HTML div content. 
         The aim is to toggle the found/not found status for a Geocache (to the user) and 
         sends the request asynchronously to the backend. 
@@ -67,7 +95,8 @@
         let currentStatus = (button.innerHTML).valueOf(); 
         let current_user = '{{ logged_in_user }}'; 
         const csrftoken = '{{ csrf_token }}'; 
-        let selected_geocache = null
+        let selected_geocache = null; 
+        let objIndex = null;  
     
         // Have different conditions based on the button content. 
         // Toggle the text content to the user (to reflect UI change) & fetch data to backend. 
@@ -90,20 +119,7 @@
                     })
                 }); 
 
-                // Update the contents of the geocache variable. 
-                selected_geocache = null; 
-                for (var i = 0; i < geocaches.length; i++) {
-                    var geocache = geocaches[i];
-                    if (parseInt(geocache.id) == parseInt(geocache_id)){
-                        selected_geocache = geocache; 
-                    }; 
-                }; 
-                selected_geocache.is_founder = "True"; 
-                selected_geocache.num_users_solved = selected_geocache.num_users_solved + 1; 
-                selected_geocache.category = "discovered"; 
-                selected_geocache.icon_location = "/static/geocache/images/green_map_icon.png"; 
-                console.log(selected_geocache); 
-
+                updateGeocaches(geocaches, geocache_id, "found"); 
                 break; 
 
             case "Undiscover": 
@@ -124,28 +140,14 @@
                     })
                 }); 
 
-                // Update the contents of the geocache variable. 
-                selected_geocache = null; 
-                for (var i = 0; i < geocaches.length; i++) {
-                    var geocache = geocaches[i];
-                    if (parseInt(geocache.id) == parseInt(geocache_id)){
-                        selected_geocache = geocache; 
-                    }; 
-                }; 
-                selected_geocache.is_founder = "False"; 
-                selected_geocache.num_users_solved = selected_geocache.num_users_solved - 1; 
-                selected_geocache.category = "undiscovered"; 
-                selected_geocache.icon_location = "/static/geocache/images/red_map_icon.png"; 
-                console.log(selected_geocache); 
-
-
+                updateGeocaches(geocaches, geocache_id, "unfound"); 
                 break; 
 
             default: 
                 console.log('Error in Switch-Case for toggleFound function.')
         }; 
 
-    }
+    }; 
 
     function initializeMap() {
         map = new google.maps.Map(document.getElementById('map-canvas'));
@@ -153,7 +155,7 @@
 
         // Instantiate JSON object from JSON string from Django. 
         // let geocaches = JSON.parse('{{ geocaches|safe }}');
-        console.log(`Created JSON from server:`); 
+        // console.log(`Created JSON from server:`); 
         console.log(geocaches); 
         
         // Iterate over each geocache and plot the coordinates and content. 
@@ -259,6 +261,7 @@
     // Will load these functions when the page is loaded. 
     document.addEventListener('DOMContentLoaded', function() {
         initializeMap(); 
+        geocaches = JSON.parse('{{ geocaches|safe }}'); 
     }); 
 </script>
 {% endblock %}
@@ -285,7 +288,9 @@
     </div>
 
     <button onclick="initializeMap()">Refresh icons</button>
+    <!-- <button onclick="window.location.reload();">Refresh Using Reload</button> -->
 
     <div id="map-canvas"></div>
+    
 
 {% endblock %}
