@@ -44,7 +44,7 @@ There are 3 webpages that interacts with the Google Maps API. Their features are
 - `submit_geocache.html`: This page renders an interactable map using the Google Maps JavaScript API. To submit a geocache, a user needs to either manually supply the latitude and longitude coordinates or click on the map. This will autopopulate the input fields with the coordinates. 
 
 <figure>
-<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/submission_form.png" width="600" height = 350 alt="Submission Form Image">
+<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/submission_form.png" width="600" height = "350" alt="Submission Form Image">
 <figcaption align = "left"><b>Fig. 1 - Form for submitting a geocache</b></figcaption>
 </figure>
 
@@ -89,7 +89,7 @@ Once at the input page, the user can either manually input the GPS coordinates o
 Aside from the GPS longitude and latitude coordinates, the user will need to specify the geocache title and associated hint. 
 
 <figure>
-<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/submission_form.png" width="600" height = 350 alt="Submission Form Image">
+<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/submission_form.png" width="600" height = "350" alt="Submission Form Image">
 <figcaption align = "left"><b>Fig. 1 - Form for submitting a geocache</b></figcaption>
 </figure>
 
@@ -201,9 +201,5 @@ The contents of the directory represents a standard Django application. The nota
 # Demo Video Link 
 
 <a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ">
-<img src="http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Demo Video">
+<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/video_thumbnail.png" alt="YouTube Demo Video" width="600" height = "350">
 </a>
-
-<div>
-    <iframe class="youtubeplayer" width="700" height="455" src="http://www.youtube.com/embed/ScfXNmDkvHo?wmode=opaque" frameborder="0" allowfullscreen></iframe>
-</div>
