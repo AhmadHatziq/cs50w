@@ -202,5 +202,6 @@ The contents of the directory represents a standard Django application. The nota
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](http://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
+<a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ">
 <img src="http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Demo Video">
-
+</a>
