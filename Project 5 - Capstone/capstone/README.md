@@ -51,6 +51,7 @@ There are 3 webpages that interacts with the Google Maps API. Their features are
    
 
 - `geocache_discussion_post.html`: This page renders a static map using the Google Maps Static API. However, the views can be toggled using the side buttons. In the discussion page, the map image loaded is already zoomed in, allowing users to easily see the nearby landmarks. This would facillitate discussion about the geocache. 
+
     <figure>
     <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/static_toggle.png" alt="Static Maps With Toggle">
     <figcaption align = "left"><b>Fig. 4 - Static images with toggle buttons</b></figcaption>
