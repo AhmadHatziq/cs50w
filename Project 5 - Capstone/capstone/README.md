@@ -1,3 +1,8 @@
+##### Table of Contents  
+[Project Writeup](#project-writeup)
+[Distinctiveness and Complexity](#distinctiveness-and-complexity)
+
+
 # Project Writeup
 The title of this project is 'Geocache'. The aim is to support users who would like to take part in Geocaching. 
 
