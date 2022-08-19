@@ -1,6 +1,21 @@
 ##### Table of Contents  
-[Project Writeup](#project-writeup)
-[Distinctiveness and Complexity](#distinctiveness-and-complexity)
+- [Project Writeup](#project-writeup)
+- [Distinctiveness and Complexity](#distinctiveness-and-complexity)
+    - [Django Models](#django-models)
+        - [`Users`](#users)
+        - [`Geocache`](#geocache)
+        - [`DiscussionBoard](#discussionboard)
+    - [How Does This Application Help Geocachers? ](#how-does-this-application-help-geocachers)
+    - [Google Maps integration](#google-maps-integration)
+- [User Guide](#user-guide)
+    - [Adding A Geocache](#adding-a-geocache)
+    - [Viewing Mearby Geocaches](#viewing-mearby-geocaches)
+    - [Marking A Geocache As Found/Unfound](#markingunmarking-a-geocache-as-foundunfound)
+    - [Discussing About A Geocache](#discussing-about-a-geocache)
+- [Folder Contents](#folder-contents)
+- [Python Package Dependencies & Setup](#python-package-dependencies--setup)
+- [How To Run The Application](#how-to-run-the-application)
+- [Demo Video Link](#demo-video-link)
 
 
 # Project Writeup
