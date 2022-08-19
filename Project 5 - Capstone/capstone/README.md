@@ -204,7 +204,13 @@ The application was developed using a Windows11 64-bit machine running Anaconda 
 
 Before running the application, ensure that all dependencies are installed and a valid Google Maps API key is obtained. The Google Maps API key can be obtained [here](https://developers.google.com/maps/documentation/javascript/get-api-key).
 
+Please save your API key in a text file inside the [`/api_key`](https://github.com/AhmadHatziq/cs50w/tree/main/Project%205%20-%20Capstone/capstone/geocache/api_key) directory. 
 
+As per usual Django projects, avigate to the folder with the file `manage.py` and run the following command. 
+
+`python manage.py runserver`
+
+The loaded Google Maps API key should be printed in the console, as well as the local address of the index page. 
 
 # Demo Video Link 
 
