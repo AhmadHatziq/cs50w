@@ -4,7 +4,7 @@
     - [Django Models](#django-models)
         - [`Users`](#users)
         - [`Geocache`](#geocache)
-        - [`DiscussionBoard](#discussionboard)
+        - [`DiscussionBoard`](#discussionboard)
     - [How Does This Application Help Geocachers? ](#how-does-this-application-help-geocachers)
     - [Google Maps integration](#google-maps-integration)
 - [User Guide](#user-guide)
@@ -44,7 +44,7 @@ There are 3 models used in this project: `Users`, `Geocache` and `DiscussionBoar
 The standard `User` model is used, to create new accounts. 
 
 ### `Geocache`
-`Geocache` represents the geocache object itself. There are fields to store the latitude and longitude GPS coordinates, character fields to store the hints and titles as well as timestamps. The User fields are used to store the owner of the geocache and keep track of Users that have found the field. 
+`Geocache` represents the geocache object itself. There are fields to store the latitude and longitude GPS coordinates, character fields to store the hints and titles as well as timestamps. The `User` fields are used to store the owner of the geocache and keep track of `Users` that have found the field. 
 
 The other remaining fields are not currently in use. 
 
@@ -59,8 +59,8 @@ Using this application, users can log in and do the following:
 - Discuss with other users regarding a geocache
 
 ## Google Maps integration
-What makes this project unique is that there is extensive interaction with the Google Maps API to render the maps and get inputs from the user. 
-There are 3 webpages that interacts with the Google Maps API. Their features are detailed below. 
+What makes this project unique is that there are extensive interactions with the Google Maps API to render the maps and get inputs from the user. 
+There are 3 webpages that interact with the Google Maps API. Their features are detailed below. 
 - `submit_geocache.html`: This page renders an interactable map using the Google Maps JavaScript API. To submit a geocache, a user needs to either manually supply the latitude and longitude coordinates or click on the map. This will autopopulate the input fields with the coordinates. 
 
 <figure>
@@ -182,12 +182,12 @@ The contents of the directory represents a standard Django application. The nota
 │   │   views.py - Contains the main logic for the whole application.
 │   │   __init__.py
 │   │
-│   ├───api_key
+│   │───api_key
 │   │       GOOGLE_MAPS_API.txt - Contains the API key needed to interact with Google Maps
 │   │
 │   ├───migrations
-|   | 
-│   ├───static
+│   │ 
+│   │───static
 │   │   └───geocache
 │   │       │   styles.css
 │   │       │
@@ -201,10 +201,10 @@ The contents of the directory represents a standard Django application. The nota
 │   │           error.html - Displays a generic error page. 
 │   │           index.html - Landing page when the user logs in. Gives an introduction of geocaching to the user and asks for location access. 
 │   │           submit_geocache.html - Renders a Google map instance to the user using JavaScript. Allows the user to input a geocache.
-|   |                                  JavaScript is also used to automatically retrieve the coordinates based on mouseClick events. 
+│   │                                  JavaScript is also used to automatically retrieve the coordinates based on mouseClick events. 
 │   │           main_map.html - Renders a Google map instance to the user using JavaScript. Inside the map, the markers are added as well as 
-|   |                           their relevant contents. When the user marks a geocache as found/unfound, an asynchronous request is sent to
-|   |                           the back-end while the front-end content is also updated.      
+│   │                           their relevant contents. When the user marks a geocache as found/unfound, an asynchronous request is sent to
+│   │                           the back-end while the front-end content is also updated.      
 │   │           discussion_board.html - Displays all the geocaches as well as their discussion page links. 
 │   │           geocache_discussion_post.html - Displays the contents of a single geocache. Renders a static Google map instance with 
 |   |                                           toggleable buttons. 
@@ -218,7 +218,7 @@ The contents of the directory represents a standard Django application. The nota
 
 The list of dependencies can be found in [`requirements.txt`](https://github.com/AhmadHatziq/cs50w/blob/main/Project%205%20-%20Capstone/capstone/requirements.txt). 
 
-The application was developed using a Windows11 64-bit machine running Anaconda and Python version 3.9.12.  
+The application was developed using a Windows 11 64-bit machine running Anaconda and Python version 3.9.12.  
 
 # How To Run The Application 
 
