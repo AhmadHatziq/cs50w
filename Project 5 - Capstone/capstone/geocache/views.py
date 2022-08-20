@@ -294,6 +294,8 @@ def discussion_board(request):
         new_geocache_dict = geocache.copy() 
         new_geocache_dict['latest_post_text'] = str(latest_geocache_boardpost.comment_text)
         new_geocache_dict['latest_post_poster'] = str(latest_geocache_boardpost.comment_poster)
+
+        # Parse datetime string
         timestamp_string = str(latest_geocache_boardpost.timestamp)
         date = timestamp_string.split(' ')[0]
         year = date.split('-')[0]
@@ -303,6 +305,9 @@ def discussion_board(request):
         hour = time.split(':')[0]
         min = time.split(':')[1]
         new_geocache_dict['latest_post_datetime'] = "{}/{}/{} at {}:{}".format(day, month, year, hour, min)
+
+        # Extract count of posts associated with geocache 
+        new_geocache_dict['count_of_posts'] = len(DiscussionBoard.objects.filter(geocache = geocache_object))
 
         if geocache_category == 'created': 
             created_geocaches.append(new_geocache_dict) 
