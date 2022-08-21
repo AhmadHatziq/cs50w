@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from geoposition.fields import GeopositionField
 
 
 class User(AbstractUser):
