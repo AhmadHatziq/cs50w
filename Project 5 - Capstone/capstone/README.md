@@ -216,7 +216,11 @@ The contents of the directory represents a standard Django application. The nota
 ```
 # Python Package Dependencies & Setup
 
-The list of dependencies can be found in [`requirements.txt`](https://github.com/AhmadHatziq/cs50w/blob/main/Project%205%20-%20Capstone/capstone/requirements.txt). 
+The list of dependencies can be found in [`requirements.txt`](https://github.com/AhmadHatziq/cs50w/blob/main/Project%205%20-%20Capstone/capstone/pip_requirements.txt). 
+
+They can be installed with the command: 
+
+`pip install -r pip_requirements.txt`
 
 The application was developed using a Windows 11 64-bit machine running Anaconda and Python version 3.9.12.  
 
@@ -226,7 +230,13 @@ Before running the application, ensure that all dependencies are installed and a
 
 Please save your API key in a text file inside the [`/api_key`](https://github.com/AhmadHatziq/cs50w/tree/main/Project%205%20-%20Capstone/capstone/geocache/api_key) directory. 
 
-As per usual Django projects, avigate to the folder with the file `manage.py` and run the following command. 
+As per usual Django projects, avigate to the folder with the file `manage.py` and run the following commands to make migrations.
+
+`python manage.py makemigrations`
+
+`python manage.py migrate`
+
+And to run the server: 
 
 `python manage.py runserver`
 
