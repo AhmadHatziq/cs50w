@@ -218,6 +218,10 @@ The contents of the directory represents a standard Django application. The nota
 
 The list of dependencies can be found in [`requirements.txt`](https://github.com/AhmadHatziq/cs50w/blob/main/Project%205%20-%20Capstone/capstone/pip_requirements.txt). 
 
+They can be installed with the command: 
+
+`pip install -r pip_requirements.txt`
+
 The application was developed using a Windows 11 64-bit machine running Anaconda and Python version 3.9.12.  
 
 # How To Run The Application 
