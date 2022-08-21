@@ -36,9 +36,13 @@ This project uses the following technologies:
 - CSS 
 - HTML
 
+## Technical Implementations (What I Did)
+
+## Motivations (Why)
+
 ## Django Models
 
-There are 3 models used in this project: `Users`, `Geocache` and `DiscussionBoard`. 
+There are 3 data models used in this project: `Users`, `Geocache` and `DiscussionBoard`. 
 
 ### `Users`
 The standard `User` model is used, to create new accounts. 
