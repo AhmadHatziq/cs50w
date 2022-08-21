@@ -244,6 +244,6 @@ The loaded Google Maps API key should be printed in the console, as well as the 
 
 # Demo Video Link 
 
-<a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ">
+<a href="https://youtu.be/RQH51yzz_PM">
 <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/video_thumbnail.png" alt="YouTube Demo Video" width="600" height = "350">
 </a>
