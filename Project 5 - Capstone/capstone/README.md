@@ -9,7 +9,7 @@
     - [Google Maps integration](#google-maps-integration)
 - [User Guide](#user-guide)
     - [Adding A Geocache](#adding-a-geocache)
-    - [Viewing Mearby Geocaches](#viewing-mearby-geocaches)
+    - [Viewing Nearby Geocaches](#viewing-nearby-geocaches)
     - [Marking A Geocache As Found/Unfound](#markingunmarking-a-geocache-as-foundunfound)
     - [Discussing About A Geocache](#discussing-about-a-geocache)
 - [Folder Contents](#folder-contents)
@@ -113,7 +113,7 @@ Aside from the GPS longitude and latitude coordinates, the user will need to spe
 <figcaption align = "left"><b>Fig. 1 - Form for submitting a geocache</b></figcaption>
 </figure>
 
-## Viewing Mearby Geocaches
+## Viewing Nearby Geocaches
 
 After inputting the geocache, the user will be redirected to the `View Map` section of the application. 
 Here, the user will be able to see any recently created geocaches (in blue), as well as discovered (in green) and undiscovered (in red) geocaches. The current user location will also be marked with the 'house' icon. 
