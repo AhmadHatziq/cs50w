@@ -25,6 +25,9 @@ def index(request):
     return render(request, "geocache/index.html")
 
 def login_view(request):
+    '''
+    Handles the login procedure. Either process POST-ed user credentials or serves the login page via GET.
+    '''
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -44,10 +47,17 @@ def login_view(request):
         return render(request, "geocache/login.html")
 
 def logout_view(request):
+    '''
+    Logs the user out. 
+    '''
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 def register(request):
+    '''
+    Serves a 'register' form the the user via GET or 
+    processes the registration information when the form is POST-ed. 
+    '''
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -197,10 +207,6 @@ def view_map(request):
             banner_message = request.session['banner_message']
             del request.session['banner_message']
             context_dict['message'] = banner_message
-
-        # Extract the geocache data out. 
-        goecache_posts = Geocache.objects.all() 
-        current_user = User.objects.get(username=request.user.username)
 
         # Process the geocache posts and check if: 
         #   (i)     the current user is the owner (user pin will show a different color)
