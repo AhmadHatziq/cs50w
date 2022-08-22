@@ -1,12 +1,15 @@
 ##### Table of Contents  
 - [Project Writeup](#project-writeup)
 - [Distinctiveness and Complexity](#distinctiveness-and-complexity)
+    - [Code Contributions For Significant Files](#code-contributions-for-significant-files-what-i-did)
+    - [Design Considerations](#design-considerations)
+    - [Justifications for Distinctiveness and Complexity Requirements](#justifications-for-distinctiveness-and-complexity-requirements)
     - [Django Models](#django-models)
         - [`Users`](#users)
         - [`Geocache`](#geocache)
         - [`DiscussionBoard`](#discussionboard)
     - [How Does This Application Help Geocachers? ](#how-does-this-application-help-geocachers)
-    - [Google Maps integration](#google-maps-integration)
+    - [Google Maps integration (with screenshots)](#google-maps-integration)
 - [User Guide](#user-guide)
     - [Adding A Geocache](#adding-a-geocache)
     - [Viewing Nearby Geocaches](#viewing-nearby-geocaches)
@@ -36,9 +39,45 @@ This project uses the following technologies:
 - CSS 
 - HTML
 
-## Technical Implementations (What I Did)
+## Code Contributions For Significant Files (What I Did)  
 
-## Motivations (Why)
+The significant code contributions are listed below: 
+
+| Filename      | Code Contributions |
+| ----------- | ----------- |
+| `admin.py`      | 3 data models are registed with the admin site. To display the fields which have multiple foreign keys, such as `models.ManyToManyField(User)`,  a string method is generated. The method will iterate over each `User` field and concatenate them into a single field.     |
+| `utils.py`   | Contains a single function, `load_google_maps_API_key()`. This function will look into the folder called `/api_key` for any text files and load it as the Google Maps API key.        |
+| `urls.py` | Contains 11 URL routes. One URL route is used to serve images. Another URL route is used to test the geoposition and another is used to serve error messages. The remaining 8 URL routes are used to serve the core application: index, login, logout, register, view_map, submit_geocache, view discussion_board and view geocache_discussion_post. |
+| `views.py` | There are 11 functions within this file. Their elaborations are as follows: <ul><li>`index(request)`: Serves the index page, `index.html`. </li><li>`login_view(request)`: Serves the login page if accessed via `GET`. Processes the login information if data is sent via `POST`.</li> <li> `logout_view(request)`: Logs the user out. </li> <li> `register(request)`: Handles the user account registration procedures. Either serves the registration form (via `GET`) or processes the registration details (via `POST`). </li> <li> `process_geocache(request)`: Is a helper function for `view_map()` and `submit_geocache()`. This function will extract all the records in `Geocache` and categorize each based on the current `User` logged in. It returns a list of `Geocache` objects.  </li> <li> `view_map(request)`: If accessed via `GET`, this method will call `process_geocache()` to obtain a list of `Geocache` objects. The list will be converted to a `JSON` object and passed to the template page, `main_map.html`. If data is sent via 'PUT', the `User` will either be added or removed to the list of `User` founders for each `Geocache` object.  </li> <li> `submit_geocache(request)`: If accessed via `GET`, this method will return a `Geocache` submission form to the user. If data is sent via `POST`, a new `Geocache` and `DiscussionBoard` object will be created. The `DiscusisonBoard` object represents the hint and title used to generate the new `Geocache`. </li> <li> `discussion_board(request)`: This method will call `process_geocache()` and obtain a list of `Geocache` objects. The list will be further split into the 3 categories and a parsed timestamp field is generated. The final list will be passed and rendered via `discussion_board.html`. </li> <li> `geocache_discussion_post(request, geocache_id)`: If data is sent via `POST`, a new `DiscussionBoard` object is created. If accessed via `GET`, a form will be sent to the user. <li>`test_geoposition(request)`: This is a test function to practice interacting with the Google Maps API. </li> <li> `error(request)`: This is a method which returns a template (`error.html`), displaying an error message.  </li> 
+| `models.py` | Contains the 3 data models used for this project. They are: <li> `User`: Represents a single user account. </li>  <li> `Geocache`: Represents a single geocache. Contains fields to store the GPS coordinates, geocache title, geocache hint, `Users` that have found the geocache and the timestamp. </li>  <li> `DiscussionBoard`: Represents a single comment made for any `Geocache`. </li>  |  </li></ul>| 
+| `error.html` | Represents an error HTML page, with links that redirects back to the index. |
+| `test_geoposition.html` | Represents a test HTML page which renders coordinates from the Google Maps API. |
+| `layout.html` | Contains the layout page, which contains placeholder template for JavaScript, banner messages. CSS etc. |
+| `login.html` | Represents the login page. |
+| `register.html` | Represents the user account registration page. |
+| `index.html` | Represents the home page. This page contains a textual description of what is Geocaching as well as a YouTube video describing it. There are 3 JavaScript functions which aims to obtain the user GPS coordinates and store it within the `localStorage`: <li> `setUserPosition(position)`: Obtains the GPS coordinates and stores into the `localStorage`. </li> <li> `handleLocationError(error)`: Used to handle the event where the user GPS coordinates cannot be obtained. </li> <li> `getLocation()`: Calls the previous 2 functions. </li> |
+| `main_map.html` | Represents a Google Maps rendered page. The HTML will display the Google Maps image as well as legends for the icons used. There are 4 JavaScript functions which are used: <li> `addMarker(lat, lng, title, contentString, icon_url)`: Used to add a marker to a Google Maps. Will require the GPS coordinates, title, HTML content string and icon URL to display on the map itself. </li> <li> `updateGeocaches(geocaches_input, geocache_id, status)`: Used to change the global JSON array of `Geocaches` when the button (which is within the HTML content of each marker) is clicked. </li>  <li> `toggleFound(event, geocache_id)`: This function is attached to the button defined in the Google Map pop-up HTML div content (`contentString`). The aim is to toggle the found/not found status for a Geocache and sends the request asynchronously to the backend.  </li> <li> `initializeMap()`: Used to initialize the Google Maps instance, when the page is loaded. This function will create all the markers and its associated contents. </li>  |
+| `submit_geocache.html` | Contains a submission form, with a Google Maps instance rendered below. The purpose of the Google Maps instance is so that the user can click on the map, which will auto-populate the GPS coordinate fields of the form. There is 1 JavaScript function, `initializeMap()` which |
+| `geocache_discussion_post.html` | This page represents the discussion regarding a `Geocache`. It uses the static Google Maps API, which only uses the `<img>` tag. At the top of the page, there are 4 buttons. Each button will toggle the views for each type of static image ie: roadmad, satellite, hybrid, terrain. The JavaScript function attached to each button is `toggle_terrain(terrain_type)`, which just changes the image source being displayed. |
+| `discussion_board.html` | This page will display all the Geocaches, according to their 3 categories.  | 
+
+For the full write-up of all the files in the directories, please refer to the [Folder Directory Contents](#folder-contents)
+
+## Design Considerations
+
+One of the main motivations of this project was to enhance my skills in using public APIs, in this case the Google Maps API. A location-based treasure hunting activity (geocaching) appears to fulfill the use-case of using the Google Maps API. 
+
+To keep the data models manageable, only 3 data models were used. One for the user accounts, another for the geocache data and lastly for the discussion posts. 
+
+The challenge of this project comes in knowing how to render data via Google Maps and obtaining user inputs (coordinates) for it. Vanilla JavsScript is extensively used to support the interaction with Google Maps.
+
+This project is mobile responsive. 
+
+## Justifications for Distinctiveness and Complexity Requirements 
+
+This project is different from the old CS50W Pizza project and Project 2 (Commerce) as there are no items being sold/bought/auctioned etc. The only entity in this project are the `Geocaches`. 
+
+The project is different from Project 4 (Network) as although there are posts being displayed in this project, the posts here utilize both text and image contents, rather than just text contents. Furthermore, the only asynchronous function is when a `Geocache` is marked as `found` or `unfound`, which I have implemented using the `PUT` method. 
 
 ## Django Models
 
