@@ -11,7 +11,7 @@ Aside from the lecture material, there are 6 projects covered in this course. Th
 - [Network](#network)
 - [Capstone: Geocache](#capstone-geocache)
 
-# Search 
+# [Search](https://github.com/AhmadHatziq/cs50w/tree/main/Project%200%20-%20Search) 
 
 Simple website which aims to replicate the Google Search webpage. Uses HTML form tags and JavaScript to achieve the functionalities.
 
@@ -24,7 +24,7 @@ Video demo can be found [here](https://www.youtube.com/watch?v=4mnQtnxfZWI).
 
 Code can be found [here](https://github.com/AhmadHatziq/cs50w/tree/main/Project%200%20-%20Search). 
 
-# Wiki 
+# [Wiki](https://github.com/AhmadHatziq/cs50w/tree/main/Project%201%20-%20Wiki/wiki) 
 
 Django website which aims to replicate Wikipedia. Entries are stored locally as `markdown` files which are rendered dynamically using the [Django template language (DTL)](https://docs.djangoproject.com/en/4.1/topics/templates/). 
 
@@ -38,7 +38,7 @@ Video demo can be found [here](https://www.youtube.com/watch?v=jd25pUiqDRA).
 
 Code can be found [here](https://github.com/AhmadHatziq/cs50w/tree/main/Project%201%20-%20Wiki/wiki). 
 
-# Commerce 
+# [Commerce](https://github.com/AhmadHatziq/cs50w/tree/main/Project%202%20-%20Commerce/commerce) 
 
 An eBay-like e-commerce auction site built using Django and Django Models. 
 
@@ -52,7 +52,7 @@ Video demo can be found [here](https://www.youtube.com/watch?v=g1BGqi07Qnk).
 
 Code can be found [here](https://github.com/AhmadHatziq/cs50w/tree/main/Project%202%20-%20Commerce/commerce). 
 
-# Mail 
+# [Mail](https://github.com/AhmadHatziq/cs50w/tree/main/Project%203%20-%20Mail) 
 
 A front-end email client, which renders everything on a single webpage. JavaScript is used to handle the front-end client and its interactions with the back-end, which is done via aynchronous API calls. 
 
@@ -68,7 +68,7 @@ Video demo can be found [here](https://www.youtube.com/watch?v=pMrE-vUEKkU).
 
 Code can be found [here](https://github.com/AhmadHatziq/cs50w/tree/main/Project%203%20-%20Mail). 
 
-# Network 
+# [Network](https://github.com/AhmadHatziq/cs50w/tree/main/Project%204%20-%20Network/project4) 
 
 A Twitter-like social network website where users can make text-based posts, follow other users and like/unlike posts. 
 There is a combination of asynchronous and standard POST requests made by the application to the back-end. 
@@ -85,7 +85,7 @@ Video demo can be found [here](https://www.youtube.com/watch?v=BOW9xJOGtDk).
 
 Code can be found [here](https://github.com/AhmadHatziq/cs50w/tree/main/Project%204%20-%20Network/project4). 
 
-# Capstone: Geocache
+# [Capstone: Geocache](https://github.com/AhmadHatziq/cs50w/tree/main/Project%205%20-%20Capstone/capstone)
 
 A discussion-based website revolving around posts made on Google Maps. The purpose is to support Geocaching. 
 
