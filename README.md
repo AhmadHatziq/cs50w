@@ -89,6 +89,8 @@ Code can be found [here](https://github.com/AhmadHatziq/cs50w/tree/main/Project%
 
 A discussion-based website revolving around posts made on Google Maps. The purpose is to support Geocaching. 
 
+JavaScript is extensively used to interact and render the Google Map instance. 
+
 What is Geocaching? 
 > Geocaching is an outdoor recreational activity, in which participants use a Global Positioning System device and other navigational techniques to hide and seek containers, called "geocaches" or "caches", at specific locations marked by GPS coordinates all over the world.
 
