@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+
 from . import util
 
 import random 
@@ -27,7 +26,7 @@ def display_entry(request, title):
             "html_content": html_content, 
             "entry_name": title
         }
-        
+        print('length:', len(html_content))
         return render(request, "encyclopedia/wiki_entry.html", context_dict)
         
     else: 
@@ -40,17 +39,6 @@ def display_entry(request, title):
     
 # Handles /search, which is called when the FORM POSTS data     
 def search(request): 
-    
-    search_string = ""
-    
-    # Allow for data to be sent either via GET or POST. 
-    # Current method: POST (as search string)
-    '''
-    if request.method == 'GET': 
-        search_string = request.GET["q"]
-    '''
-
-    # Extract search string if sent via POST 
     if request.method == "POST":
     
         # Extract search string inputted by user
@@ -138,7 +126,9 @@ def create_page(request):
         # Add title and content to storage
         print("Adding new content:")
         print(f"Title: {title}")
-        print(f"Markdown content: {markdown_content}")
+        markdown_content = markdown_content.replace('\t', '').replace('\r', '')
+        print(f"Markdown content",  repr(markdown_content))
+        print('length:', len(markdown_content))
         util.save_entry(title, markdown_content)
         
         # Redirect to index with different message depending on new creation or edit. 
@@ -166,8 +156,10 @@ def edit_page(request):
         # User will come here by clicking a button (in a form) from each entry page 
         title_to_edit = request.POST["entry_name"]
         markdown_content = util.get_entry_markdown(title_to_edit)
+        markdown_content = markdown_content.replace('\t', '').replace('\r', '')
         print(f"User wants to edit {title_to_edit}")
-        
+        print("Markdown content is", repr(markdown_content))
+        print('length:', len(markdown_content))
         return render(request, "encyclopedia/edit_page.html", {
             "entry_name": title_to_edit, 
             "markdown_content": markdown_content
