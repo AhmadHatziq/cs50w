@@ -129,7 +129,8 @@ def create_page(request):
         markdown_content = markdown_content.replace('\t', '').replace('\r', '')
         print(f"Markdown content",  repr(markdown_content))
         print('length:', len(markdown_content))
-        util.save_entry(title, markdown_content)
+        # util.save_entry(title, markdown_content)
+        util.save_entry(title, bytes(markdown_content, 'utf8'))
         
         # Redirect to index with different message depending on new creation or edit. 
         message = ""
