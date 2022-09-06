@@ -29,6 +29,9 @@ What is Geocaching?
 
 Essentially, it is a form a treasure hunting! 
 
+This application will help users view geocaches hosted in their surrounding areas and discuss about each geocache post. 
+
+
 # Distinctiveness and Complexity
 
 This project uses the following technologies: 
@@ -41,9 +44,11 @@ This project uses the following technologies:
 
 ## Justifications for Distinctiveness and Complexity Requirements 
 
-This project is different from the old CS50W Pizza project and Project 2 (Commerce) as there are no items being sold/bought/auctioned etc. The only entity in this project are the `Geocaches`. 
+This project is sufficiently different from the old CS50W Pizza project and Project 2 (Commerce) as there are no items being sold/bought/auctioned etc. The only entity in this project are the `Geocaches`. 
 
 The project is different from Project 4 (Network) as although there are posts being displayed in this project, the posts here utilize both text and image contents, rather than just text contents. Furthermore, the only asynchronous function is when a `Geocache` is marked as `found` or `unfound`, which I have implemented using the `PUT` method. 
+
+This project is sufficiently different from the other projects as it extensively interacts with the Google Maps API using JavaScript. 
 
 ## Design Considerations
 
@@ -53,7 +58,7 @@ To keep the data models manageable, only 3 data models were used. One for the us
 
 The challenge of this project comes in knowing how to render data via Google Maps and obtaining user inputs (coordinates) for it. Vanilla JavsScript is extensively used to support the interaction with Google Maps.
 
-This project is mobile responsive. 
+This project is mobile responsive with the help of Bootstrap. 
 
 ## Code Contributions For Significant Files (What I Did)  
 
@@ -78,8 +83,6 @@ The significant code contributions are listed below:
 | `discussion_board.html` | This page will display all the Geocaches, according to their 3 categories.  | 
 
 For the full write-up of all the files in the directories, please refer to the [Folder Directory Contents](#folder-contents)
-
-
 
 ## Django Models
 
