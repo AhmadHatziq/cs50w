@@ -52,7 +52,7 @@ This project is sufficiently different from the other projects as it extensively
 
 ## Design Considerations
 
-One of the main motivations of this project was to enhance my skills in using public APIs, in this case the Google Maps API. A location-based treasure hunting activity (geocaching) appears to fulfill the use-case of using the Google Maps API. 
+One of the main motivations of this project was to enhance my skills in using public APIs, in this case the Google Maps API. A location-based treasure hunting activity (geocaching) appears to fulfil the use-case of using the Google Maps API. 
 
 To keep the data models manageable, only 3 data models were used. One for the user accounts, another for the geocache data and lastly for the discussion posts. 
 
@@ -66,7 +66,7 @@ The significant code contributions are listed below:
 
 | Filename      | Code Contributions |
 | ----------- | ----------- |
-| `admin.py`      | 3 data models are registed with the admin site. To display the fields which have multiple foreign keys, such as `models.ManyToManyField(User)`,  a string method is generated. The method will iterate over each `User` field and concatenate them into a single field.     |
+| `admin.py`      | 3 data models are registered with the admin site. To display the fields which have multiple foreign keys, such as `models.ManyToManyField(User)`,  a string method is generated. The method will iterate over each `User` field and concatenate them into a single field.     |
 | `utils.py`   | Contains a single function, `load_google_maps_API_key()`. This function will look into the folder called `/api_key` for any text files and load it as the Google Maps API key.        |
 | `urls.py` | Contains 11 URL routes. One URL route is used to serve images. Another URL route is used to test the geoposition and another is used to serve error messages. The remaining 8 URL routes are used to serve the core application: index, login, logout, register, view_map, submit_geocache, view discussion_board and view geocache_discussion_post. |
 | `views.py` | There are 11 functions within this file. Their elaborations are as follows: <ul><li>`index(request)`: Serves the index page, `index.html`. </li><li>`login_view(request)`: Serves the login page if accessed via `GET`. Processes the login information if data is sent via `POST`.</li> <li> `logout_view(request)`: Logs the user out. </li> <li> `register(request)`: Handles the user account registration procedures. Either serves the registration form (via `GET`) or processes the registration details (via `POST`). </li> <li> `process_geocache(request)`: Is a helper function for `view_map()` and `submit_geocache()`. This function will extract all the records in `Geocache` and categorize each based on the current `User` logged in. It returns a list of `Geocache` objects.  </li> <li> `view_map(request)`: If accessed via `GET`, this method will call `process_geocache()` to obtain a list of `Geocache` objects. The list will be converted to a `JSON` object and passed to the template page, `main_map.html`. If data is sent via 'PUT', the `User` will either be added or removed to the list of `User` founders for each `Geocache` object.  </li> <li> `submit_geocache(request)`: If accessed via `GET`, this method will return a `Geocache` submission form to the user. If data is sent via `POST`, a new `Geocache` and `DiscussionBoard` object will be created. The `DiscusisonBoard` object represents the hint and title used to generate the new `Geocache`. </li> <li> `discussion_board(request)`: This method will call `process_geocache()` and obtain a list of `Geocache` objects. The list will be further split into the 3 categories and a parsed timestamp field is generated. The final list will be passed and rendered via `discussion_board.html`. </li> <li> `geocache_discussion_post(request, geocache_id)`: If data is sent via `POST`, a new `DiscussionBoard` object is created. If accessed via `GET`, a form will be sent to the user. <li>`test_geoposition(request)`: This is a test function to practice interacting with the Google Maps API. </li> <li> `error(request)`: This is a method which returns a template (`error.html`), displaying an error message.  </li> 
@@ -79,7 +79,7 @@ The significant code contributions are listed below:
 | `index.html` | Represents the home page. This page contains a textual description of what is Geocaching as well as a YouTube video describing it. There are 3 JavaScript functions which aims to obtain the user GPS coordinates and store it within the `localStorage`: <li> `setUserPosition(position)`: Obtains the GPS coordinates and stores into the `localStorage`. </li> <li> `handleLocationError(error)`: Used to handle the event where the user GPS coordinates cannot be obtained. </li> <li> `getLocation()`: Calls the previous 2 functions. </li> |
 | `main_map.html` | Represents a Google Maps rendered page. The HTML will display the Google Maps image as well as legends for the icons used. There are 4 JavaScript functions which are used: <li> `addMarker(lat, lng, title, contentString, icon_url)`: Used to add a marker to a Google Maps. Will require the GPS coordinates, title, HTML content string and icon URL to display on the map itself. </li> <li> `updateGeocaches(geocaches_input, geocache_id, status)`: Used to change the global JSON array of `Geocaches` when the button (which is within the HTML content of each marker) is clicked. </li>  <li> `toggleFound(event, geocache_id)`: This function is attached to the button defined in the Google Map pop-up HTML div content (`contentString`). The aim is to toggle the found/not found status for a Geocache and sends the request asynchronously to the backend.  </li> <li> `initializeMap()`: Used to initialize the Google Maps instance, when the page is loaded. This function will create all the markers and its associated contents. </li>  |
 | `submit_geocache.html` | Contains a submission form, with a Google Maps instance rendered below. The purpose of the Google Maps instance is so that the user can click on the map, which will auto-populate the GPS coordinate fields of the form. There is 1 JavaScript function, `initializeMap()` which |
-| `geocache_discussion_post.html` | This page represents the discussion regarding a `Geocache`. It uses the static Google Maps API, which only uses the `<img>` tag. At the top of the page, there are 4 buttons. Each button will toggle the views for each type of static image ie: roadmad, satellite, hybrid, terrain. The JavaScript function attached to each button is `toggle_terrain(terrain_type)`, which just changes the image source being displayed. |
+| `geocache_discussion_post.html` | This page represents the discussion regarding a `Geocache`. It uses the static Google Maps API, which only uses the `<img>` tag. At the top of the page, there are 4 buttons. Each button will toggle the views for each type of static image ie: roadmap, satellite, hybrid, terrain. The JavaScript function attached to each button is `toggle_terrain(terrain_type)`, which just changes the image source being displayed. |
 | `discussion_board.html` | This page will display all the Geocaches, according to their 3 categories.  | 
 
 For the full write-up of all the files in the directories, please refer to the [Folder Directory Contents](#folder-contents)
@@ -109,7 +109,7 @@ Using this application, users can log in and do the following:
 ## Google Maps integration
 What makes this project unique is that there are extensive interactions with the Google Maps API to render the maps and get inputs from the user. 
 There are 3 webpages that interact with the Google Maps API. Their features are detailed below. 
-- `submit_geocache.html`: This page renders an interactable map using the Google Maps JavaScript API. To submit a geocache, a user needs to either manually supply the latitude and longitude coordinates or click on the map. This will autopopulate the input fields with the coordinates. 
+- `submit_geocache.html`: This page renders an interactable map using the Google Maps JavaScript API. To submit a geocache, a user needs to either manually supply the latitude and longitude coordinates or click on the map. This will auto populate the input fields with the coordinates. 
 
 <figure>
 <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/submission_form.png" width="600" height = "350" alt="Submission Form Image">
@@ -167,7 +167,7 @@ After inputting the geocache, the user will be redirected to the `View Map` sect
 Here, the user will be able to see any recently created geocaches (in blue), as well as discovered (in green) and undiscovered (in red) geocaches. The current user location will also be marked with the 'house' icon. 
 
 <figure>
-<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/new_input_geocache.png" width="600" height = 350 alt="Map">
+<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Projerated ect%205%20-%20Capstone/capstone/assets/new_input_geocache.png" width="600" height = 350 alt="Map">
 <figcaption align = "left"><b>Fig. 5 - Map showing newly created and undiscovered geocaches</b></figcaption>
 </figure>
 
@@ -182,9 +182,9 @@ While in the `View Map` portion of the application, the user will be able to cli
 
 ## Discussing About A Geocache 
 
-To get to the discussion page, the user can either click the link in the pop up above (Fig. 6) or nagivate to the `Discussion` section of the navigation bar. 
+To get to the discussion page, the user can either click the link in the pop up above (Fig. 6) or navigate to the `Discussion` section of the navigation bar. 
 
-At the `Discussion` section, the user will be able to see a consolidated list of all the geocaches, seperated into the 3 previous categories.
+At the `Discussion` section, the user will be able to see a consolidated list of all the geocaches, separated into the 3 previous categories.
 
 <figure>
 <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/discussion_board.png"  alt="Discussion Board View">
@@ -193,7 +193,7 @@ At the `Discussion` section, the user will be able to see a consolidated list of
 
 The user will be able to click on any of the geocache titles to access the discussion for a single geocache. 
 
-In the discussion page, users can discuss with each other regarding finding the geocache. The application accepts image uploads to facillitate the discussion. 
+In the discussion page, users can discuss with each other regarding finding the geocache. The application accepts image uploads to facilitate  the discussion. 
 
 <figure>
 <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/discussion_page_1.png"  alt="Discussion Page">
@@ -278,7 +278,7 @@ Before running the application, ensure that all dependencies are installed and a
 
 Please save your API key in a text file inside the [`/api_key`](https://github.com/AhmadHatziq/cs50w/tree/main/Project%205%20-%20Capstone/capstone/geocache/api_key) directory. 
 
-As per usual Django projects, avigate to the folder with the file `manage.py` and run the following commands to make migrations.
+As per usual Django projects, navigate to the folder with the file `manage.py` and run the following commands to make migrations.
 
 `python manage.py makemigrations`
 
