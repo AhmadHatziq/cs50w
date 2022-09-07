@@ -69,6 +69,21 @@ The project is different from Project 4 (Network) as although there are posts be
 
 This project is sufficiently different from the other projects as it extensively interacts with the Google Maps API using JavaScript. 
 
+## Distinctiveness 
+
+1. The Google Maps API is used to interact with the user. This allows the user to easily see the locations of geocaches. 
+2. Users can submit image files in the discussion page. The image files will be stored on the server. 
+
+## Complexity 
+
+| Iten  | Counts |
+| ------------- | ------------- |
+| Django Data Models  | 3  |
+| JavaScript Functions  | 9  |
+| Python Functions (including views)  | 12  |
+| URLs  | 10  |
+| HTML Pages  | 10  |
+
 ## Design Considerations
 
 One of the main motivations of this project was to enhance my skills in using public APIs, in this case the Google Maps API. A location-based treasure hunting activity (geocaching) appears to fulfil the use-case of using the Google Maps API. 
