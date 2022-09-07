@@ -1,57 +1,41 @@
-##### Table of Contents  
-- [Project Writeup](#project-writeup)
-- [Distinctiveness and Complexity](#distinctiveness-and-complexity)
-    - [Code Contributions For Significant Files](#code-contributions-for-significant-files-what-i-did)
-    - [Design Considerations](#design-considerations)
-    - [Justifications for Distinctiveness and Complexity Requirements](#justifications-for-distinctiveness-and-complexity-requirements)
-    - [Django Models](#django-models)
-        - [`Users`](#users)
-        - [`Geocache`](#geocache)
-        - [`DiscussionBoard`](#discussionboard)
-    - [How Does This Application Help Geocachers? ](#how-does-this-application-help-geocachers)
-    - [Google Maps integration (with screenshots)](#google-maps-integration)
-- [User Guide](#user-guide)
-    - [Adding A Geocache](#adding-a-geocache)
-    - [Viewing Nearby Geocaches](#viewing-nearby-geocaches)
-    - [Marking A Geocache As Found/Unfound](#markingunmarking-a-geocache-as-foundunfound)
-    - [Discussing About A Geocache](#discussing-about-a-geocache)
-- [Folder Contents](#folder-contents)
-- [Python Package Dependencies & Setup](#python-package-dependencies--setup)
-- [How To Run The Application](#how-to-run-the-application)
-- [Demo Video Link](#demo-video-link)
+
 
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#project-writeup">Project Writeup</a>
+    </li>
+    <li>
+      <a href="distinctiveness-and-complexity">Distinctiveness and Complexity</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#justifications-for-distinctiveness-and-complexity-requirements">Justifications for Distinctiveness and Complexity Requirements</a></li>
+        <li><a href="#design-considerations">Design Considerations</a></li>
+        <li><a href="code-contributions-for-significant-files-what-i-did">Code Contributions For Significant Files</a></li>
+        <li><a href="django-models">Django Models</a></li>
+        <li><a href="how-does-this-application-help-geocachers">How Does This Application Help Geocachers? </a></li>
+        <li><a href="google-maps-integration">Google Maps integration (with screenshots)</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#user-guide">User Guide</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#adding-a-geocache">Adding A Geocache</a></li>
+        <li><a href="#viewing-nearby-geocaches">Viewing Nearby Geocaches </a></li>
+        <li><a href="#markingunmarking-a-geocache-as-foundunfound">Marking A Geocache As Found/Unfound </a></li>
+        <li><a href="#discussing-about-a-geocache"> Discussing About A Geocache</a></li>
       </ul>
     </li>
+    <li><a href="#folder-contents">Folder Contents / File Structure</a></li>
     <li>
-      <a href="#usage">Usage</a>
-      <ul>
-        <li><a href="#authentication">Authentication</a></li>
-        <li><a href="#intake-calculator">Intake Calculator</a></li>
-        <li><a href="#user-profile">User Profile</a></li>
-      </ul>
+      <a href="#python-package-dependencies--setup">Python Package Dependencies & Setup</a>
     </li>
-    <li><a href="#file-structure">File Structure</a></li>
     <li>
-      <a href="#distinctiveness-and-complexity">Distinctiveness and Complexity</a>
-      <ul>
-        <li><a href="#distinctiveness">Distinctiveness</a></li>
-        <li><a href="#complexity">Complexity</a></li>
-      </ul>
+      <a href="#how-to-run-the-application">How To Run The Application</a>
+    </li>
+    <li>
+      <a href="#demo-video-link">Demo Video Link</a>
     </li>
   </ol>
 </details>
