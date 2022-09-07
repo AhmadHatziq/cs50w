@@ -20,6 +20,41 @@
 - [How To Run The Application](#how-to-run-the-application)
 - [Demo Video Link](#demo-video-link)
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#intake-calculator">Intake Calculator</a></li>
+        <li><a href="#user-profile">User Profile</a></li>
+      </ul>
+    </li>
+    <li><a href="#file-structure">File Structure</a></li>
+    <li>
+      <a href="#distinctiveness-and-complexity">Distinctiveness and Complexity</a>
+      <ul>
+        <li><a href="#distinctiveness">Distinctiveness</a></li>
+        <li><a href="#complexity">Complexity</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
 
 # Project Writeup
 The title of this project is 'Geocache'. The aim is to support users who would like to take part in Geocaching. 
@@ -121,6 +156,7 @@ There are 3 webpages that interact with the Google Maps API. Their features are 
 
     <figure>
     <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/pop_up_map.png" alt="Pop Up Geocache Display">
+
     <figcaption align = "left"><b>Fig. 2 - Pop-up content when the user clicks on a marker representing a geocache</b></figcaption>
     </figure>
 
@@ -139,6 +175,7 @@ There are 3 webpages that interact with the Google Maps API. Their features are 
 
     <figure>
     <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/static_toggle.png" alt="Static Maps With Toggle">
+
     <figcaption align = "left"><b>Fig. 4 - Static images with toggle buttons</b></figcaption>
     </figure>
 
@@ -167,7 +204,8 @@ After inputting the geocache, the user will be redirected to the `View Map` sect
 Here, the user will be able to see any recently created geocaches (in blue), as well as discovered (in green) and undiscovered (in red) geocaches. The current user location will also be marked with the 'house' icon. 
 
 <figure>
-<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Projerated ect%205%20-%20Capstone/capstone/assets/new_input_geocache.png" width="600" height = 350 alt="Map">
+<img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/new_input_geocache.png" width="600" height = 350 alt="Map">
+
 <figcaption align = "left"><b>Fig. 5 - Map showing newly created and undiscovered geocaches</b></figcaption>
 </figure>
 
@@ -291,6 +329,8 @@ And to run the server:
 The loaded Google Maps API key should be printed in the console, as well as the local address of the index page. 
 
 # Demo Video Link 
+
+Please click on the image below to be redirected to the demo video. 
 
 <a href="https://youtu.be/RQH51yzz_PM">
 <img src="https://raw.githubusercontent.com/AhmadHatziq/cs50w/main/Project%205%20-%20Capstone/capstone/assets/video_thumbnail.png" alt="YouTube Demo Video" width="600" height = "350">
